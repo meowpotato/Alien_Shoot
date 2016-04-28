@@ -75,7 +75,7 @@ void checkKeys(XEvent *e);
 void init();
 void physics(void);
 void render(void);
-
+void moveAlien();
 //-----------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 30.0;
@@ -102,7 +102,7 @@ typedef struct t_bigfoot {
     Vec pos;
     Vec vel;
 } Bigfoot;
-Bigfoot bigfoot;
+Bigfoot alien;
 
 class Weapon {
 	protected:
@@ -577,8 +577,8 @@ void init() {
     umbrella.width2 = umbrella.width * 0.5;
     umbrella.radius = (float)umbrella.width2;
     umbrella.shape = UMBRELLA_FLAT;
-    MakeVector(-150.0,180.0,0.0, bigfoot.pos);
-    MakeVector(6.0,0.0,0.0, bigfoot.vel);
+    MakeVector(-150.0,180.0,0.0, alien.pos);
+    MakeVector(6.0,0.0,0.0, alien.vel);
 }
 
 void checkMouse(XEvent *e)
@@ -628,7 +628,7 @@ void checkKeys(XEvent *e)
 	case XK_b:
 	    showBigfoot ^= 1;
 	    if (showBigfoot) {
-		bigfoot.pos[0] = -250.0;
+		alien.pos[0] = -250.0;
 	    }
 	    break;
 	case XK_d:
@@ -760,7 +760,7 @@ void deleteRain(Raindrop *node)
     //and set the node to NULL.
 }
 
-void moveBigfoot()
+/*void moveBigfoot()
 {
     //move bigfoot...
     int addgrav = 1;
@@ -781,7 +781,7 @@ void moveBigfoot()
     //Gravity
     if (addgrav)
 	bigfoot.vel[1] -= 0.75;
-}
+} */
 
 
 void createRaindrop(const int n)
@@ -939,7 +939,7 @@ void checkRaindrops()
 void physics(void)
 {
     if (showBigfoot)
-	moveBigfoot();
+	moveAlien();
     if (showRain)
 	checkRaindrops();
 }
@@ -1049,7 +1049,7 @@ void render(void)
 	}
 	if (showBigfoot) {
 	    glPushMatrix();
-	    glTranslatef(bigfoot.pos[0], bigfoot.pos[1], bigfoot.pos[2]);
+	    glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
 	    if (!silhouette) {
 		glBindTexture(GL_TEXTURE_2D, bigfootTexture);
 	    } else {
@@ -1059,7 +1059,7 @@ void render(void)
 		glColor4ub(255,255,255,255);
 	    }
 	    glBegin(GL_QUADS);
-	    if (bigfoot.vel[0] > 0.0) {
+	    if (alien.vel[0] > 0.0) {
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 		glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);

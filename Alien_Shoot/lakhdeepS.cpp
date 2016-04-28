@@ -6,6 +6,7 @@
 #include <functional>
 using namespace std;
 
+int xres=800, yres=600;
 void moveAlien()
 {
     //move alien...
@@ -19,7 +20,7 @@ void moveAlien()
     alien.vel[0] = -alien.vel[0];
     addgrav = 0;
     }
-    if ((alien.pos[1] < 150.0 && bigfoot.vel[1] < 0.0) ||
+    if ((alien.pos[1] < 150.0 && alien.vel[1] < 0.0) ||
         (alien.pos[1] >= (float)yres && alien.vel[1] > 0.0)) {
     alien.vel[1] = -alien.vel[1];
     addgrav = 0;
