@@ -183,15 +183,18 @@ Ppmimage *forestTransImage=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
+Ppmimage *glock30Image=NULL;
 GLuint bigfootTexture;
 GLuint silhouetteTexture;
 GLuint forestTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
+GLuint glock30Texture;
 GLuint forestTransTexture;
 GLuint umbrellaTexture;
 bool space=false;
 int pauseMenu = 0;
+int glock30 = 0;
 int showBigfoot=0;
 int forest=1;
 int silhouette=1;
@@ -417,6 +420,7 @@ void initOpengl(void)
     forestImage      = ppm6GetImage("./images/forest.ppm");
     mainMenuImage	 = ppm6GetImage("./images/mainMenu.ppm");
     pauseMenuImage	 = ppm6GetImage("./images/pauseMenu.ppm");
+    glock30Image	 = ppm6GetImage("./images/glock_30.ppm");
     forestTransImage = ppm6GetImage("./images/forestTrans.ppm");
     umbrellaImage    = ppm6GetImage("./images/umbrella.ppm");
     //
@@ -426,6 +430,7 @@ void initOpengl(void)
     glGenTextures(1, &forestTexture);
     glGenTextures(1, &mainMenuTexture);
     glGenTextures(1, &pauseMenuTexture);
+    glGenTextures(1, &glock30Texture);
     glGenTextures(1, &umbrellaTexture);
     //-------------------------------------------------------------------------
     //bigfoot
@@ -505,6 +510,18 @@ void initOpengl(void)
     glTexImage2D(GL_TEXTURE_2D, 0, 3,
 	    pauseMenuImage->width, pauseMenuImage->height,
 	    0, GL_RGB, GL_UNSIGNED_BYTE, pauseMenuImage->data);
+
+    //-------------------------------------------------------------------------
+    //-------------------------------------------------------------------------
+    //
+    //Glock 30 Weapon
+    glBindTexture(GL_TEXTURE_2D, glock30Texture);
+    //
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3,
+	    glock30Image->width, glock30Image->height,
+	    0, GL_RGB, GL_UNSIGNED_BYTE, glock30Image->data);
 
     //-------------------------------------------------------------------------
     //
@@ -668,9 +685,10 @@ void checkKeys(XEvent *e)
 	case XK_n:
 	    break;
 	case XK_w:
-	    if (shift) {
+	    glock30 ^= 1;
+	    if (shift) //{
 		//shrink the umbrella
-		umbrella.width *= (1.0 / 1.05);
+		/*umbrella.width *= (1.0 / 1.05);
 	    } else {
 		//enlarge the umbrella
 		umbrella.width *= 1.05;
@@ -678,6 +696,7 @@ void checkKeys(XEvent *e)
 	    //half the width
 	    umbrella.width2 = umbrella.width * 0.5;
 	    umbrella.radius = (float)umbrella.width2;
+	    */
 	    break;
 	case XK_Escape:
 	    done=1;
@@ -1008,6 +1027,15 @@ void render(void)
 	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	glEnd();
     }
+    else if (glock30 == 1) {
+	glBindTexture(GL_TEXTURE_2D, glock30Texture);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	glEnd();
+    }
 
     else {
 	if (forest) {
@@ -1058,14 +1086,6 @@ void render(void)
 	}
 
 	glDisable(GL_TEXTURE_2D);
-	//glColor3f(1.0f, 0.0f, 0.0f);
-	//glBegin(GL_QUADS);
-	//	glVertex2i(10,10);
-	//	glVertex2i(10,60);
-	//	glVertex2i(60,60);
-	//	glVertex2i(60,10);
-	//glEnd();
-	//return;
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 	if (showRain)
@@ -1089,6 +1109,7 @@ void render(void)
 	ggprint8b(&r, 16, 0, "R - Rain");
 	ggprint8b(&r, 16, 0, "D - Deflection");
 	ggprint8b(&r, 16, 0, "N - Sounds");
+	ggprint8b(&r, 16, 0, "W - Weapon");
     }
 }
 
