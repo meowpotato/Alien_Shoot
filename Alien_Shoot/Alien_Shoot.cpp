@@ -2,7 +2,7 @@
 //SO WE MAKE SURE WE DON'T DELETE ANYTHING WE COULD USE
 //cs335
 //Alien Shoot game
-//Modifiers: Sabrina Smith, 
+//Modifiers: Sabrina Smith, Jeff Cadena 
 //
 //
 //program: rainforest
@@ -21,6 +21,7 @@
 //
 //
 //
+#include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -38,6 +39,8 @@
 extern "C" {
 #include "fonts.h"
 }
+
+using namespace std;
 
 //defined types
 typedef double Flt;
@@ -101,6 +104,79 @@ typedef struct t_bigfoot {
 } Bigfoot;
 Bigfoot bigfoot;
 
+class Weapon {
+	protected:
+		// Coordinates of center
+		int x, y, z;
+		float angle;
+		float color[3];
+		std::string manufacturer;
+		std::string model;
+		std::string caliber;
+	public:
+		// Default ctor to initialize vars
+		Weapon() {
+			x = 0;
+			y = 0;
+			z = 0;
+			//Default color
+			color[0] = 1.0;
+			color[1] = 1.0;
+			color[2] = 1.0;
+		}
+		void shoot();
+		void pan();
+		void muzzle_flash();
+		void set_manufacturer(std::string);
+		void set_model(std::string);
+		void set_caliber(std::string);
+		std::string get_manufacturer();
+		std::string get_model();
+		std::string get_caliber();
+
+};
+
+
+class Glock : public Weapon {
+	public:
+		Glock() {
+			manufacturer = "Glock";
+			model = "";
+			caliber = "";
+		}
+};
+
+class Bullet {
+	protected:
+		// Width and height of the bullet
+		int width;
+		int height;
+		// x, y, z are position vars
+		int x;
+		int y;
+		int z;
+		std::string caliber;
+		// Velocity of the bullet
+		float x_velocity;
+		float y_velocity;
+	public:
+		Bullet() {
+			width = 0;
+			height = 0;
+			x = 0;
+			y = 0;
+			z = 0;
+			caliber = "9mm";
+			x_velocity = 0;
+			y_velocity = 0;
+		}
+		void move();
+		int get_x();
+		int get_y();
+		int get_z();
+		void delete_bullet();
+};
+
 Ppmimage *bigfootImage=NULL;
 Ppmimage *forestImage=NULL;
 Ppmimage *forestTransImage=NULL;
@@ -157,9 +233,11 @@ Umbrella umbrella;
 int showUmbrella=0;
 int deflection=0;
 
-
 int main(void)
 {
+    Weapon weapon;
+    weapon.get_manufacturer();
+
     logOpen();
     initXWindows();
     initOpengl();
@@ -205,6 +283,9 @@ int main(void)
     cleanupXWindows();
     cleanup_fonts();
     logClose();
+
+
+
     return 0;
 }
 
