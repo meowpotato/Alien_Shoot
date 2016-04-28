@@ -1,13 +1,12 @@
 /* No main function is included per instructions, so this file
  * will not compile by itself, it will be built with a makefile
- * into the Alien Shoot.cpp file
+ * into the Alien_Shoot.cpp file
  * 
- * Name: Jeff Cadena
+ * Author: Jeff Cadena
  * CMPS 335 Individual contribution to project
- * Make weapon classes and functions that will be called in 
- * the main project program. Opengl and Xwindows framework
- * code will necessarily be included to display the
- * animation
+ * Purpose: Make weapon classes, appropriate child classes
+ * using inheritance, and functions that will be called
+ * in the main project program Alien_Shoot.cpp
  * */
 
 #include <iostream>
