@@ -1,0 +1,173 @@
+/* No main function is included per instructions, so this file
+ * will not compile by itself, it will be built with a makefile
+ * into the Alien Shoot.cpp file
+ * 
+ * Name: Jeff Cadena
+ * CMPS 335 Individual contribution to project
+ * Make weapon classes and functions that will be called in 
+ * the main project program. Opengl and Xwindows framework
+ * code will necessarily be included to display the
+ * animation
+ * */
+
+#include <iostream>
+#include <cstdlib>
+#include <cstring>
+#include <unistd.h>
+#include <ctime>
+#include <cmath>
+
+using namespace std;
+
+// Global vars
+int x_resolution = 1250;
+int y_resolution = 900;
+
+class Weapon {
+	protected:
+		// Coordinates of center
+		int x, y, z;
+		float angle;
+		float color[3];
+		std::string manufacturer;
+		std::string model;
+		std::string caliber;
+	public:
+		// Default ctor to initialize vars
+		Weapon() {
+			x = 0;
+			y = 0;
+			z = 0;
+			//Default color
+			color[0] = 1.0;
+			color[1] = 1.0;
+			color[2] = 1.0;
+		}
+		void shoot();
+		void pan();
+		void muzzle_flash();
+		void set_manufacturer(std::string);
+		void set_model(std::string);
+		void set_caliber(std::string);
+		std::string get_manufacturer();
+		std::string get_model();
+		std::string get_caliber();
+
+};
+
+class Glock : public Weapon {
+	public:
+		Glock() {
+			manufacturer = "Glock";
+			model = "";
+			caliber = "";
+		}
+};
+
+class Bullet {
+	protected:
+		// Width and height of the bullet
+		int width;
+		int height;
+		// x, y, z are position vars
+		int x;
+		int y;
+		int z;
+		std::string caliber;
+		// Velocity of the bullet
+		float x_velocity;
+		float y_velocity;
+	public:
+		Bullet() {
+			width = 0;
+			height = 0;
+			x = 0;
+			y = 0;
+			z = 0;
+			caliber = "9mm";
+			x_velocity = 0;
+			y_velocity = 0;
+		}
+		void move();
+		int get_x();
+		int get_y();
+		int get_z();
+		void delete_bullet();
+};
+
+// Fire a bullet
+void Weapon::shoot()
+{
+	// Draw a bullet at the end of the barrel 
+	// and send it to the mouse cursor
+	
+	
+	//delete bullets
+}
+
+// Pan the weapon to follow the mouse cursor
+void Weapon::pan()
+{
+	// Get location of the mouse cursor
+	
+	// Turn the barrel of the weapon towards mouse cursor
+}
+
+// Deletes bullets from the screen
+void Bullet::delete_bullet()
+{
+	// Remove bullet from data struct. holding bullets
+}
+
+// Set the manufacturer of the weapon
+void Weapon::set_manufacturer(string str)
+{
+	manufacturer = str;
+}
+
+// Set the model of the weapon
+void Weapon::set_model(string str)
+{
+	model = str;
+}
+
+// Set the caliber of the weapon
+void Weapon::set_caliber(string str)
+{
+	caliber = str;
+}
+
+// Get the manufacturer of the weapon
+std::string Weapon::get_manufacturer()
+{
+	return manufacturer;
+}
+
+// Get the model of the weapon
+std::string Weapon::get_model()
+{
+	return model;
+}
+
+// Get the caliber of the weapon
+std::string Weapon::get_caliber()
+{
+	return caliber;
+}
+
+// Get the x-coordinate of bullet's position
+int Bullet::get_x()
+{
+	return x;
+}
+
+// Get the y-coordinate of bullet's position
+int Bullet::get_y()
+{
+	return y;
+}
+// Get the z-coordinate of bullet's position
+int Bullet::get_z()
+{
+	return z;
+}
