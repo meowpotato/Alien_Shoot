@@ -5,7 +5,7 @@ LFLAGS = -lrt -lX11 -lGLU -lGL -pthread -lm #-lXrandr
 all: Alien_Shoot
 
 Alien_Shoot: Alien_Shoot.cpp ppm.cpp log.cpp
-	g++ $(CFLAGS) Alien_Shoot.cpp ppm.cpp log.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -o Alien_Shoot
+	g++ $(CFLAGS) Alien_Shoot.cpp jeffC.cpp ppm.cpp log.cpp libggfonts.a -Wall -Wextra $(LFLAGS) -o Alien_Shoot
 
 clean:
 	rm -f Alien_Shoot
