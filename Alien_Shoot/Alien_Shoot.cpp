@@ -235,8 +235,15 @@ int deflection=0;
 
 int main(void)
 {
-    Weapon weapon;
-    weapon.get_manufacturer();
+    // Create the user's weapon and display the specs
+    Glock glock;
+    glock.set_model("30");
+    glock.set_caliber("45 ACP");
+    cout << "Current Weapon: " << endl;
+    cout << glock.get_manufacturer() << endl;
+    cout << glock.get_model() << endl;;
+    cout << glock.get_caliber() << endl;;
+
 
     logOpen();
     initXWindows();
