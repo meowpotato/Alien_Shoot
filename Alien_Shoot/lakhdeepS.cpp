@@ -1,7 +1,10 @@
 //Lakhdeep Singh
 //Lab 5
 //CS 335 - Project
-
+/* So far,  the code down below is for the movement of the aliens
+ this all works and does compile, and more code for more movement will be added soon.
+ This code is will compilr with the main Alien_Shoot.cpp file
+*/
 #include <iostream>
 #include <functional>
 #include "common.h"
