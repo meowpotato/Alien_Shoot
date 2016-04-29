@@ -33,9 +33,13 @@ class Weapon {
 		int x, y, z;
 		float angle;
 		float color[3];
+		// Gun specs
 		std::string manufacturer;
 		std::string model;
 		std::string caliber;
+		std::string sights;
+		// Signals if this weapon is selected
+		bool current_weapon;
 	public:
 		// Default ctor to initialize vars
 		Weapon() {
@@ -46,6 +50,7 @@ class Weapon {
 			color[0] = 1.0;
 			color[1] = 1.0;
 			color[2] = 1.0;
+			current_weapon = false;
 		}
 		void shoot();
 		void pan();
@@ -65,6 +70,17 @@ class Glock : public Weapon {
 			manufacturer = "Glock";
 			model = "";
 			caliber = "";
+			sights = "Factory Sights";
+		}
+};
+
+class Sig_Sauer : public Weapon {
+	public:
+		Sig_Sauer() {
+			manufacturer = "Sig Sauer";
+			model = "";
+			caliber = "";
+			sights = "Factory Sights";
 		}
 };
 
@@ -81,6 +97,8 @@ class Bullet {
 		// Velocity of the bullet
 		float x_velocity;
 		float y_velocity;
+		// Signals if the bullet makes contact w/ an object
+		bool hit_object;
 	public:
 		Bullet() {
 			width = 0;
@@ -91,6 +109,7 @@ class Bullet {
 			caliber = "9mm";
 			x_velocity = 0;
 			y_velocity = 0;
+			hit_object = false;
 		}
 		void move();
 		int get_x();
