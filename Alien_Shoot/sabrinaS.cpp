@@ -1,3 +1,9 @@
+//Author: Sabrina Smith
+//Class: CMPS 335
+//Purpose: Lab 5 - Work on project material
+//	   Loading images and textures outside of main .cpp file	   
+
+
 #include "sabrinaS.h"
 
 Ppmimage *bigfootImage=NULL;
