@@ -36,6 +36,8 @@
 #include <GL/glx.h>
 #include "log.h"
 #include "ppm.h"
+#include "common.h"
+#include "sabrinaS.h"
 extern "C" {
 #include "fonts.h"
 }
@@ -73,6 +75,15 @@ void checkResize(XEvent *e);
 void checkMouse(XEvent *e);
 void checkKeys(XEvent *e);
 void init();
+void loadImages();
+void loadTextures();
+void buildTextures();
+unsigned char *buildAlphaData(Ppmimage *);
+/*void renderMainMenu();
+void renderPauseMenu();
+void renderGun();
+void renderBackground();
+void renderBigfoot();*/
 void physics(void);
 void render(void);
 void moveAlien();
@@ -97,11 +108,11 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 int done=0;
 int xres=800, yres=600;
-
+/*
 typedef struct t_bigfoot {
     Vec pos;
     Vec vel;
-} Bigfoot;
+} Bigfoot;*/
 Bigfoot alien;
 
 class Weapon {
@@ -177,7 +188,7 @@ class Bullet {
 		void delete_bullet();
 };
 
-Ppmimage *bigfootImage=NULL;
+/*Ppmimage *bigfootImage=NULL;
 Ppmimage *forestImage=NULL;
 Ppmimage *forestTransImage=NULL;
 Ppmimage *umbrellaImage=NULL;
@@ -192,6 +203,8 @@ GLuint pauseMenuTexture;
 GLuint glock30Texture;
 GLuint forestTransTexture;
 GLuint umbrellaTexture;
+*/
+
 bool space=false;
 int pauseMenu = 0;
 int glock30 = 0;
@@ -360,7 +373,7 @@ void reshapeWindow(int width, int height)
     setTitle();
 }
 
-unsigned char *buildAlphaData(Ppmimage *img)
+/*unsigned char *buildAlphaData(Ppmimage *img)
 {
     //add 4th component to RGB stream...
     int i;
@@ -376,21 +389,12 @@ unsigned char *buildAlphaData(Ppmimage *img)
 	*(ptr+0) = a;
 	*(ptr+1) = b;
 	*(ptr+2) = c;
-	//get largest color component...
-	//*(ptr+3) = (unsigned char)((
-	//		(int)*(ptr+0) +
-	//		(int)*(ptr+1) +
-	//		(int)*(ptr+2)) / 3);
-	//d = a;
-	//if (b >= a && b >= c) d = b;
-	//if (c >= a && c >= b) d = c;
-	//*(ptr+3) = d;
 	*(ptr+3) = (a|b|c);
 	ptr += 4;
 	data += 3;
     }
     return newdata;
-}
+}*/
 
 void initOpengl(void)
 {
@@ -413,6 +417,7 @@ void initOpengl(void)
     //Do this to allow fonts
     glEnable(GL_TEXTURE_2D);
     initialize_fonts();
+    /*
     //
     //load the images file into a ppm structure.
     //
@@ -432,6 +437,12 @@ void initOpengl(void)
     glGenTextures(1, &pauseMenuTexture);
     glGenTextures(1, &glock30Texture);
     glGenTextures(1, &umbrellaTexture);
+    */
+    
+    loadImages();
+    loadTextures();
+    buildTextures();
+/*
     //-------------------------------------------------------------------------
     //bigfoot
     //
@@ -542,6 +553,7 @@ void initOpengl(void)
     //glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
     //GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
     //-------------------------------------------------------------------------
+*/
 }
 
 void checkResize(XEvent *e)
@@ -686,7 +698,7 @@ void checkKeys(XEvent *e)
 	    break;
 	case XK_w:
 	    glock30 ^= 1;
-	    if (shift) //{
+	    if (shift) {} //{
 		//shrink the umbrella
 		/*umbrella.width *= (1.0 / 1.05);
 	    } else {
@@ -944,7 +956,7 @@ void physics(void)
 	checkRaindrops();
 }
 
-void drawUmbrella(void)
+/*void drawUmbrella(void)
 {
     //Log("drawUmbrella()...\n");
     if (umbrella.shape == UMBRELLA_FLAT) {
@@ -973,7 +985,7 @@ void drawUmbrella(void)
 	glDisable(GL_ALPHA_TEST);
 	glPopMatrix();
     }
-}
+}*/
 
 void drawRaindrops(void)
 {
@@ -1083,6 +1095,7 @@ void render(void)
 		glEnd();
 	    }
 	    glDisable(GL_ALPHA_TEST);
+	
 	}
 
 	glDisable(GL_TEXTURE_2D);
@@ -1093,10 +1106,11 @@ void render(void)
 	glDisable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
 	//
-	if (showUmbrella)
-	    drawUmbrella();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	//
+	//if (showUmbrella)
+	//    drawUmbrella();
+	//glBindTexture(GL_TEXTURE_2D, 0);
+	
+   	//
 	//
 	r.bot = yres - 20;
 	r.left = 10;

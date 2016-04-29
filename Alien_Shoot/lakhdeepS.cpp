@@ -4,11 +4,13 @@
 
 #include <iostream>
 #include <functional>
+#include "common.h"
+
 using namespace std;
 
-int xres=800, yres=600;
 void moveAlien()
 {
+    Bigfoot alien;
     //move alien...
     int addgrav = 1;
     //Update position
