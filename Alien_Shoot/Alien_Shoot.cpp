@@ -39,6 +39,7 @@
 #include "ppm.h"
 #include "common.h"
 #include "sabrinaS.h"
+#include "jeffC.h"
 extern "C" {
 #include "fonts.h"
 }
@@ -209,6 +210,7 @@ GLuint umbrellaTexture;
 bool space=false;
 int pauseMenu = 0;
 int glock30 = 0;
+int glock17 = 0;
 int showBigfoot=0;
 int forest=1;
 int silhouette=1;
@@ -260,7 +262,6 @@ int main(void)
     cout << glock.get_manufacturer() << endl;
     cout << glock.get_model() << endl;;
     cout << glock.get_caliber() << endl;;
-
 
     logOpen();
     initXWindows();
@@ -699,6 +700,7 @@ void checkKeys(XEvent *e)
 	    break;
 	case XK_w:
 	    glock30 ^= 1;
+	    //glock17 ^= 1;
 	    if (shift) {} //{
 		//shrink the umbrella
 		/*umbrella.width *= (1.0 / 1.05);
@@ -1049,6 +1051,15 @@ void render(void)
 	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	glEnd();
     }
+    else if (glock17 == 1) {
+	glBindTexture(GL_TEXTURE_2D, glock17Texture);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	glEnd();
+    }
 
     else {
 	if (forest) {
@@ -1134,11 +1145,11 @@ void render(void)
 
 	 
 	//Create the user's weapon and display the specs
-	ggprint12(&r, 16, 0, "Current Weapon");
-	ggprint12(&r, 16, 0, "==============");
-	ggprint12(&r, 16, 0, "Manufacturer: Glock");
-	ggprint12(&r, 16, 0, "Model: 30");
-	ggprint12(&r, 16, 0, "Caliber: 45ACP");
+	ggprint8b(&r, 16, 0, "Current Weapon");
+	ggprint8b(&r, 16, 0, "==============");
+	ggprint8b(&r, 16, 0, "Manufacturer: Glock");
+	ggprint8b(&r, 16, 0, "Model: 30");
+	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
     }
 }
 

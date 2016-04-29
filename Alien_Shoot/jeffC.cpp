@@ -15,6 +15,11 @@
 #include <unistd.h>
 #include <ctime>
 #include <cmath>
+#include <GL/glx.h>
+#include <GL/glu.h>
+#include "ppm.h"
+#include "fonts.h"
+#include "ppm.h"
 
 using namespace std;
 
