@@ -28,6 +28,7 @@
 #include <unistd.h>
 #include <time.h>
 #include <math.h>
+#include <cstring>
 #include <X11/Xlib.h>
 //#include <X11/Xutil.h>
 //#include <GL/gl.h>
@@ -1124,6 +1125,20 @@ void render(void)
 	ggprint8b(&r, 16, 0, "D - Deflection");
 	ggprint8b(&r, 16, 0, "N - Sounds");
 	ggprint8b(&r, 16, 0, "W - Weapon");
+    
+	// Reposition the Rect instance r so weapon menu will be 
+	// displayed in bottom right corner
+	r.bot = yres - 400;
+	r.left = 550;
+	r.center = 540;
+
+	 
+	//Create the user's weapon and display the specs
+	ggprint12(&r, 16, 0, "Current Weapon");
+	ggprint12(&r, 16, 0, "==============");
+	ggprint12(&r, 16, 0, "Manufacturer: Glock");
+	ggprint12(&r, 16, 0, "Model: 30");
+	ggprint12(&r, 16, 0, "Caliber: 45ACP");
     }
 }
 
