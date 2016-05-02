@@ -4,6 +4,8 @@
  * 
  * Author: Jeff Cadena
  * CMPS 335 Individual contribution to project
+ * Date: Written 4/11/16-5/3/16, modified 4/27/16, 
+ * modified 5/2/16
  * Purpose: Make weapon classes, appropriate child classes
  * using inheritance, and functions that will be called
  * in the main project program Alien_Shoot.cpp
