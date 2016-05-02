@@ -10,16 +10,11 @@
  * */
 
 #include <iostream>
-#include <cstdlib>
-#include <cstring>
-#include <unistd.h>
-#include <ctime>
-#include <cmath>
-#include <GL/glx.h>
-#include <GL/glu.h>
-#include "ppm.h"
+
+extern "C" {
 #include "fonts.h"
-#include "ppm.h"
+}
+
 
 using namespace std;
 
@@ -61,6 +56,7 @@ class Weapon {
 		std::string get_manufacturer();
 		std::string get_model();
 		std::string get_caliber();
+		void show_weapon_specs(Rect);
 
 };
 
@@ -117,6 +113,16 @@ class Bullet {
 		int get_z();
 		void delete_bullet();
 };
+
+//Create the user's weapon and display the specs
+void Weapon::show_weapon_specs(Rect r)
+{
+	ggprint8b(&r, 16, 0, "Current Weapon");
+	ggprint8b(&r, 16, 0, "==============");
+	ggprint8b(&r, 16, 0, "Manufacturer: Glock");
+	ggprint8b(&r, 16, 0, "Model: 30");
+	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
+}
 
 // Fire a bullet
 void Weapon::shoot()

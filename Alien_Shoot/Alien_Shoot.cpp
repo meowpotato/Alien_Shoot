@@ -146,7 +146,7 @@ class Weapon {
 		std::string get_manufacturer();
 		std::string get_model();
 		std::string get_caliber();
-
+		void show_weapon_specs(Rect);
 };
 
 
@@ -312,6 +312,16 @@ int main(void)
 
 
     return 0;
+}
+
+void show_weapon_specs(Rect r)
+{
+	ggprint8b(&r, 16, 0, "Current Weapon");
+	ggprint8b(&r, 16, 0, "==============");
+	ggprint8b(&r, 16, 0, "Manufacturer: Glock");
+	ggprint8b(&r, 16, 0, "Model: 30");
+	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
+
 }
 
 void cleanupXWindows(void)
@@ -1145,11 +1155,7 @@ void render(void)
 
 	 
 	//Create the user's weapon and display the specs
-	ggprint8b(&r, 16, 0, "Current Weapon");
-	ggprint8b(&r, 16, 0, "==============");
-	ggprint8b(&r, 16, 0, "Manufacturer: Glock");
-	ggprint8b(&r, 16, 0, "Model: 30");
-	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
+	Glock glock30;
+	glock30.show_weapon_specs(r);
     }
 }
-
