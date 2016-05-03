@@ -8,7 +8,7 @@
  * modified 5/2/16
  * Purpose: Make weapon classes, appropriate child classes
  * using inheritance, and functions that will be called
- * in the main project program Alien_Shoot.cpp
+ * in the main project program Alien_Shoot.cpp.
  * */
 
 #include <iostream>
@@ -56,9 +56,11 @@ class Weapon {
 		void set_manufacturer(std::string);
 		void set_model(std::string);
 		void set_caliber(std::string);
+		void set_sights(std::string);
 		std::string get_manufacturer();
 		std::string get_model();
 		std::string get_caliber();
+		std::string get_sights();
 		void show_weapon_specs(Rect);
 
 };
@@ -117,17 +119,43 @@ class Bullet {
 		void delete_bullet();
 };
 
-// Display the specifications of the weapon
+// Display the specifications of the weapon.
+// Specs will be placed at the bottom right-hand
+// corner as is common in shooter games
 void Weapon::show_weapon_specs(Rect r)
 {
+	// Display weapon manufacturer    
 	ggprint8b(&r, 16, 0, "Current Weapon");
 	ggprint8b(&r, 16, 0, "==============");
-	ggprint8b(&r, 16, 0, "Manufacturer: Glock");
-	ggprint8b(&r, 16, 0, "Model: 30");
-	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
+
+	if (get_manufacturer() == "Glock")
+		ggprint8b(&r, 16, 0, "Manufacturer: Glock");
+	else if (get_manufacturer() == "Sig Sauer")
+		ggprint8b(&r, 16, 0, "Manufacturer: Sig Sauer");
+	// Display weapon model
+	if (get_model() == "17")
+		ggprint8b(&r, 16, 0, "Model: 17");
+	else if (get_model() == "30")
+		ggprint8b(&r, 16, 0, "Model: 30");
+	else if (get_model() == "32")
+		ggprint8b(&r, 16, 0, "Model: 32");
+	//Display weapon caliber
+	if (get_caliber() == "9mm")	
+		ggprint8b(&r, 16, 0, "Caliber: 9mm");
+	else if (get_caliber() == "0.40")	
+		ggprint8b(&r, 16, 0, "Caliber: 0.40");
+	else if (get_caliber() == "45 ACP")	
+		ggprint8b(&r, 16, 0, "Caliber: 45 ACP");
+	else if (get_caliber() == "45 GAP")	
+		ggprint8b(&r, 16, 0, "Caliber: 45 GAP");
+	//Display weapon sights
+	if (get_sights() == "Factory")	
+		ggprint8b(&r, 16, 0, "Sights: Factory");
+	if (get_sights() == "3 Dot")	
+		ggprint8b(&r, 16, 0, "Sights: 3 Dot");
+	else if (get_sights() == "Fiberoptic")	
+		ggprint8b(&r, 16, 0, "Sights: Fiberoptic");
 }
-
-
 
 // Set the manufacturer of the weapon
 void Weapon::set_manufacturer(string str)
@@ -147,6 +175,12 @@ void Weapon::set_caliber(string str)
 	caliber = str;
 }
 
+// Set the sights of the weapon
+void Weapon::set_sights(string str)
+{
+	sights = str;
+}
+
 // Get the manufacturer of the weapon
 std::string Weapon::get_manufacturer()
 {
@@ -163,6 +197,12 @@ std::string Weapon::get_model()
 std::string Weapon::get_caliber()
 {
 	return caliber;
+}
+
+// Get the caliber of the weapon
+std::string Weapon::get_sights()
+{
+	return sights;
 }
 
 // Get the x-coordinate of bullet's position

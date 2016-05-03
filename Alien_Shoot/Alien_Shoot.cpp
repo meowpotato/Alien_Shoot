@@ -144,6 +144,7 @@ class Weapon {
 		void set_manufacturer(std::string);
 		void set_model(std::string);
 		void set_caliber(std::string);
+		void set_sights(std::string);
 		std::string get_manufacturer();
 		std::string get_model();
 		std::string get_caliber();
@@ -257,15 +258,6 @@ int deflection=0;
 
 int main(void)
 {
-    // Create the user's weapon and display the specs
-    Glock glock;
-    glock.set_model("30");
-    glock.set_caliber("45 ACP");
-    cout << "Current Weapon: " << endl;
-    cout << glock.get_manufacturer() << endl;
-    cout << glock.get_model() << endl;;
-    cout << glock.get_caliber() << endl;;
-
     logOpen();
     initXWindows();
     initOpengl();
@@ -1162,9 +1154,10 @@ void render(void)
 	r.left = 550;
 	r.center = 540;
 
-	 
-	//Create the user's weapon and display the specs
-	Glock glock30;
-	glock30.show_weapon_specs(r);
+	// Create the user's weapon and display the specs
+	Glock glock32;
+	glock32.set_model("32");
+	glock32.set_caliber("45 GAP");
+	glock32.show_weapon_specs(r);
     }
 }
