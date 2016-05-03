@@ -12,7 +12,6 @@
  * */
 
 #include <iostream>
-#include "jeffC.h"
 
 extern "C" {
 #include "fonts.h"
