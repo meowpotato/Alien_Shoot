@@ -12,8 +12,5 @@
 #define JEFFC_H
 #endif
 
-#include "ppm.h"
-#include <GL/glx.h>
-
 void load_weapon_texture();
 void load_weapon_image();
