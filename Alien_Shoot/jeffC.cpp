@@ -12,6 +12,7 @@
  * */
 
 #include <iostream>
+#include "jeffC.h"
 
 extern "C" {
 #include "fonts.h"
@@ -116,7 +117,7 @@ class Bullet {
 		void delete_bullet();
 };
 
-//Create the user's weapon and display the specs
+// Display the specifications of the weapon
 void Weapon::show_weapon_specs(Rect r)
 {
 	ggprint8b(&r, 16, 0, "Current Weapon");
@@ -126,29 +127,7 @@ void Weapon::show_weapon_specs(Rect r)
 	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
 }
 
-// Fire a bullet
-void Weapon::shoot()
-{
-	// Draw a bullet at the end of the barrel 
-	// and send it to the mouse cursor
-	
-	
-	//delete bullets
-}
 
-// Pan the weapon to follow the mouse cursor
-void Weapon::pan()
-{
-	// Get location of the mouse cursor
-	
-	// Turn the barrel of the weapon towards mouse cursor
-}
-
-// Deletes bullets from the screen
-void Bullet::delete_bullet()
-{
-	// Remove bullet from data struct. holding bullets
-}
 
 // Set the manufacturer of the weapon
 void Weapon::set_manufacturer(string str)

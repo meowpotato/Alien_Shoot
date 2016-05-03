@@ -79,6 +79,7 @@ void checkKeys(XEvent *e);
 void init();
 void loadImages();
 void loadTextures();
+void load_weapon_texture();
 void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
 /*void renderMainMenu();
@@ -206,6 +207,8 @@ GLuint glock30Texture;
 GLuint forestTransTexture;
 GLuint umbrellaTexture;
 */
+GLuint glock17Texture;
+Ppmimage *glock17Image=NULL;
 
 bool space=false;
 int pauseMenu = 0;
@@ -314,14 +317,20 @@ int main(void)
     return 0;
 }
 
-void show_weapon_specs(Rect r)
+void load_weapon_image()
 {
-	ggprint8b(&r, 16, 0, "Current Weapon");
-	ggprint8b(&r, 16, 0, "==============");
-	ggprint8b(&r, 16, 0, "Manufacturer: Glock");
-	ggprint8b(&r, 16, 0, "Model: 30");
-	ggprint8b(&r, 16, 0, "Caliber: 45ACP");
+	glock17Image = ppm6GetImage("./images/glock_17.ppm");
+}
 
+void load_weapon_texture()
+{
+	//Glock 17 Weapon
+	glBindTexture(GL_TEXTURE_2D, glock17Texture);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3,
+			glock17Image->width, glock17Image->height,
+			0, GL_RGB, GL_UNSIGNED_BYTE, glock17Image->data);
 }
 
 void cleanupXWindows(void)
