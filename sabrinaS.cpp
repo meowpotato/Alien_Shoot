@@ -1,7 +1,8 @@
 //Author: Sabrina Smith
 //Class: CMPS 335
 //Purpose: Lab 5 - Work on project material
-//	   Loading images and textures outside of main .cpp file	   
+//	   Loading images and textures outside of main.cpp file	   
+//Modified: 5/2/16
 
 
 #include "sabrinaS.h"
@@ -45,8 +46,7 @@ void loadTextures() {
 	glGenTextures(1, &umbrellaTexture);
 }
 
-unsigned char *buildAlphaData(Ppmimage *img)
-{
+unsigned char *buildAlphaData(Ppmimage *img) {
 	//add 4th component to RGB stream...
 	int i;
 	int a,b,c;
