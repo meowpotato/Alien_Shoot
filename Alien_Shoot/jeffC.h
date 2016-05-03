@@ -7,7 +7,6 @@
  *
  * */
 
-
 #ifndef JEFFC_H
 #define JEFFC_H
 #endif
