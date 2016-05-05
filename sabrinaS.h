@@ -21,12 +21,14 @@ extern Ppmimage *umbrellaImage;
 extern Ppmimage *mainMenuImage;
 extern Ppmimage *pauseMenuImage;
 extern Ppmimage *glock30Image;
+extern Ppmimage *glock17Image;
 extern GLuint bigfootTexture;
 extern GLuint silhouetteTexture;
 extern GLuint forestTexture;
 extern GLuint mainMenuTexture;
 extern GLuint pauseMenuTexture;
 extern GLuint glock30Texture;
+extern GLuint glock17Texture;
 extern GLuint forestTransTexture;
 extern GLuint umbrellaTexture;
 
