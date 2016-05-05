@@ -26,7 +26,8 @@ GLuint umbrellaTexture;
 float wid = 120.0f;
 
 
-void loadImages() {
+void loadImages() 
+{
 	bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
 	forestImage      = ppm6GetImage("./images/forest.ppm");
 	mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
@@ -36,7 +37,8 @@ void loadImages() {
 	umbrellaImage    = ppm6GetImage("./images/umbrella.ppm");
 }
 
-void loadTextures() {
+void loadTextures() 
+{
 	glGenTextures(1, &bigfootTexture);
 	glGenTextures(1, &silhouetteTexture);
 	glGenTextures(1, &forestTexture);
@@ -46,7 +48,8 @@ void loadTextures() {
 	glGenTextures(1, &umbrellaTexture);
 }
 
-unsigned char *buildAlphaData(Ppmimage *img) {
+unsigned char *buildAlphaData(Ppmimage *img) 
+{
 	//add 4th component to RGB stream...
 	int i;
 	int a,b,c;
@@ -78,7 +81,8 @@ unsigned char *buildAlphaData(Ppmimage *img) {
 }
 
 
-void buildTextures() {
+void buildTextures() 
+{
 	int w = bigfootImage->width;
 	int h = bigfootImage->height;
 	//
@@ -187,86 +191,3 @@ void buildTextures() {
 	//GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
 	//-------------------------------------------------------------------------
 }
-/*
-void renderMainMenu () {
-	glBindTexture(GL_TEXTURE_2D, mainMenuTexture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	glEnd();
-}
-
-void renderPauseMenu () {
-	glBindTexture(GL_TEXTURE_2D, pauseMenuTexture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	glEnd();
-
-}
-
-void renderGun () {
-	glBindTexture(GL_TEXTURE_2D, glock30Texture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	glEnd();
-
-}
-void renderBackground () {
-	glBindTexture(GL_TEXTURE_2D, forestTexture);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	glEnd();
-
-}
-void renderBigfoot () {
-	
-	Bigfoot alien;
-
-	glPushMatrix();
-	glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
-	//if (!silhouette) {
-	//	glBindTexture(GL_TEXTURE_2D, bigfootTexture);
-	//} else {
-		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
-		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0.0f);
-		glColor4ub(255,255,255,255);
-	//}
-	glBegin(GL_QUADS);
-	if (alien.vel[0] > 0.0) {
-		glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-		glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-	} else {
-		glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
-		glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-	}
-	glEnd();
-	glPopMatrix();
-	//
-	if (trees && silhouette) {
-		glBindTexture(GL_TEXTURE_2D, forestTransTexture);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-		glEnd();
-	}
-	glDisable(GL_ALPHA_TEST);
-
-}*/
