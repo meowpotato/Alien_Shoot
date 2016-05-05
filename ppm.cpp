@@ -180,12 +180,11 @@ void ppm1ClearImage(Ppmimage *image, unsigned char color)
 	}
 }
 
-void ppm1Setpixel(Ppmimage *image, int x, int y, unsigned char val) {
+void ppm1Setpixel(Ppmimage *image, int x, int y, unsigned char val) 
+{
 	unsigned char *data = (unsigned char *)image->data + (y * image->width + x);
 	*data = val;
 }
-
-
 
 Ppmimage *ppm3GetImage(const char *filename)
 {
@@ -316,8 +315,10 @@ void ppm3ClearImage(Ppmimage *image, unsigned char red, unsigned char green, uns
 	}
 }
 
-void ppm3Setpixel(Ppmimage *image, int x, int y, int channel, unsigned char val) {
-	unsigned char *data = (unsigned char *)image->data + ((y * image->width * 3) + (x * 3) + channel);
+void ppm3Setpixel(Ppmimage *image, int x, int y, int channel, unsigned char val) 
+{
+	unsigned char *data = (unsigned char *)image->data + 
+		((y * image->width * 3) + (x * 3) + channel);
 	*data = val;
 }
 
@@ -338,7 +339,6 @@ void ppm3Setpixel(Ppmimage *image, int x, int y, int channel, unsigned char val)
 //
 //
 //
-
 Ppmimage *ppm6GetImage(const char *filename)
 {
 	int i, j, width, height, size, maxval, ntries;
@@ -482,8 +482,9 @@ void ppm6ClearImage(Ppmimage *image, unsigned char red, unsigned char green, uns
 	}
 }
 
-void ppm6Setpixel(Ppmimage *image, int x, int y, int channel, unsigned char val) {
-	unsigned char *data = (unsigned char *)image->data + ((y * image->width * 3) + (x * 3) + channel);
+void ppm6Setpixel(Ppmimage *image, int x, int y, int channel, unsigned char val) 
+{
+	unsigned char *data = (unsigned char *)image->data + 
+		((y * image->width * 3) + (x * 3) + channel);
 	*data = val;
 }
-
