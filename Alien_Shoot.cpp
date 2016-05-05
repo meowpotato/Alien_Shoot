@@ -82,11 +82,6 @@ void loadTextures();
 void load_weapon_texture();
 void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
-/*void renderMainMenu();
-void renderPauseMenu();
-void renderGun();
-void renderBackground();
-void renderBigfoot();*/
 void physics(void);
 void render(void);
 void moveAlien();
@@ -111,107 +106,83 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 int done=0;
 int xres=800, yres=600;
-/*
-typedef struct t_bigfoot {
-    Vec pos;
-    Vec vel;
-} Bigfoot;*/
 Bigfoot alien;
 
 class Weapon {
-	protected:
-		// Coordinates of center
-		int x, y, z;
-		float angle;
-		float color[3];
-		std::string manufacturer;
-		std::string model;
-		std::string caliber;
-	public:
-		// Default ctor to initialize vars
-		Weapon() {
-			x = 0;
-			y = 0;
-			z = 0;
-			//Default color
-			color[0] = 1.0;
-			color[1] = 1.0;
-			color[2] = 1.0;
-		}
-		void shoot();
-		void pan();
-		void muzzle_flash();
-		void set_manufacturer(std::string);
-		void set_model(std::string);
-		void set_caliber(std::string);
-		void set_sights(std::string);
-		std::string get_manufacturer();
-		std::string get_model();
-		std::string get_caliber();
-		void show_weapon_specs(Rect);
+    protected:
+	// Coordinates of center
+	int x, y, z;
+	float angle;
+	float color[3];
+	std::string manufacturer;
+	std::string model;
+	std::string caliber;
+    public:
+	// Default ctor to initialize vars
+	Weapon() {
+	    x = 0;
+	    y = 0;
+	    z = 0;
+	    //Default color
+	    color[0] = 1.0;
+	    color[1] = 1.0;
+	    color[2] = 1.0;
+	}
+	void shoot();
+	void pan();
+	void muzzle_flash();
+	void set_manufacturer(std::string);
+	void set_model(std::string);
+	void set_caliber(std::string);
+	void set_sights(std::string);
+	std::string get_manufacturer();
+	std::string get_model();
+	std::string get_caliber();
+	void show_weapon_specs(Rect);
 };
 
 
 class Glock : public Weapon {
-	public:
-		Glock() {
-			manufacturer = "Glock";
-			model = "";
-			caliber = "";
-		}
+    public:
+	Glock() {
+	    manufacturer = "Glock";
+	    model = "";
+	    caliber = "";
+	}
 };
 
 class Bullet {
-	protected:
-		// Width and height of the bullet
-		int width;
-		int height;
-		// x, y, z are position vars
-		int x;
-		int y;
-		int z;
-		std::string caliber;
-		// Velocity of the bullet
-		float x_velocity;
-		float y_velocity;
-	public:
-		Bullet() {
-			width = 0;
-			height = 0;
-			x = 0;
-			y = 0;
-			z = 0;
-			caliber = "9mm";
-			x_velocity = 0;
-			y_velocity = 0;
-		}
-		void move();
-		int get_x();
-		int get_y();
-		int get_z();
-		void delete_bullet();
+    protected:
+	// Width and height of the bullet
+	int width;
+	int height;
+	// x, y, z are position vars
+	int x;
+	int y;
+	int z;
+	std::string caliber;
+	// Velocity of the bullet
+	float x_velocity;
+	float y_velocity;
+    public:
+	Bullet() {
+	    width = 0;
+	    height = 0;
+	    x = 0;
+	    y = 0;
+	    z = 0;
+	    caliber = "9mm";
+	    x_velocity = 0;
+	    y_velocity = 0;
+	}
+	void move();
+	int get_x();
+	int get_y();
+	int get_z();
+	void delete_bullet();
 };
 
-/*Ppmimage *bigfootImage=NULL;
-Ppmimage *forestImage=NULL;
-Ppmimage *forestTransImage=NULL;
-Ppmimage *umbrellaImage=NULL;
-Ppmimage *mainMenuImage=NULL;
-Ppmimage *pauseMenuImage=NULL;
-Ppmimage *glock30Image=NULL;
-GLuint bigfootTexture;
-GLuint silhouetteTexture;
-GLuint forestTexture;
-GLuint mainMenuTexture;
-GLuint pauseMenuTexture;
-GLuint glock30Texture;
-GLuint forestTransTexture;
-GLuint umbrellaTexture;
-*/
-GLuint glock17Texture;
-Ppmimage *glock17Image=NULL;
-
-bool space=false;
+bool space = false;
 int pauseMenu = 0;
 int glock30 = 0;
 int glock17 = 0;
@@ -309,22 +280,6 @@ int main(void)
     return 0;
 }
 
-void load_weapon_image()
-{
-	glock17Image = ppm6GetImage("./images/glock_17.ppm");
-}
-
-void load_weapon_texture()
-{
-	//Glock 17 Weapon
-	glBindTexture(GL_TEXTURE_2D, glock17Texture);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3,
-			glock17Image->width, glock17Image->height,
-			0, GL_RGB, GL_UNSIGNED_BYTE, glock17Image->data);
-}
-
 void cleanupXWindows(void)
 {
     XDestroyWindow(dpy, win);
@@ -386,29 +341,6 @@ void reshapeWindow(int width, int height)
     setTitle();
 }
 
-/*unsigned char *buildAlphaData(Ppmimage *img)
-{
-    //add 4th component to RGB stream...
-    int i;
-    int a,b,c;
-    unsigned char *newdata, *ptr;
-    unsigned char *data = (unsigned char *)img->data;
-    newdata = (unsigned char *)malloc(img->width * img->height * 4);
-    ptr = newdata;
-    for (i=0; i<img->width * img->height * 3; i+=3) {
-	a = *(data+0);
-	b = *(data+1);
-	c = *(data+2);
-	*(ptr+0) = a;
-	*(ptr+1) = b;
-	*(ptr+2) = c;
-	*(ptr+3) = (a|b|c);
-	ptr += 4;
-	data += 3;
-    }
-    return newdata;
-}*/
-
 void initOpengl(void)
 {
     //OpenGL initialization
@@ -430,143 +362,10 @@ void initOpengl(void)
     //Do this to allow fonts
     glEnable(GL_TEXTURE_2D);
     initialize_fonts();
-    /*
-    //
-    //load the images file into a ppm structure.
-    //
-    bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
-    forestImage      = ppm6GetImage("./images/forest.ppm");
-    mainMenuImage	 = ppm6GetImage("./images/mainMenu.ppm");
-    pauseMenuImage	 = ppm6GetImage("./images/pauseMenu.ppm");
-    glock30Image	 = ppm6GetImage("./images/glock_30.ppm");
-    forestTransImage = ppm6GetImage("./images/forestTrans.ppm");
-    umbrellaImage    = ppm6GetImage("./images/umbrella.ppm");
-    //
-    //create opengl texture elements
-    glGenTextures(1, &bigfootTexture);
-    glGenTextures(1, &silhouetteTexture);
-    glGenTextures(1, &forestTexture);
-    glGenTextures(1, &mainMenuTexture);
-    glGenTextures(1, &pauseMenuTexture);
-    glGenTextures(1, &glock30Texture);
-    glGenTextures(1, &umbrellaTexture);
-    */
-    
+
     loadImages();
     loadTextures();
     buildTextures();
-/*
-    //-------------------------------------------------------------------------
-    //bigfoot
-    //
-    int w = bigfootImage->width;
-    int h = bigfootImage->height;
-    //
-    glBindTexture(GL_TEXTURE_2D, bigfootTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-	    GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
-    //-------------------------------------------------------------------------
-    //
-    //silhouette
-    //this is similar to a sprite graphic
-    //
-    glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    //
-    //must build a new set of data...
-    unsigned char *silhouetteData = buildAlphaData(bigfootImage);	
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-    free(silhouetteData);
-    //glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-    //	GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
-    //-------------------------------------------------------------------------
-    //
-    //umbrella
-    //
-    glBindTexture(GL_TEXTURE_2D, umbrellaTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    //
-    //must build a new set of data...
-    silhouetteData = buildAlphaData(umbrellaImage);	
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-    free(silhouetteData);
-    //glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-    //	GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
-    //-------------------------------------------------------------------------
-    //
-    //forest
-    glBindTexture(GL_TEXTURE_2D, forestTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3,
-	    forestImage->width, forestImage->height,
-	    0, GL_RGB, GL_UNSIGNED_BYTE, forestImage->data);
-
-    //-------------------------------------------------------------------------
-    //
-    //main menu
-    glBindTexture(GL_TEXTURE_2D, mainMenuTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3,
-	    mainMenuImage->width, mainMenuImage->height,
-	    0, GL_RGB, GL_UNSIGNED_BYTE, mainMenuImage->data);
-
-
-    //-------------------------------------------------------------------------
-    //
-    //pause menu
-    glBindTexture(GL_TEXTURE_2D, pauseMenuTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3,
-	    pauseMenuImage->width, pauseMenuImage->height,
-	    0, GL_RGB, GL_UNSIGNED_BYTE, pauseMenuImage->data);
-
-    //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
-    //
-    //Glock 30 Weapon
-    glBindTexture(GL_TEXTURE_2D, glock30Texture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    glTexImage2D(GL_TEXTURE_2D, 0, 3,
-	    glock30Image->width, glock30Image->height,
-	    0, GL_RGB, GL_UNSIGNED_BYTE, glock30Image->data);
-
-    //-------------------------------------------------------------------------
-    //
-    //forest transparent part
-    //
-    glBindTexture(GL_TEXTURE_2D, forestTransTexture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    //
-    //must build a new set of data...
-    w = forestTransImage->width;
-    h = forestTransImage->height;
-    unsigned char *ftData = buildAlphaData(forestTransImage);	
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
-    free(ftData);
-    //glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-    //GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
-    //-------------------------------------------------------------------------
-*/
 }
 
 void checkResize(XEvent *e)
@@ -588,10 +387,6 @@ void initSounds(void)
     //Fmod is not allowed.
     //OpenAL sound only.
     //Look for the openalTest folder under code.
-
-
-
-
 }
 
 void init() {
@@ -680,22 +475,6 @@ void checkKeys(XEvent *e)
 	    //if (!show_rain)
 	    //	cleanup_raindrops();
 	    break;
-	case XK_Left:
-	    VecCopy(umbrella.pos, umbrella.lastpos);
-	    umbrella.pos[0] -= 10.0;
-	    break;
-	case XK_Right:
-	    VecCopy(umbrella.pos, umbrella.lastpos);
-	    umbrella.pos[0] += 10.0;
-	    break;
-	case XK_Up:
-	    VecCopy(umbrella.pos, umbrella.lastpos);
-	    umbrella.pos[1] += 10.0;
-	    break;
-	case XK_Down:
-	    VecCopy(umbrella.pos, umbrella.lastpos);
-	    umbrella.pos[1] -= 10.0;
-	    break;
 	case XK_space:
 	    space = true;
 	    break;
@@ -712,17 +491,7 @@ void checkKeys(XEvent *e)
 	case XK_w:
 	    glock30 ^= 1;
 	    //glock17 ^= 1;
-	    if (shift) {} //{
-		//shrink the umbrella
-		/*umbrella.width *= (1.0 / 1.05);
-	    } else {
-		//enlarge the umbrella
-		umbrella.width *= 1.05;
-	    }
-	    //half the width
-	    umbrella.width2 = umbrella.width * 0.5;
-	    umbrella.radius = (float)umbrella.width2;
-	    */
+	    if (shift) {} 
 	    break;
 	case XK_Escape:
 	    done=1;
@@ -751,274 +520,33 @@ Flt VecNormalize(Vec vec)
 
 void cleanupRaindrops(void)
 {
-    Raindrop *s;
-    while (ihead) {
-	s = ihead->next;
-	free(ihead);
-	ihead = s;
-    }
-    ihead=NULL;
+
 }
 
 void deleteRain(Raindrop *node)
 {
-    //remove a node from linked list
-    //this line keeps the compiler happy for now.
     if (node) {}
-
-
-    //hints:
-    //check for some special cases:
-    //1. only 1 node in list (it is also the head node)
-    //2. node at beginning of list (it is also the head node)
-    //3. node at end of list.
-    //4. node somewhere else in list.
-
-    //if (node->prev == NULL) <--- node at beginning of list.
-
-
-
-
-
-
-
-    //At the end of this function, free the node's memory,
-    //and set the node to NULL.
 }
-
-/*void moveBigfoot()
-{
-    //move bigfoot...
-    int addgrav = 1;
-    //Update position
-    bigfoot.pos[0] += bigfoot.vel[0];
-    bigfoot.pos[1] += bigfoot.vel[1];
-    //Check for collision with window edges
-    if ((bigfoot.pos[0] < -140.0 && bigfoot.vel[0] < 0.0) ||
-	    (bigfoot.pos[0] >= (float)xres+140.0 && bigfoot.vel[0] > 0.0)) {
-	bigfoot.vel[0] = -bigfoot.vel[0];
-	addgrav = 0;
-    }
-    if ((bigfoot.pos[1] < 150.0 && bigfoot.vel[1] < 0.0) ||
-	    (bigfoot.pos[1] >= (float)yres && bigfoot.vel[1] > 0.0)) {
-	bigfoot.vel[1] = -bigfoot.vel[1];
-	addgrav = 0;
-    }
-    //Gravity
-    if (addgrav)
-	bigfoot.vel[1] -= 0.75;
-} */
-
 
 void createRaindrop(const int n)
 {
-    //create new rain drops...
-    int i;
-    for (i=0; i<n; i++) {
-	Raindrop *node = (Raindrop *)malloc(sizeof(Raindrop));
-	if (node == NULL) {
-	    Log("error allocating node.\n");
-	    exit(EXIT_FAILURE);
-	}
-	node->prev = NULL;
-	node->next = NULL;
-	node->sound=0;
-	node->pos[0] = rnd() * (float)xres;
-	node->pos[1] = rnd() * 100.0f + (float)yres;
-	VecCopy(node->pos, node->lastpos);
-	node->vel[0] = 
-	    node->vel[1] = 0.0f;
-	node->color[0] = rnd() * 0.2f + 0.8f;
-	node->color[1] = rnd() * 0.2f + 0.8f;
-	node->color[2] = rnd() * 0.2f + 0.8f;
-	node->color[3] = rnd() * 0.5f + 0.3f; //alpha
-	node->linewidth = random(8)+1;
-	//larger linewidth = faster speed
-	node->maxvel[1] = (float)(node->linewidth*16);
-	node->length = node->maxvel[1] * 0.2f + rnd();
-	//put raindrop into linked list
-	node->next = ihead;
-	if (ihead != NULL)
-	    ihead->prev = node;
-	ihead = node;
-	++totrain;
-    }
+
 }
 
 void checkRaindrops()
 {
-    if (random(100) < 50) {
-	createRaindrop(ndrops);
-    }
-    //
-    //move rain droplets
-    Raindrop *node = ihead;
-    while (node) {
-	//force is toward the ground
-	node->vel[1] += gravity;
-	VecCopy(node->pos, node->lastpos);
 
-	//----------------------------------------------------------------
-	//The next 2 lines are temporary code just for this assignment.
-	//Comment them out, then fix the raindrop delet function.
-	//----------------------------------------------------------------
-	float test = rnd() * 100.0;
-	if (node->pos[1] > test)
-	{
-	    node->pos[0] += node->vel[0] * timeslice;
-	    node->pos[1] += node->vel[1] * timeslice;
-	    if (fabs(node->vel[1]) > node->maxvel[1])
-		node->vel[1] *= 0.96;
-	    node->vel[0] *= 0.999;
-	}
-	//
-	node = node->next;
-    }
-    //
-    //check rain droplets
-    int n=0;
-    node = ihead;
-    while (node) {
-	n++;
-#ifdef USE_SOUND
-	if (node->pos[1] < 0.0f) {
-	    //raindrop hit ground
-	    if (!node->sound && play_sounds) {
-		//small chance that a sound will play
-		int r = random(50);
-		if (r==1) {
-		    //play sound here...
-
-
-
-		}
-		//sound plays once per raindrop
-		node->sound=1;
-	    }
-	}
-#endif //USE_SOUND
-	//collision detection for raindrop on umbrella
-	if (showUmbrella) {
-	    if (umbrella.shape == UMBRELLA_FLAT) {
-		if (node->pos[0] >= (umbrella.pos[0] - umbrella.width2) &&
-			node->pos[0] <= (umbrella.pos[0] + umbrella.width2)) {
-		    if (node->lastpos[1] > umbrella.lastpos[1] ||
-			    node->lastpos[1] > umbrella.pos[1]) {
-			if (node->pos[1] <= umbrella.pos[1] ||
-				node->pos[1] <= umbrella.lastpos[1]) {
-			    if (node->linewidth > 1) {
-				Raindrop *savenode = node->next;
-				deleteRain(node);
-				node = savenode;
-				continue;
-			    }
-			}
-		    }
-		}
-	    }
-	    if (umbrella.shape == UMBRELLA_ROUND) {
-		float d0 = node->pos[0] - umbrella.pos[0];
-		float d1 = node->pos[1] - umbrella.pos[1];
-		float distance = sqrt((d0*d0)+(d1*d1));
-		//Log("distance: %f  umbrella.radius: %f\n",
-		//distance,umbrella.radius);
-		if (distance <= umbrella.radius &&
-			node->pos[1] > umbrella.pos[1]) {
-		    if (node->linewidth > 1) {
-			if (deflection) {
-			    //deflect raindrop
-			    double dot;
-			    Vec v, up = {0,1,0};
-			    VecSub(node->pos, umbrella.pos, v);
-			    VecNormalize(v);
-			    node->pos[0] =
-				umbrella.pos[0] + v[0] * umbrella.radius;
-			    node->pos[1] =
-				umbrella.pos[1] + v[1] * umbrella.radius;
-			    dot = VecDot(v,up);
-			    dot += 1.0;
-			    node->vel[0] += v[0] * dot * 1.0;
-			    node->vel[1] += v[1] * dot * 1.0;
-			} else {
-			    Raindrop *savenode = node->next;
-			    deleteRain(node);
-			    node = savenode;
-			    continue;
-			}
-		    }
-		}
-	    }
-	}
-	if (node->pos[1] < -20.0f) {
-	    //rain drop is below the visible area
-	    Raindrop *savenode = node->next;
-	    deleteRain(node);
-	    node = savenode;
-	    continue;
-	}
-	node = node->next;
-    }
-    if (maxrain < n)
-	maxrain = n;
 }
 
 void physics(void)
 {
     if (showBigfoot)
 	moveAlien();
-    if (showRain)
-	checkRaindrops();
 }
-
-/*void drawUmbrella(void)
-{
-    //Log("drawUmbrella()...\n");
-    if (umbrella.shape == UMBRELLA_FLAT) {
-	glColor4f(1.0f, 0.2f, 0.2f, 0.5f);
-	glLineWidth(8);
-	glBegin(GL_LINES);
-	glVertex2f(umbrella.pos[0]-umbrella.width2, umbrella.pos[1]);
-	glVertex2f(umbrella.pos[0]+umbrella.width2, umbrella.pos[1]);
-	glEnd();
-	glLineWidth(1);
-    } else {
-	glColor4f(1.0f, 1.0f, 1.0f, 0.8f);
-	glPushMatrix();
-	glTranslatef(umbrella.pos[0],umbrella.pos[1],umbrella.pos[2]);
-	glEnable(GL_ALPHA_TEST);
-	glAlphaFunc(GL_GREATER, 0.0f);
-	glBindTexture(GL_TEXTURE_2D, umbrellaTexture);
-	glBegin(GL_QUADS);
-	float w = umbrella.width2;
-	glTexCoord2f(0.0f, 0.0f); glVertex2f(-w,  w);
-	glTexCoord2f(1.0f, 0.0f); glVertex2f( w,  w);
-	glTexCoord2f(1.0f, 1.0f); glVertex2f( w, -w);
-	glTexCoord2f(0.0f, 1.0f); glVertex2f(-w, -w);
-	glEnd();
-	glBindTexture(GL_TEXTURE_2D, 0);
-	glDisable(GL_ALPHA_TEST);
-	glPopMatrix();
-    }
-}*/
 
 void drawRaindrops(void)
 {
-    //if (ihead) {
-    Raindrop *node = ihead;
-    while (node) {
-	glPushMatrix();
-	glTranslated(node->pos[0],node->pos[1],node->pos[2]);
-	glColor4fv(node->color);
-	glLineWidth(node->linewidth);
-	glBegin(GL_LINES);
-	glVertex2f(0.0f, 0.0f);
-	glVertex2f(0.0f, node->length);
-	glEnd();
-	glPopMatrix();
-	node = node->next;
-    }
-    //}
-    glLineWidth(1);
+
 }
 
 void render(void)
@@ -1118,22 +646,14 @@ void render(void)
 		glEnd();
 	    }
 	    glDisable(GL_ALPHA_TEST);
-	
+
 	}
 
 	glDisable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
-	if (showRain)
-	    drawRaindrops();
 	glDisable(GL_BLEND);
 	glEnable(GL_TEXTURE_2D);
-	//
-	//if (showUmbrella)
-	//    drawUmbrella();
-	//glBindTexture(GL_TEXTURE_2D, 0);
-	
-   	//
 	//
 	r.bot = yres - 20;
 	r.left = 10;
@@ -1147,7 +667,7 @@ void render(void)
 	ggprint8b(&r, 16, 0, "D - Deflection");
 	ggprint8b(&r, 16, 0, "N - Sounds");
 	ggprint8b(&r, 16, 0, "W - Weapon");
-    
+
 	// Reposition the Rect instance r so weapon menu will be 
 	// displayed in bottom right corner
 	r.bot = yres - 400;
@@ -1155,9 +675,9 @@ void render(void)
 	r.center = 540;
 
 	// Create the user's weapon and display the specs
-	Glock glock32;
-	glock32.set_model("32");
-	glock32.set_caliber("45 GAP");
-	glock32.show_weapon_specs(r);
+	/*Glock glock32;
+	  glock32.set_model("32");
+	  glock32.set_caliber("45 GAP");
+	  glock32.show_weapon_specs(r);*/
     }
 }
