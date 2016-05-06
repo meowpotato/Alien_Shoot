@@ -658,14 +658,14 @@ void render(void)
 	r.bot = yres - 20;
 	r.left = 10;
 	r.center = 0;
-	ggprint8b(&r, 16, 0, "B - Bigfoot");
+	/*ggprint8b(&r, 16, 0, "B - Bigfoot");
 	ggprint8b(&r, 16, 0, "F - Forest");
 	ggprint8b(&r, 16, 0, "S - Silhouette");
 	ggprint8b(&r, 16, 0, "T - Trees");
 	ggprint8b(&r, 16, 0, "U - Umbrella");
 	ggprint8b(&r, 16, 0, "R - Rain");
 	ggprint8b(&r, 16, 0, "D - Deflection");
-	ggprint8b(&r, 16, 0, "N - Sounds");
+	ggprint8b(&r, 16, 0, "N - Sounds");*/
 	ggprint8b(&r, 16, 0, "W - Weapon");
 
 	// Reposition the Rect instance r so weapon menu will be 
@@ -675,9 +675,9 @@ void render(void)
 	r.center = 540;
 
 	// Create the user's weapon and display the specs
-	/*Glock glock32;
-	  glock32.set_model("32");
-	  glock32.set_caliber("45 GAP");
-	  glock32.show_weapon_specs(r);*/
+	Glock glock32;
+	glock32.set_model("32");
+	glock32.set_caliber("45 GAP");
+	//glock32.show_weapon_specs(r);
     }
 }
