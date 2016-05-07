@@ -11,5 +11,6 @@
 #define JEFFC_H
 #endif
 
+void show_weapon();
 void load_weapon_texture();
 void load_weapon_image();

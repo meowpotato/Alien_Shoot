@@ -12,6 +12,7 @@
  * */
 
 #include <iostream>
+#include <GL/glu.h>
 
 extern "C" {
 #include "fonts.h"
@@ -117,6 +118,21 @@ class Bullet {
 		int get_z();
 		void delete_bullet();
 };
+
+// Displays a rear-view of the weapon
+void show_weapon()
+{
+	glPushMatrix();
+	glTranslatef(400,0,0);
+	glColor3f(1.0, 1.0, 1.0);
+	glBegin(GL_POLYGON);
+		glVertex3f(20.0, 20.0, 0.0);
+		glVertex3f(60.0, 20.0, 0.0);
+		glVertex3f(60.0, 60.0, 0.0);
+		glVertex3f(20.0, 60.0, 0.0);
+	glEnd();
+	glPopMatrix();
+}
 
 // Display the specifications of the weapon.
 // Specs will be placed at the bottom right-hand
