@@ -4,8 +4,8 @@
  * 
  * Author: Jeff Cadena
  * CMPS 335 Individual contribution to project
- * Date: Written 4/11/16-5/3/16, modified 4/27/16, 
- * modified 5/2/16
+ * Date: Written 4/11/16-Present 
+ * Modified 4/27/16, 5/2/16, 5/6/16
  * Purpose: Make weapon classes, appropriate child classes
  * using inheritance, and functions that will be called
  * in the main project program Alien_Shoot.cpp.
@@ -17,7 +17,6 @@
 extern "C" {
 #include "fonts.h"
 }
-
 
 using namespace std;
 
@@ -172,66 +171,66 @@ void Weapon::show_weapon_specs(Rect r)
 		ggprint8b(&r, 16, 0, "Sights: Fiberoptic");
 }
 
-// Set the manufacturer of the weapon
+// Assign the manufacturer of the weapon
 void Weapon::set_manufacturer(string str)
 {
 	manufacturer = str;
 }
 
-// Set the model of the weapon
+// Assign the model of the weapon
 void Weapon::set_model(string str)
 {
 	model = str;
 }
 
-// Set the caliber of the weapon
+// Assign the caliber of the weapon
 void Weapon::set_caliber(string str)
 {
 	caliber = str;
 }
 
-// Set the sights of the weapon
+// Assign the sights of the weapon
 void Weapon::set_sights(string str)
 {
 	sights = str;
 }
 
-// Get the manufacturer of the weapon
+// Return the manufacturer of the weapon
 std::string Weapon::get_manufacturer()
 {
 	return manufacturer;
 }
 
-// Get the model of the weapon
+// Return the model of the weapon
 std::string Weapon::get_model()
 {
 	return model;
 }
 
-// Get the caliber of the weapon
+// Return the caliber of the weapon
 std::string Weapon::get_caliber()
 {
 	return caliber;
 }
 
-// Get the caliber of the weapon
+// Return the sights of the weapon
 std::string Weapon::get_sights()
 {
 	return sights;
 }
 
-// Get the x-coordinate of bullet's position
+// Return the x-coordinate of bullet's position
 int Bullet::get_x()
 {
 	return x;
 }
 
-// Get the y-coordinate of bullet's position
+// Return the y-coordinate of bullet's position
 int Bullet::get_y()
 {
 	return y;
 }
-// Get the z-coordinate of bullet's position
+// Return the z-coordinate of bullet's position
 int Bullet::get_z()
 {
 	return z;
