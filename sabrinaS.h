@@ -15,6 +15,7 @@
 #include "ppm.h"
 
 extern Ppmimage *bigfootImage;
+extern Ppmimage *backgroundImage;
 extern Ppmimage *forestImage;
 extern Ppmimage *forestTransImage;
 extern Ppmimage *umbrellaImage;
@@ -25,6 +26,7 @@ extern Ppmimage *glock17Image;
 extern GLuint bigfootTexture;
 extern GLuint silhouetteTexture;
 extern GLuint forestTexture;
+extern GLuint backgroundTexture;
 extern GLuint mainMenuTexture;
 extern GLuint pauseMenuTexture;
 extern GLuint glock30Texture;

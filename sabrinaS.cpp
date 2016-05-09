@@ -9,6 +9,7 @@
 
 Ppmimage *bigfootImage=NULL;
 Ppmimage *forestImage=NULL;
+Ppmimage *backgroundImage=NULL;
 Ppmimage *forestTransImage=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
@@ -18,6 +19,7 @@ Ppmimage *glock17Image=NULL;
 GLuint bigfootTexture;
 GLuint silhouetteTexture;
 GLuint forestTexture;
+GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
 GLuint glock30Texture;
@@ -31,6 +33,7 @@ float wid = 120.0f;
 void loadImages() 
 {
     bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
+    backgroundImage  = ppm6GetImage("./images/background.ppm");
     forestImage      = ppm6GetImage("./images/forest.ppm");
     mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
     pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
@@ -43,6 +46,7 @@ void loadImages()
 void loadTextures() 
 {
     glGenTextures(1, &bigfootTexture);
+    glGenTextures(1, &backgroundTexture);
     glGenTextures(1, &silhouetteTexture);
     glGenTextures(1, &forestTexture);
     glGenTextures(1, &mainMenuTexture);
@@ -130,14 +134,14 @@ void buildTextures()
     //  GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
     //-------------------------------------------------------------------------
     //
-    //forest
-    glBindTexture(GL_TEXTURE_2D, forestTexture);
+    //background
+    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
     //
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3,
-	    forestImage->width, forestImage->height,
-	    0, GL_RGB, GL_UNSIGNED_BYTE, forestImage->data);
+	    backgroundImage->width, backgroundImage->height,
+	    0, GL_RGB, GL_UNSIGNED_BYTE, backgroundImage->data);
 
     //-------------------------------------------------------------------------
     //

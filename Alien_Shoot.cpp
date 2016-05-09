@@ -602,7 +602,7 @@ void render(void)
 
     else {
 	if (forest) {
-	    glBindTexture(GL_TEXTURE_2D, forestTexture);
+	    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
 	    glBegin(GL_QUADS);
 	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
 	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
