@@ -124,7 +124,7 @@ void Weapon::show_fact_sights()
 {
 	glPushMatrix();
 	glTranslatef(280,0,0);
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
 		glVertex3f(45.0, 100.0, 0.0);
 		glVertex3f(45.0, 110.0, 0.0);
@@ -139,7 +139,7 @@ void Weapon::show_weapon()
 {
 	glPushMatrix();
 	glTranslatef(280,0,0);
-	glColor3f(1.0, 1.0, 1.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
 		glVertex3f(0.0, 0.0, 0.0);
 		glVertex3f(0.0, 95.0, 0.0);
