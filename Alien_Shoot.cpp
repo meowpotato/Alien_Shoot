@@ -138,6 +138,7 @@ class Weapon {
 	std::string get_manufacturer();
 	std::string get_model();
 	std::string get_caliber();
+	void show_weapon();
 	void show_weapon_specs(Rect);
 };
 
@@ -668,6 +669,7 @@ void render(void)
 	ggprint8b(&r, 16, 0, "N - Sounds");*/
 	ggprint8b(&r, 16, 0, "W - Weapon");
 
+
 	// Reposition the Rect instance r so weapon menu will be 
 	// displayed in bottom right corner
 	r.bot = yres - 400;
@@ -676,6 +678,7 @@ void render(void)
 
 	// Create the user's weapon and display the specs
 	Glock glock32;
+	glock32.show_weapon();
 	glock32.set_model("32");
 	glock32.set_caliber("45 GAP");
 	//glock32.show_weapon_specs(r);

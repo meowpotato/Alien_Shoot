@@ -60,8 +60,8 @@ class Weapon {
 		std::string get_model();
 		std::string get_caliber();
 		std::string get_sights();
+		void show_weapon();
 		void show_weapon_specs(Rect);
-
 };
 
 class Glock : public Weapon {
@@ -119,16 +119,18 @@ class Bullet {
 };
 
 // Displays a rear-view of the weapon
-void show_weapon()
+void Weapon::show_weapon()
 {
 	glPushMatrix();
-	glTranslatef(400,0,0);
+	glTranslatef(280,0,0);
 	glColor3f(1.0, 1.0, 1.0);
 	glBegin(GL_POLYGON);
-		glVertex3f(20.0, 20.0, 0.0);
-		glVertex3f(60.0, 20.0, 0.0);
-		glVertex3f(60.0, 60.0, 0.0);
-		glVertex3f(20.0, 60.0, 0.0);
+		glVertex3f(0.0, 0.0, 0.0);
+		glVertex3f(0.0, 95.0, 0.0);
+		glVertex3f(5.0, 100.0, 0.0);
+		glVertex3f(95.0, 100.0, 0.0);
+		glVertex3f(100.0, 95.0, 0.0);
+		glVertex3f(100.0, 0.0, 0.0);
 	glEnd();
 	glPopMatrix();
 }
