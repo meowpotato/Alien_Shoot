@@ -140,6 +140,7 @@ class Weapon {
 	std::string get_caliber();
 	void show_weapon();
 	void show_weapon_specs(Rect);
+	void show_fact_sights();
 };
 
 
@@ -676,9 +677,10 @@ void render(void)
 	r.left = 550;
 	r.center = 540;
 
-	// Create the user's weapon and display the specs
+	// Display the user's weapon and display the specs
 	Glock glock32;
 	glock32.show_weapon();
+	glock32.show_fact_sights();
 	glock32.set_model("32");
 	glock32.set_caliber("45 GAP");
 	//glock32.show_weapon_specs(r);

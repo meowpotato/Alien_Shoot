@@ -62,6 +62,7 @@ class Weapon {
 		std::string get_sights();
 		void show_weapon();
 		void show_weapon_specs(Rect);
+		void show_fact_sights();
 };
 
 class Glock : public Weapon {
@@ -117,6 +118,21 @@ class Bullet {
 		int get_z();
 		void delete_bullet();
 };
+
+// Displays the factory sights
+void Weapon::show_fact_sights()
+{
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0, 1.0, 1.0);
+	glBegin(GL_POLYGON);
+		glVertex3f(45.0, 100.0, 0.0);
+		glVertex3f(45.0, 110.0, 0.0);
+		glVertex3f(55.0, 110.0, 0.0);
+		glVertex3f(55.0, 100.0, 0.0);
+	glEnd();
+	glPopMatrix();
+}
 
 // Displays a rear-view of the weapon
 void Weapon::show_weapon()
