@@ -105,7 +105,7 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 
 int done=0;
-int xres=800, yres=600;
+int xres=1024, yres=1024;
 Bigfoot alien;
 
 class Weapon {
@@ -307,7 +307,7 @@ void initXWindows(void)
     //GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
     XSetWindowAttributes swa;
 
-    setupScreenRes(640, 480);
+    setupScreenRes(580, 580);
     dpy = XOpenDisplay(NULL);
     if (dpy == NULL) {
 	printf("\n\tcannot connect to X server\n\n");
