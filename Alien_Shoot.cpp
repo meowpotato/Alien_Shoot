@@ -191,7 +191,9 @@ int glock17 = 0;
 int showBigfoot=0;
 int forest=1;
 int curtains=1;
-int levels=1;
+int level1=1;
+int level2=1;
+int level3=1;
 int silhouette=1;
 int trees=1;
 int showRain=0;
@@ -461,7 +463,9 @@ void checkKeys(XEvent *e)
 	case XK_f:
 	    forest ^= 1;
 	    curtains ^= 1;
-	    levels ^= 1;
+	    level1 ^= 1;
+	    level2 ^= 1;
+	    level3 ^= 1;
 	    break;
 	case XK_s:
 	    silhouette ^= 1;
@@ -629,7 +633,7 @@ void render(void)
 	    glDisable(GL_ALPHA_TEST);
 	}
 	
-	if(levels) {
+	if(level1) {
 	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, level1Texture);
@@ -640,7 +644,8 @@ void render(void)
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
-
+	}
+	if(level2) {
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, level2Texture);
 	    glBegin(GL_QUADS);
@@ -650,7 +655,8 @@ void render(void)
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
-	    
+	} 
+	if(level3) {
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, level3Texture);
 	    glBegin(GL_QUADS);
