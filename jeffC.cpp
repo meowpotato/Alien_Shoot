@@ -118,7 +118,24 @@ class Bullet {
 		int get_y();
 		int get_z();
 		void delete_bullet();
+		void show_bullet();
 };
+
+// Display the bullet
+void Bullet::show_bullet()
+{
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(0.0f, 0.0f, 1.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(45.0, 111.0, 0.0);
+		glVertex3f(45.0, 121.0, 0.0);
+		glVertex3f(55.0, 121.0, 0.0);
+		glVertex3f(55.0, 111.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+} 
 
 // Display muzzle flash when the weapon fires
 void Weapon::show_muzzle_flash()
