@@ -141,8 +141,8 @@ class Weapon {
 	void show_weapon();
 	void show_weapon_specs(Rect);
 	void show_fact_sights();
+	void show_muzzle_flash();
 };
-
 
 class Glock : public Weapon {
     public:
