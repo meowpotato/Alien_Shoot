@@ -651,6 +651,13 @@ void render(void)
 
 	}
 
+	// Display the user's weapon and display the specs
+	Glock glock32;
+	glock32.show_weapon();
+	glock32.show_fact_sights();
+	glock32.set_model("32");
+	glock32.set_caliber("45 GAP");
+
 	glDisable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -677,12 +684,6 @@ void render(void)
 	r.left = 550;
 	r.center = 540;
 
-	// Display the user's weapon and display the specs
-	Glock glock32;
-	glock32.show_weapon();
-	glock32.show_fact_sights();
-	glock32.set_model("32");
-	glock32.set_caliber("45 GAP");
 	//glock32.show_weapon_specs(r);
     }
 }
