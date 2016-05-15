@@ -611,6 +611,45 @@ void render(void)
     }
 
     else {
+	
+	if(level3) {
+	    glEnable(GL_ALPHA_TEST);
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, level3Texture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+	    glDisable(GL_ALPHA_TEST);
+	}
+
+	if(level2) {
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, level2Texture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+	    glDisable(GL_ALPHA_TEST);
+	}
+ 
+	if(level1) {
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, level1Texture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+
+	    glDisable(GL_ALPHA_TEST);
+	}
+
 	if (forest) {
 	    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
 	    glBegin(GL_QUADS);
@@ -620,6 +659,7 @@ void render(void)
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
 	}
+	
 	if(curtains) {
 	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
@@ -632,44 +672,8 @@ void render(void)
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
 	}
-	
-	if(level1) {
-	    glEnable(GL_ALPHA_TEST);
-            glAlphaFunc(GL_GREATER, 0.0f);
-	    glBindTexture(GL_TEXTURE_2D, level1Texture);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	    glEnd();
-	    glDisable(GL_ALPHA_TEST);
-	}
-	if(level2) {
-            glAlphaFunc(GL_GREATER, 0.0f);
-	    glBindTexture(GL_TEXTURE_2D, level2Texture);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	    glEnd();
-	    glDisable(GL_ALPHA_TEST);
-	} 
-	if(level3) {
-            glAlphaFunc(GL_GREATER, 0.0f);
-	    glBindTexture(GL_TEXTURE_2D, level3Texture);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	    glEnd();
-
-	    glDisable(GL_ALPHA_TEST);
-	}
-
-        if (showBigfoot) {
+        
+	if (showBigfoot) {
 	    glPushMatrix();
 	    glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
 	    if (!silhouette) {
