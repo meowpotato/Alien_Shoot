@@ -10,7 +10,7 @@
 Ppmimage *bigfootImage=NULL;
 Ppmimage *forestImage=NULL;
 Ppmimage *backgroundImage=NULL;
-Ppmimage *forestTransImage=NULL;
+Ppmimage *curtainsImage=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
@@ -24,7 +24,7 @@ GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
 GLuint glock30Texture;
 GLuint glock17Texture;
-GLuint forestTransTexture;
+GLuint curtainsTexture;
 GLuint umbrellaTexture;
 
 float wid = 120.0f;
@@ -39,7 +39,7 @@ void loadImages()
     pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
     glock30Image     = ppm6GetImage("./images/glock_30.ppm");
     glock17Image     = ppm6GetImage("./images/glock_17.ppm");
-    forestTransImage = ppm6GetImage("./images/forestTrans.ppm");
+    curtainsImage    = ppm6GetImage("./images/curtains.ppm");
     umbrellaImage    = ppm6GetImage("./images/umbrella.ppm");
 }
 
@@ -49,6 +49,7 @@ void loadTextures()
     glGenTextures(1, &backgroundTexture);
     glGenTextures(1, &silhouetteTexture);
     glGenTextures(1, &forestTexture);
+    glGenTextures(1, &curtainsTexture);
     glGenTextures(1, &mainMenuTexture);
     glGenTextures(1, &pauseMenuTexture);
     glGenTextures(1, &glock30Texture);
@@ -167,9 +168,9 @@ void buildTextures()
 	    0, GL_RGB, GL_UNSIGNED_BYTE, pauseMenuImage->data);
 
     //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
     //
     //Glock 30 Weapon
+    //
     glBindTexture(GL_TEXTURE_2D, glock30Texture);
     //
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -179,9 +180,9 @@ void buildTextures()
 	    0, GL_RGB, GL_UNSIGNED_BYTE, glock30Image->data);
 
     //-------------------------------------------------------------------------
-    //-------------------------------------------------------------------------
     //
     //Glock 17 Weapon
+    //
     glBindTexture(GL_TEXTURE_2D, glock17Texture);
     //
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
@@ -195,19 +196,16 @@ void buildTextures()
     //
     //forest transparent part
     //
-    glBindTexture(GL_TEXTURE_2D, forestTransTexture);
+    glBindTexture(GL_TEXTURE_2D, curtainsTexture);
     //
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     //
     //must build a new set of data...
-    w = forestTransImage->width;
-    h = forestTransImage->height;
-    unsigned char *ftData = buildAlphaData(forestTransImage);
+    w = curtainsImage->width;
+    h = curtainsImage->height;
+    unsigned char *ftData = buildAlphaData(curtainsImage);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
     free(ftData);
-    //glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-    //GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
-    //-------------------------------------------------------------------------
 }
