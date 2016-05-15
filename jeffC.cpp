@@ -63,6 +63,7 @@ class Weapon {
 		void show_weapon();
 		void show_weapon_specs(Rect);
 		void show_fact_sights();
+		void show_muzzle_flash();
 };
 
 class Glock : public Weapon {
@@ -118,6 +119,34 @@ class Bullet {
 		int get_z();
 		void delete_bullet();
 };
+
+// Display muzzle flash when the weapon fires
+void Weapon::show_muzzle_flash()
+{
+	// Left half of flash    
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(0.0, 95.0, 0.0);
+		glVertex3f(-20.0, 130.0, 0.0);
+		glVertex3f(0.0, 75.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+
+	// Right half of flash    
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(95.0, 95.0, 0.0);
+		glVertex3f(115.0, 130.0, 0.0);
+		glVertex3f(100.0, 75.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+}
 
 // Displays the factory sights
 void Weapon::show_fact_sights()
