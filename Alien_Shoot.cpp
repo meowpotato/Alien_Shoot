@@ -190,6 +190,7 @@ int glock30 = 0;
 int glock17 = 0;
 int showBigfoot=0;
 int forest=1;
+int curtains=1;
 int silhouette=1;
 int trees=1;
 int showRain=0;
@@ -458,6 +459,7 @@ void checkKeys(XEvent *e)
 	    break;
 	case XK_f:
 	    forest ^= 1;
+	    curtains ^= 1;
 	    break;
 	case XK_s:
 	    silhouette ^= 1;
@@ -611,7 +613,10 @@ void render(void)
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
-
+	}
+	if(curtains) {
+	    glEnable(GL_ALPHA_TEST);
+            glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, curtainsTexture);
 	    glBegin(GL_QUADS);
 	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
@@ -619,6 +624,7 @@ void render(void)
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
+	    glDisable(GL_ALPHA_TEST);
 	}
 	if (showBigfoot) {
 	    glPushMatrix();
@@ -646,7 +652,7 @@ void render(void)
 	    glEnd();
 	    glPopMatrix();
 	    //
-	    if (trees && silhouette) {
+	    /*if (trees && silhouette) {
 		glBindTexture(GL_TEXTURE_2D, forestTransTexture);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
@@ -655,7 +661,7 @@ void render(void)
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 		glEnd();
 	    }
-	    glDisable(GL_ALPHA_TEST);
+	    glDisable(GL_ALPHA_TEST);*/
 
 	}
 
