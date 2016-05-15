@@ -39,7 +39,7 @@ void loadImages()
     pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
     glock30Image     = ppm6GetImage("./images/glock_30.ppm");
     glock17Image     = ppm6GetImage("./images/glock_17.ppm");
-    curtainsImage    = ppm6GetImage("./images/curtains.ppm");
+    curtainsImage    = ppm6GetImage("./images/curtains1.ppm");
     umbrellaImage    = ppm6GetImage("./images/umbrella.ppm");
 }
 
