@@ -134,11 +134,23 @@ void Weapon::show_fact_sights()
 	glEnd();
 	glPopMatrix();
 
+	// Show red dot on front sight 
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(47.0, 103.0, 0.0);
+		glVertex3f(47.0, 108.0, 0.0);
+		glVertex3f(53.0, 108.0, 0.0);
+		glVertex3f(53.0, 103.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	
 	// Show black left rear factory sight
 	glPushMatrix();
 	glTranslatef(280,0,0);
 	glColor3f(0.0f, 0.0f, 0.0f);
-	glBegin(GL_POLYGON);
+	glBegin(GL_POLYGON);		
 		glVertex3f(5.0, 100.0, 0.0);
 		glVertex3f(10.0, 110.0, 0.0);
 		glVertex3f(30.0, 110.0, 0.0);
@@ -157,6 +169,7 @@ void Weapon::show_fact_sights()
 		glVertex3f(95.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 }
 
 // Displays a rear-view of the weapon
@@ -174,6 +187,7 @@ void Weapon::show_weapon()
 		glVertex3f(100.0, 0.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 }
 
 // Display the specifications of the weapon.
