@@ -17,7 +17,7 @@
 extern Ppmimage *bigfootImage;
 extern Ppmimage *backgroundImage;
 extern Ppmimage *forestImage;
-extern Ppmimage *forestTransImage;
+extern Ppmimage *curtainsImage;
 extern Ppmimage *umbrellaImage;
 extern Ppmimage *mainMenuImage;
 extern Ppmimage *pauseMenuImage;
@@ -31,6 +31,6 @@ extern GLuint mainMenuTexture;
 extern GLuint pauseMenuTexture;
 extern GLuint glock30Texture;
 extern GLuint glock17Texture;
-extern GLuint forestTransTexture;
+extern GLuint curtainsTexture;
 extern GLuint umbrellaTexture;
 

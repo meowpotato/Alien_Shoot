@@ -611,6 +611,14 @@ void render(void)
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
+
+	    glBindTexture(GL_TEXTURE_2D, curtainsTexture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
 	}
 	if (showBigfoot) {
 	    glPushMatrix();
