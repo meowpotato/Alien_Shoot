@@ -105,7 +105,7 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 
 int done=0;
-int xres=800, yres=600;
+int xres=1024, yres=1024;
 Bigfoot alien;
 
 class Weapon {
@@ -307,7 +307,7 @@ void initXWindows(void)
     //GLint att[] = { GLX_RGBA, GLX_DEPTH_SIZE, 24, None };
     XSetWindowAttributes swa;
 
-    setupScreenRes(640, 480);
+    setupScreenRes(580, 580);
     dpy = XOpenDisplay(NULL);
     if (dpy == NULL) {
 	printf("\n\tcannot connect to X server\n\n");
@@ -659,6 +659,13 @@ void render(void)
 
 	}
 
+	// Display the user's weapon and display the specs
+	Glock glock32;
+	glock32.show_weapon();
+	glock32.show_fact_sights();
+	glock32.set_model("32");
+	glock32.set_caliber("45 GAP");
+
 	glDisable(GL_TEXTURE_2D);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
@@ -685,12 +692,6 @@ void render(void)
 	r.left = 550;
 	r.center = 540;
 
-	// Display the user's weapon and display the specs
-	Glock glock32;
-	glock32.show_weapon();
-	glock32.show_fact_sights();
-	glock32.set_model("32");
-	glock32.set_caliber("45 GAP");
 	//glock32.show_weapon_specs(r);
     }
 }
