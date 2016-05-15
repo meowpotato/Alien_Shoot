@@ -639,6 +639,7 @@ void render(void)
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
+	    glDisable(GL_ALPHA_TEST);
 
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, level2Texture);
@@ -648,6 +649,7 @@ void render(void)
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
+	    glDisable(GL_ALPHA_TEST);
 	    
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, level3Texture);
