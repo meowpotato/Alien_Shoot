@@ -122,6 +122,7 @@ class Bullet {
 // Displays the factory sights
 void Weapon::show_fact_sights()
 {
+	// Show black front sight
 	glPushMatrix();
 	glTranslatef(280,0,0);
 	glColor3f(0.0f, 0.0f, 0.0f);
@@ -130,6 +131,30 @@ void Weapon::show_fact_sights()
 		glVertex3f(45.0, 110.0, 0.0);
 		glVertex3f(55.0, 110.0, 0.0);
 		glVertex3f(55.0, 100.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
+	// Show black left rear factory sight
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(5.0, 100.0, 0.0);
+		glVertex3f(10.0, 110.0, 0.0);
+		glVertex3f(30.0, 110.0, 0.0);
+		glVertex3f(30.0, 100.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
+	// Show black right rear factory sight
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(0.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(70.0, 100.0, 0.0);
+		glVertex3f(70.0, 110.0, 0.0);
+		glVertex3f(90.0, 110.0, 0.0);
+		glVertex3f(95.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
 }
