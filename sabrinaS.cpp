@@ -11,6 +11,9 @@ Ppmimage *bigfootImage=NULL;
 Ppmimage *forestImage=NULL;
 Ppmimage *backgroundImage=NULL;
 Ppmimage *curtainsImage=NULL;
+Ppmimage *level1Image=NULL;
+Ppmimage *level2Image=NULL;
+Ppmimage *level3Image=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
@@ -19,6 +22,9 @@ Ppmimage *glock17Image=NULL;
 GLuint bigfootTexture;
 GLuint silhouetteTexture;
 GLuint forestTexture;
+GLuint level1Texture;
+GLuint level2Texture;
+GLuint level3Texture;
 GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
@@ -33,6 +39,9 @@ float wid = 120.0f;
 void loadImages() 
 {
     bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
+    level1Image	     = ppm6GetImage("./images/level1.ppm");
+    level2Image	     = ppm6GetImage("./images/level2.ppm");
+    level3Image	     = ppm6GetImage("./images/level3.ppm");
     backgroundImage  = ppm6GetImage("./images/background.ppm");
     forestImage      = ppm6GetImage("./images/forest.ppm");
     mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
@@ -49,6 +58,9 @@ void loadTextures()
     glGenTextures(1, &backgroundTexture);
     glGenTextures(1, &silhouetteTexture);
     glGenTextures(1, &forestTexture);
+    glGenTextures(1, &level1Texture);
+    glGenTextures(1, &level2Texture);
+    glGenTextures(1, &level3Texture);
     glGenTextures(1, &curtainsTexture);
     glGenTextures(1, &mainMenuTexture);
     glGenTextures(1, &pauseMenuTexture);
@@ -194,7 +206,7 @@ void buildTextures()
 
     //-------------------------------------------------------------------------
     //
-    //forest transparent part
+    //curtains
     //
     glBindTexture(GL_TEXTURE_2D, curtainsTexture);
     //
@@ -205,6 +217,57 @@ void buildTextures()
     w = curtainsImage->width;
     h = curtainsImage->height;
     unsigned char *ftData = buildAlphaData(curtainsImage);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+    free(ftData);
+
+    //-------------------------------------------------------------------------
+    //
+    //level 1
+    //
+    glBindTexture(GL_TEXTURE_2D, level1Texture);
+    //
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    //
+    //must build a new set of data...
+    w = level1Image->width;
+    h = level1Image->height;
+    unsigned char *ftData = buildAlphaData(level1Image);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+    free(ftData);
+
+    //-------------------------------------------------------------------------
+    //
+    //level 2
+    //
+    glBindTexture(GL_TEXTURE_2D, level2Texture);
+    //
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    //
+    //must build a new set of data...
+    w = level2Image->width;
+    h = level2Image->height;
+    unsigned char *ftData = buildAlphaData(level2Image);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+    free(ftData);
+
+    //-------------------------------------------------------------------------
+    //
+    //level 3
+    //
+    glBindTexture(GL_TEXTURE_2D, level3Texture);
+    //
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    //
+    //must build a new set of data...
+    w = level3Image->width;
+    h = level3Image->height;
+    unsigned char *ftData = buildAlphaData(level3Image);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
     free(ftData);

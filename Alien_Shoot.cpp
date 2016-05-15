@@ -191,6 +191,7 @@ int glock17 = 0;
 int showBigfoot=0;
 int forest=1;
 int curtains=1;
+int levels=1;
 int silhouette=1;
 int trees=1;
 int showRain=0;
@@ -460,6 +461,7 @@ void checkKeys(XEvent *e)
 	case XK_f:
 	    forest ^= 1;
 	    curtains ^= 1;
+	    levels ^= 1;
 	    break;
 	case XK_s:
 	    silhouette ^= 1;
@@ -626,7 +628,40 @@ void render(void)
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
 	}
-	if (showBigfoot) {
+	
+	if(levels) {
+	    glEnable(GL_ALPHA_TEST);
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, level1Texture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, level2Texture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+	    
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, level3Texture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+
+	    glDisable(GL_ALPHA_TEST);
+	}
+
+        if (showBigfoot) {
 	    glPushMatrix();
 	    glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
 	    if (!silhouette) {
