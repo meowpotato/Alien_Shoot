@@ -233,10 +233,10 @@ void buildTextures()
     //must build a new set of data...
     w = level1Image->width;
     h = level1Image->height;
-    unsigned char *ftData = buildAlphaData(level1Image);
+    unsigned char *ftData1 = buildAlphaData(level1Image);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
-    free(ftData);
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData1);
+    free(ftData1);
 
     //-------------------------------------------------------------------------
     //
@@ -250,10 +250,10 @@ void buildTextures()
     //must build a new set of data...
     w = level2Image->width;
     h = level2Image->height;
-    unsigned char *ftData = buildAlphaData(level2Image);
+    unsigned char *ftData2 = buildAlphaData(level2Image);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
-    free(ftData);
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData2);
+    free(ftData2);
 
     //-------------------------------------------------------------------------
     //
@@ -267,8 +267,8 @@ void buildTextures()
     //must build a new set of data...
     w = level3Image->width;
     h = level3Image->height;
-    unsigned char *ftData = buildAlphaData(level3Image);
+    unsigned char *ftData3 = buildAlphaData(level3Image);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
-    free(ftData);
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData3);
+    free(ftData3);
 }
