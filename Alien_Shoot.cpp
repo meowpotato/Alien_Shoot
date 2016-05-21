@@ -649,6 +649,7 @@ void render(void)
 	}
 	
 	if(level1) {
+	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, levelsTexture);
 	    glBegin(GL_QUADS);
