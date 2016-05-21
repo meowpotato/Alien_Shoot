@@ -237,10 +237,10 @@ void buildTextures()
     //must build a new set of data...
     w = levelsImage->width;
     h = levelsImage->height;
-    unsigned char *ftData1 = buildAlphaData(levelsImage);
+    ftData = buildAlphaData(levelsImage);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData1);
-    free(ftData1);
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+    free(ftData);
     /*
     //-------------------------------------------------------------------------
     //
