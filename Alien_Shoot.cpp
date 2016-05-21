@@ -464,8 +464,8 @@ void checkKeys(XEvent *e)
 	    forest ^= 1;
 	    curtains ^= 1;
 	    level1 ^= 1;
-	    level2 ^= 1;
-	    level3 ^= 1;
+	    //level2 ^= 1;
+	    //level3 ^= 1;
 	    break;
 	case XK_s:
 	    silhouette ^= 1;
@@ -612,7 +612,7 @@ void render(void)
 
     else {
 	
-	if(level3) {
+	/*if(level3) {
 	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, level3Texture);
@@ -635,20 +635,8 @@ void render(void)
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
-	}
+	}*/
  
-	if(level1) {
-            glAlphaFunc(GL_GREATER, 0.0f);
-	    glBindTexture(GL_TEXTURE_2D, level1Texture);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	    glEnd();
-
-	    glDisable(GL_ALPHA_TEST);
-	}
 
 	if (forest) {
 	    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
@@ -660,6 +648,19 @@ void render(void)
 	    glEnd();
 	}
 	
+	if(level1) {
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glBindTexture(GL_TEXTURE_2D, levelsTexture);
+	    glBegin(GL_QUADS);
+	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+	    glEnd();
+
+	    glDisable(GL_ALPHA_TEST);
+	}
+
 	if(curtains) {
 	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);

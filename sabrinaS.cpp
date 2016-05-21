@@ -11,6 +11,7 @@ Ppmimage *bigfootImage=NULL;
 Ppmimage *forestImage=NULL;
 Ppmimage *backgroundImage=NULL;
 Ppmimage *curtainsImage=NULL;
+Ppmimage *levelsImage=NULL;
 Ppmimage *level1Image=NULL;
 Ppmimage *level2Image=NULL;
 Ppmimage *level3Image=NULL;
@@ -22,6 +23,7 @@ Ppmimage *glock17Image=NULL;
 GLuint bigfootTexture;
 GLuint silhouetteTexture;
 GLuint forestTexture;
+GLuint levelsTexture;
 GLuint level1Texture;
 GLuint level2Texture;
 GLuint level3Texture;
@@ -39,6 +41,7 @@ float wid = 120.0f;
 void loadImages() 
 {
     bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
+    levelsImage	     = ppm6GetImage("./images/levels.ppm");
     level1Image	     = ppm6GetImage("./images/level1.ppm");
     level2Image	     = ppm6GetImage("./images/level2.ppm");
     level3Image	     = ppm6GetImage("./images/level3.ppm");
@@ -58,6 +61,7 @@ void loadTextures()
     glGenTextures(1, &backgroundTexture);
     glGenTextures(1, &silhouetteTexture);
     glGenTextures(1, &forestTexture);
+    glGenTextures(1, &levelsTexture);
     glGenTextures(1, &level1Texture);
     glGenTextures(1, &level2Texture);
     glGenTextures(1, &level3Texture);
@@ -225,19 +229,19 @@ void buildTextures()
     //
     //level 1
     //
-    glBindTexture(GL_TEXTURE_2D, level1Texture);
+    glBindTexture(GL_TEXTURE_2D, levelsTexture);
     //
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     //
     //must build a new set of data...
-    w = level1Image->width;
-    h = level1Image->height;
-    unsigned char *ftData1 = buildAlphaData(level1Image);
+    w = levelsImage->width;
+    h = levelsImage->height;
+    unsigned char *ftData1 = buildAlphaData(levelsImage);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 	    GL_RGBA, GL_UNSIGNED_BYTE, ftData1);
     free(ftData1);
-
+    /*
     //-------------------------------------------------------------------------
     //
     //level 2
@@ -270,5 +274,5 @@ void buildTextures()
     unsigned char *ftData3 = buildAlphaData(level3Image);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 	    GL_RGBA, GL_UNSIGNED_BYTE, ftData3);
-    free(ftData3);
+    free(ftData3);*/
 }
