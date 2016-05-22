@@ -126,12 +126,11 @@ void Bullet::show_bullet()
 {
 	glPushMatrix();
 	glTranslatef(280,0,0);
-	glColor3f(0.0f, 0.0f, 1.0f);
+	glColor3f(1.0f, 0.5f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(45.0, 111.0, 0.0);
 		glVertex3f(45.0, 121.0, 0.0);
-		glVertex3f(55.0, 121.0, 0.0);
-		glVertex3f(55.0, 111.0, 0.0);
+		glVertex3f(47.5, 131.0, 0.0);
+		glVertex3f(50.0, 121.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
@@ -180,10 +179,10 @@ void Weapon::show_fact_sights()
 	glEnd();
 	glPopMatrix();
 
-	// Show red dot on front sight 
+	// Show white dot on front sight 
 	glPushMatrix();
 	glTranslatef(280,0,0);
-	glColor3f(1.0f, 0.0f, 0.0f);
+	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
 		glVertex3f(47.0, 103.0, 0.0);
 		glVertex3f(47.0, 108.0, 0.0);
