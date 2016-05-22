@@ -182,6 +182,7 @@ class Bullet {
 	int get_y();
 	int get_z();
 	void delete_bullet();
+	void show_bullet();
 };
 
 bool space = false;
@@ -530,7 +531,7 @@ void render(void)
     }
 
     else {
- 
+
 //	if (forest) {
 	    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
 	    glBegin(GL_QUADS);
@@ -567,7 +568,18 @@ void render(void)
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
 //	}
-        
+	// Display the user's weapon and display the specs
+	Glock glock32;
+	glock32.show_weapon();
+	glock32.show_fact_sights();
+	glock32.set_model("32");
+	glock32.set_caliber("45 GAP");
+
+	// Display bullet
+	Bullet bullet;
+	bullet.show_bullet();
+	//glDisable(GL_TEXTURE_2D);
+	
 //	if (showBigfoot) {
 	    glPushMatrix();
 	    glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
@@ -594,14 +606,6 @@ void render(void)
 	    //
 //	}
 
-	// Display the user's weapon and display the specs
-	Glock glock32;
-	glock32.show_weapon();
-	glock32.show_fact_sights();
-	glock32.set_model("32");
-	glock32.set_caliber("45 GAP");
-
-	//
 	r.bot = yres - 20;
 	r.left = 10;
 	r.center = 0;
