@@ -84,7 +84,7 @@ void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
 void physics(void);
 void render(void);
-void moveAlien();
+void moveAlien(Alien);
 //-----------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 30.0;
@@ -106,7 +106,7 @@ void timeCopy(struct timespec *dest, struct timespec *source) {
 
 int done=0;
 int xres=1024, yres=1024;
-Bigfoot alien;
+Alien alien;
 
 class Weapon {
     protected:
@@ -188,51 +188,13 @@ bool space = false;
 int pauseMenu = 0;
 int glock30 = 0;
 int glock17 = 0;
-int showBigfoot=0;
+int showBigfoot=1;
 int forest=1;
 int curtains=1;
-int level1=1;
-int level2=1;
-int level3=1;
 int silhouette=1;
 int trees=1;
 int showRain=0;
 //
-typedef struct t_raindrop {
-    int type;
-    int linewidth;
-    int sound;
-    Vec pos;
-    Vec lastpos;
-    Vec vel;
-    Vec maxvel;
-    Vec force;
-    float length;
-    float color[4];
-    struct t_raindrop *prev;
-    struct t_raindrop *next;
-} Raindrop;
-Raindrop *ihead=NULL;
-int ndrops=1;
-int totrain=0;
-int maxrain=0;
-void deleteRain(Raindrop *node);
-void cleanupRaindrops(void);
-//
-#define UMBRELLA_FLAT  0
-#define UMBRELLA_ROUND 1
-typedef struct t_umbrella {
-    int shape;
-    Vec pos;
-    Vec lastpos;
-    float width;
-    float width2;
-    float radius;
-} Umbrella;
-Umbrella umbrella;
-int showUmbrella=0;
-int deflection=0;
-
 int main(void)
 {
     logOpen();
@@ -281,8 +243,6 @@ int main(void)
     cleanup_fonts();
     logClose();
 
-
-
     return 0;
 }
 
@@ -296,7 +256,7 @@ void setTitle(void)
 {
     //Set the window title bar.
     XMapWindow(dpy, win);
-    XStoreName(dpy, win, "CS335 - OpenGL Animation Template Under XWindows");
+    XStoreName(dpy, win, "Alien Shoot");
 }
 
 void setupScreenRes(const int w, const int h)
@@ -396,13 +356,6 @@ void initSounds(void)
 }
 
 void init() {
-    umbrella.pos[0] = 220.0;
-    umbrella.pos[1] = (double)(yres-200);
-    VecCopy(umbrella.pos, umbrella.lastpos);
-    umbrella.width = 200.0;
-    umbrella.width2 = umbrella.width * 0.5;
-    umbrella.radius = (float)umbrella.width2;
-    umbrella.shape = UMBRELLA_FLAT;
     MakeVector(-150.0,180.0,0.0, alien.pos);
     MakeVector(6.0,0.0,0.0, alien.vel);
 }
@@ -452,20 +405,17 @@ void checkKeys(XEvent *e)
     }
     switch(key) {
 	case XK_b:
-	    showBigfoot ^= 1;
-	    if (showBigfoot) {
-		alien.pos[0] = -250.0;
-	    }
+	    //showBigfoot ^= 1;
+	    //if (showBigfoot) {
+	    //}
 	    break;
 	case XK_d:
-	    deflection ^= 1;
+	    //deflection ^= 1;
 	    break;
 	case XK_f:
-	    forest ^= 1;
-	    curtains ^= 1;
-	    level1 ^= 1;
-	    //level2 ^= 1;
-	    //level3 ^= 1;
+	    //forest ^= 1;
+	    //curtains ^= 1;
+	    //level1 ^= 1;
 	    break;
 	case XK_s:
 	    silhouette ^= 1;
@@ -475,26 +425,18 @@ void checkKeys(XEvent *e)
 	    trees ^= 1;
 	    break;
 	case XK_u:
-	    showUmbrella ^= 1;
 	    break;
 	case XK_p:
 	    pauseMenu ^= 1;
 	    break;
 	case XK_r:
-	    showRain ^= 1;
-	    //if (!show_rain)
-	    //	cleanup_raindrops();
 	    break;
 	case XK_space:
 	    space = true;
 	    break;
 	case XK_equal:
-	    if (++ndrops > 40)
-		ndrops=40;
 	    break;
 	case XK_minus:
-	    if (--ndrops < 0)
-		ndrops = 0;
 	    break;
 	case XK_n:
 	    break;
@@ -528,35 +470,12 @@ Flt VecNormalize(Vec vec)
     return(len);
 }
 
-void cleanupRaindrops(void)
-{
-
-}
-
-void deleteRain(Raindrop *node)
-{
-    if (node) {}
-}
-
-void createRaindrop(const int n)
-{
-
-}
-
-void checkRaindrops()
-{
-
-}
-
 void physics(void)
 {
-    if (showBigfoot)
-	moveAlien();
-}
-
-void drawRaindrops(void)
-{
-
+    //if (showBigfoot)
+		alien.pos[0] = 200.0;
+		alien.pos[1] = 200.0;
+	moveAlien(alien);
 }
 
 void render(void)
@@ -611,34 +530,8 @@ void render(void)
     }
 
     else {
-	
-	/*if(level3) {
-	    glEnable(GL_ALPHA_TEST);
-            glAlphaFunc(GL_GREATER, 0.0f);
-	    glBindTexture(GL_TEXTURE_2D, level3Texture);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	    glEnd();
-	    glDisable(GL_ALPHA_TEST);
-	}
-
-	if(level2) {
-            glAlphaFunc(GL_GREATER, 0.0f);
-	    glBindTexture(GL_TEXTURE_2D, level2Texture);
-	    glBegin(GL_QUADS);
-	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-	    glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-	    glEnd();
-	    glDisable(GL_ALPHA_TEST);
-	}*/
  
-
-	if (forest) {
+//	if (forest) {
 	    glBindTexture(GL_TEXTURE_2D, backgroundTexture);
 	    glBegin(GL_QUADS);
 	    glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
@@ -646,9 +539,9 @@ void render(void)
 	    glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
-	}
+//	}
 	
-	if(level1) {
+//	if(level1) {
 	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, levelsTexture);
@@ -660,9 +553,9 @@ void render(void)
 	    glEnd();
 
 	    glDisable(GL_ALPHA_TEST);
-	}
+//	}
 
-	if(curtains) {
+//	if(curtains) {
 	    glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
 	    glBindTexture(GL_TEXTURE_2D, curtainsTexture);
@@ -673,20 +566,17 @@ void render(void)
 	    glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 	    glEnd();
 	    glDisable(GL_ALPHA_TEST);
-	}
+//	}
         
-	if (showBigfoot) {
+//	if (showBigfoot) {
 	    glPushMatrix();
 	    glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
-	    if (!silhouette) {
-		glBindTexture(GL_TEXTURE_2D, bigfootTexture);
-	    } else {
-		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
-		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0.0f);
-		glColor4ub(255,255,255,255);
-	    }
+	    glBindTexture(GL_TEXTURE_2D, alienTexture);
+	    glEnable(GL_ALPHA_TEST);
+            glAlphaFunc(GL_GREATER, 0.0f);
+	    glColor4ub(255,255,255,255);
 	    glBegin(GL_QUADS);
+	    
 	    if (alien.vel[0] > 0.0) {
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
@@ -699,20 +589,10 @@ void render(void)
 		glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
 	    }
 	    glEnd();
+	    glDisable(GL_ALPHA_TEST);
 	    glPopMatrix();
 	    //
-	    /*if (trees && silhouette) {
-		glBindTexture(GL_TEXTURE_2D, forestTransTexture);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-		glEnd();
-	    }
-	    glDisable(GL_ALPHA_TEST);*/
-
-	}
+//	}
 
 	// Display the user's weapon and display the specs
 	Glock glock32;
@@ -721,11 +601,6 @@ void render(void)
 	glock32.set_model("32");
 	glock32.set_caliber("45 GAP");
 
-	glDisable(GL_TEXTURE_2D);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-	glEnable(GL_BLEND);
-	glDisable(GL_BLEND);
-	glEnable(GL_TEXTURE_2D);
 	//
 	r.bot = yres - 20;
 	r.left = 10;

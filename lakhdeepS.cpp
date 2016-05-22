@@ -13,9 +13,10 @@
 
 using namespace std;
 
-void moveAlien()
+//Alien alien;
+void moveAlien(Alien alien)
 {
-	Bigfoot alien;
+	//Alien alien;
 	//move alien...
 	int addgrav = 1;
 	//Update position

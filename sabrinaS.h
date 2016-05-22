@@ -15,19 +15,18 @@
 #include "ppm.h"
 
 extern Ppmimage *bigfootImage;
+extern Ppmimage *alienImage;
 extern Ppmimage *backgroundImage;
 extern Ppmimage *forestImage;
 extern Ppmimage *curtainsImage;
 extern Ppmimage *levelsImage;
-extern Ppmimage *level1Image;
-extern Ppmimage *level2Image;
-extern Ppmimage *level3Image;
 extern Ppmimage *umbrellaImage;
 extern Ppmimage *mainMenuImage;
 extern Ppmimage *pauseMenuImage;
 extern Ppmimage *glock30Image;
 extern Ppmimage *glock17Image;
 extern GLuint bigfootTexture;
+extern GLuint alienTexture;
 extern GLuint silhouetteTexture;
 extern GLuint forestTexture;
 extern GLuint backgroundTexture;

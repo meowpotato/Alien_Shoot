@@ -9,4 +9,4 @@
 #define LAKHDEEPS_H
 #endif
 
-void moveAlien()
+void moveAlien(Alien)

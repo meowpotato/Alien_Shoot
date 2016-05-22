@@ -3,9 +3,9 @@ extern int yres;
 
 typedef double Vec[3];
 
-typedef struct t_bigfoot {
+typedef struct t_alien {
     Vec pos;
     Vec vel;
-} Bigfoot;
+} Alien;
 //Bigfoot alien;
 

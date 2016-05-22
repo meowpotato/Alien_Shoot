@@ -8,25 +8,21 @@
 #include "sabrinaS.h"
 
 Ppmimage *bigfootImage=NULL;
+Ppmimage *alienImage=NULL;
 Ppmimage *forestImage=NULL;
 Ppmimage *backgroundImage=NULL;
 Ppmimage *curtainsImage=NULL;
 Ppmimage *levelsImage=NULL;
-Ppmimage *level1Image=NULL;
-Ppmimage *level2Image=NULL;
-Ppmimage *level3Image=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
 Ppmimage *glock30Image=NULL;
 Ppmimage *glock17Image=NULL;
 GLuint bigfootTexture;
+GLuint alienTexture;
 GLuint silhouetteTexture;
 GLuint forestTexture;
 GLuint levelsTexture;
-GLuint level1Texture;
-GLuint level2Texture;
-GLuint level3Texture;
 GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
@@ -41,10 +37,8 @@ float wid = 120.0f;
 void loadImages() 
 {
     bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
+    alienImage       = ppm6GetImage("./images/alien.ppm");
     levelsImage	     = ppm6GetImage("./images/levels.ppm");
-    level1Image	     = ppm6GetImage("./images/level1.ppm");
-    level2Image	     = ppm6GetImage("./images/level2.ppm");
-    level3Image	     = ppm6GetImage("./images/level3.ppm");
     backgroundImage  = ppm6GetImage("./images/background.ppm");
     forestImage      = ppm6GetImage("./images/forest.ppm");
     mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
@@ -58,13 +52,11 @@ void loadImages()
 void loadTextures() 
 {
     glGenTextures(1, &bigfootTexture);
+    glGenTextures(1, &alienTexture);
     glGenTextures(1, &backgroundTexture);
     glGenTextures(1, &silhouetteTexture);
     glGenTextures(1, &forestTexture);
     glGenTextures(1, &levelsTexture);
-    glGenTextures(1, &level1Texture);
-    glGenTextures(1, &level2Texture);
-    glGenTextures(1, &level3Texture);
     glGenTextures(1, &curtainsTexture);
     glGenTextures(1, &mainMenuTexture);
     glGenTextures(1, &pauseMenuTexture);
@@ -116,6 +108,23 @@ void buildTextures()
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
     glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
 	    GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
+    //-------------------------------------------------------------------------
+    //
+    //alien
+    //
+    //
+    glBindTexture(GL_TEXTURE_2D, alienTexture);
+    //
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+    //
+    //must build a new set of data...
+    w = alienImage->width;
+    h = alienImage->height;
+    unsigned char *ftData = buildAlphaData(alienImage);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+    free(ftData);
     //-------------------------------------------------------------------------
     //
     //silhouette
@@ -220,14 +229,14 @@ void buildTextures()
     //must build a new set of data...
     w = curtainsImage->width;
     h = curtainsImage->height;
-    unsigned char *ftData = buildAlphaData(curtainsImage);
+    ftData = buildAlphaData(curtainsImage);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
     free(ftData);
 
     //-------------------------------------------------------------------------
     //
-    //level 1
+    //levels
     //
     glBindTexture(GL_TEXTURE_2D, levelsTexture);
     //
@@ -241,38 +250,4 @@ void buildTextures()
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 	    GL_RGBA, GL_UNSIGNED_BYTE, ftData);
     free(ftData);
-    /*
-    //-------------------------------------------------------------------------
-    //
-    //level 2
-    //
-    glBindTexture(GL_TEXTURE_2D, level2Texture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    //
-    //must build a new set of data...
-    w = level2Image->width;
-    h = level2Image->height;
-    unsigned char *ftData2 = buildAlphaData(level2Image);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData2);
-    free(ftData2);
-
-    //-------------------------------------------------------------------------
-    //
-    //level 3
-    //
-    glBindTexture(GL_TEXTURE_2D, level3Texture);
-    //
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-    //
-    //must build a new set of data...
-    w = level3Image->width;
-    h = level3Image->height;
-    unsigned char *ftData3 = buildAlphaData(level3Image);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	    GL_RGBA, GL_UNSIGNED_BYTE, ftData3);
-    free(ftData3);*/
 }
