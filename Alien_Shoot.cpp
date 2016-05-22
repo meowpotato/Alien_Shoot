@@ -473,8 +473,8 @@ Flt VecNormalize(Vec vec)
 void physics(void)
 {
     //if (showBigfoot)
-		alien.pos[0] = 200.0;
-		alien.pos[1] = 200.0;
+	alien.pos[0] = 200.0;
+	alien.pos[1] = 200.0;
 	moveAlien(alien);
 }
 
