@@ -151,6 +151,17 @@ void Weapon::show_muzzle_flash()
 	glPopMatrix();
 	glFlush();
 
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(0.0, 55.0, 0.0);
+		glVertex3f(-20.0, 25.0, 0.0);
+		glVertex3f(0.0, 35.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+	
 	// Right half of flash    
 	glPushMatrix();
 	glTranslatef(280,0,0);
@@ -159,6 +170,17 @@ void Weapon::show_muzzle_flash()
 		glVertex3f(95.0, 95.0, 0.0);
 		glVertex3f(115.0, 130.0, 0.0);
 		glVertex3f(100.0, 75.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+	
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 0.0f, 0.0f);
+	glBegin(GL_POLYGON);
+		glVertex3f(100.0, 55.0, 0.0);
+		glVertex3f(115.0, 25.0, 0.0);
+		glVertex3f(100.0, 35.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();

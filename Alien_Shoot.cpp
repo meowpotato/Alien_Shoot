@@ -572,6 +572,7 @@ void render(void)
 	Glock glock32;
 	glock32.show_weapon();
 	glock32.show_fact_sights();
+	glock32.show_muzzle_flash();
 	glock32.set_model("32");
 	glock32.set_caliber("45 GAP");
 
