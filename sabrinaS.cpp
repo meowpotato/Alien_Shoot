@@ -36,32 +36,26 @@ float wid = 120.0f;
 
 void loadImages() 
 {
-	bigfootImage     = ppm6GetImage("./images/bigfoot.ppm");
 	alienImage       = ppm6GetImage("./images/alien.ppm");
 	levelsImage	 = ppm6GetImage("./images/levels.ppm");
 	backgroundImage  = ppm6GetImage("./images/background.ppm");
-	forestImage      = ppm6GetImage("./images/forest.ppm");
 	mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
 	pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
 	glock30Image     = ppm6GetImage("./images/glock_30.ppm");
 	glock17Image     = ppm6GetImage("./images/glock_17.ppm");
 	curtainsImage    = ppm6GetImage("./images/curtains1.ppm");
-	umbrellaImage    = ppm6GetImage("./images/umbrella.ppm");
 }
 
 void loadTextures() 
 {
-	glGenTextures(1, &bigfootTexture);
 	glGenTextures(1, &alienTexture);
 	glGenTextures(1, &backgroundTexture);
 	glGenTextures(1, &silhouetteTexture);
-	glGenTextures(1, &forestTexture);
 	glGenTextures(1, &levelsTexture);
 	glGenTextures(1, &curtainsTexture);
 	glGenTextures(1, &mainMenuTexture);
 	glGenTextures(1, &pauseMenuTexture);
 	glGenTextures(1, &glock30Texture);
-	glGenTextures(1, &umbrellaTexture);
 }
 
 unsigned char *buildAlphaData(Ppmimage *img) 
@@ -99,15 +93,6 @@ unsigned char *buildAlphaData(Ppmimage *img)
 
 void buildTextures() 
 {
-	int w = bigfootImage->width;
-	int h = bigfootImage->height;
-	//
-	glBindTexture(GL_TEXTURE_2D, bigfootTexture);
-	//
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-			GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
 	//-------------------------------------------------------------------------
 	//
 	//alien
@@ -119,8 +104,8 @@ void buildTextures()
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//
 	//must build a new set of data...
-	w = alienImage->width;
-	h = alienImage->height;
+	int w = alienImage->width;
+	int h = alienImage->height;
 	unsigned char *ftData = buildAlphaData(alienImage);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
 			GL_RGBA, GL_UNSIGNED_BYTE, ftData);
@@ -130,32 +115,16 @@ void buildTextures()
 	//silhouette
 	//this is similar to a sprite graphic
 	//
-	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	//glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
 	//
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	//
-	//must build a new set of data...
-	unsigned char *silhouetteData = buildAlphaData(bigfootImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-	free(silhouetteData);
-	//glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-	//  GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
-	//-------------------------------------------------------------------------
-	//
-	//umbrella
-	//
-	glBindTexture(GL_TEXTURE_2D, umbrellaTexture);
-	//
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//
 	//must build a new set of data...
-	silhouetteData = buildAlphaData(umbrellaImage);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-	free(silhouetteData);
+	//unsigned char *silhouetteData = buildAlphaData(bigfootImage);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+	//		GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
+	//free(silhouetteData);
 	//glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
 	//  GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
 	//-------------------------------------------------------------------------

@@ -485,13 +485,11 @@ void physics(void)
 
 void render(void)
 {
-	Rect r;
 
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	//
-	//
+	
 	//draw a quad with texture
 	float wid = 120.0f;
 	glColor3f(1.0, 1.0, 1.0);
@@ -533,6 +531,7 @@ void render(void)
 		glEnd();
 	}
 	else {
+		
 		//------------------------------------------------
 		//BACKGROUND
 		glBindTexture(GL_TEXTURE_2D, backgroundTexture);
@@ -611,11 +610,12 @@ void render(void)
 		glDisable(GL_ALPHA_TEST);
 		glPopMatrix();
 		//------------------------------------------------
-
+		
+		/*
+		Rect r;
 		r.bot = yres - 20;
 		r.left = 10;
 		r.center = 0;
-		/*
 		ggprint8b(&r, 16, 0, "B - Bigfoot");
 		ggprint8b(&r, 16, 0, "F - Forest");
 		ggprint8b(&r, 16, 0, "S - Silhouette");
@@ -629,9 +629,9 @@ void render(void)
 
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner
-		r.bot = yres - 400;
-		r.left = 550;
-		r.center = 540;
+		//r.bot = yres - 400;
+		//r.left = 550;
+		//r.center = 540;
 
 		//glock32.show_weapon_specs(r);
 	}
