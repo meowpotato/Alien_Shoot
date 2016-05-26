@@ -1,11 +1,13 @@
 /* Author: Lakhdeep Singh
  * HW3 - CS 335 Individual Contribution to project
- * Date Written: 4/15/16-5/3/16, modified 4/27/16, modified 5/2/16
+ * Date Written: 4/15/16-5/31/16, modified 4/27/16, modified 5/2/16, 5/4/16, 5/10/16
+ * 5/14/16, 5/22/16, 5/26/16
  *
  * So far,  the code down below is for the movement of the aliens
  * this all works and does compile,
  * and more code for more movement will be added soon.
  * This code will compile with the main Alien_Shoot.cpp file
+ * A lot of the coding has been done in the main file of our game
  * */
 #include <iostream>
 #include <functional>
@@ -14,7 +16,7 @@
 using namespace std;
 
 //Alien alien;
-/*void moveAlien(Alien alien)
+/**void moveAlien(Alien alien)
 {
 	//Alien alien;
 	//move alien...
@@ -41,35 +43,35 @@ using namespace std;
 // test code for more alien's movement
 // to show more than one alien's movement
 /*
-switch(x){
+	switch(x){
 	case 0:{
-		       if(do_up)
-			       run_do_up();
-		       else if(do_a)
-			       run_do_a();
-		       else if(do_n)
-			       run_do_n();
-		       else
-			       success = false;
-		       break;
+	       if (do_up)
+	      	   run_do_up();
+	       else if(do_a)
+	       	   run_do_a();
+	       else if(do_n)
+	           run_do_n();
+	       else
+	       success = false;
+	       break;
 	       }
 	case 1:{
-		       if(do_n)
-			       run_do_n();
-		       else if(do_a)
-			       run_do_a();
-		       else
-			       success = false;
-		       break;
+	       if(do_n)
+	           run_do_n();
+	       else if(do_a)
+	           run_do_a();
+	       else
+	       success = false;
+	       break;
 	       }
 	default: {
-			 if(do_a)
-				 run_do_a();
-			 else if(do_n)
-				 run_do_n();
-			 else
-				 success = false;
-		 }
+	       if(do_a)
+	           run_do_a();
+	       else if(do_n)
+	           run_do_n();
+	       else
+	       success = false;
+	       }
 }
 
 
