@@ -6,6 +6,12 @@
 
 
 #include "sabrinaS.h"
+#include "common.h"
+
+
+Alien *row1_head = NULL;
+Alien *row2_head = NULL;
+Alien *row3_head = NULL;
 
 Ppmimage *bigfootImage=NULL;
 Ppmimage *alienImage=NULL;
@@ -30,9 +36,6 @@ GLuint glock30Texture;
 GLuint glock17Texture;
 GLuint curtainsTexture;
 GLuint umbrellaTexture;
-
-float wid = 120.0f;
-
 
 void loadImages() 
 {
@@ -115,18 +118,16 @@ void buildTextures()
 	//silhouette
 	//this is similar to a sprite graphic
 	//
-	//glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
 	//
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	//glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//
 	//must build a new set of data...
-	//unsigned char *silhouetteData = buildAlphaData(bigfootImage);
-	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-	//		GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-	//free(silhouetteData);
-	//glTexImage2D(GL_TEXTURE_2D, 0, 3, w, h, 0,
-	//  GL_RGB, GL_UNSIGNED_BYTE, bigfootImage->data);
+	unsigned char *silhouetteData = buildAlphaData(alienImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
+	free(silhouetteData);
 	//-------------------------------------------------------------------------
 	//
 	//background
@@ -220,3 +221,215 @@ void buildTextures()
 			GL_RGBA, GL_UNSIGNED_BYTE, ftData);
 	free(ftData);
 }
+
+void createAliens2() 
+{
+	Alien *node = (Alien *)malloc(sizeof(Alien));
+	printf("alien created\n");
+	node->prev = NULL;
+	node->next = NULL;
+	node->pos[0] = 0.0;
+	node->pos[1] = 270.0;
+	node->vel[0] = rand() % 5;
+	node->vel[1] = 0.0;
+	node->next = row2_head;
+	if (row2_head != NULL)
+		row2_head->prev = node;
+	row2_head = node;
+	//++totaliens;
+	printf("number of aliens:%d\n", totaliens);
+}
+
+void createAliens3() 
+{
+	Alien *node = (Alien *)malloc(sizeof(Alien));
+	printf("alien created\n");
+	node->prev = NULL;
+	node->next = NULL;
+	node->pos[0] = 0.0;
+	node->pos[1] = 175.0;
+	node->vel[0] = rand() % 5;
+	node->vel[1] = 0.0;
+	node->next = row3_head;
+	if (row3_head != NULL)
+		row3_head->prev = node;
+	row3_head = node;
+	//++totaliens;
+	printf("number of aliens:%d\n", totaliens);
+}
+
+void deleteAlien2(Alien *currentAlien) 
+{
+	if (currentAlien->prev == NULL) {
+		if (currentAlien->next == NULL) {
+			row2_head = NULL;
+		}
+		else {
+			currentAlien->next->prev = NULL;
+			row2_head = currentAlien->next;
+		}
+	}
+
+	else {
+		if (currentAlien->next == NULL) {
+			currentAlien->prev->next = NULL;
+		}
+		else {
+			currentAlien->prev->next = currentAlien->next;
+			currentAlien->next->prev = currentAlien->prev;
+		}
+	}
+
+	free(currentAlien);
+	currentAlien = NULL;
+	totaliens--;
+	printf("Alien deleted\n");
+}
+
+void deleteAlien3(Alien *currentAlien) 
+{
+	if (currentAlien->prev == NULL) {
+		if (currentAlien->next == NULL) {
+			row3_head = NULL;
+		}
+		else {
+			currentAlien->next->prev = NULL;
+			row3_head = currentAlien->next;
+		}
+	}
+
+	else {
+		if (currentAlien->next == NULL) {
+			currentAlien->prev->next = NULL;
+		}
+		else {
+			currentAlien->prev->next = currentAlien->next;
+			currentAlien->next->prev = currentAlien->prev;
+		}
+	}
+
+	free(currentAlien);
+	currentAlien = NULL;
+	totaliens--;
+	printf("Alien deleted\n");
+}
+
+void moveAlien2(Alien *alien)
+{
+	//Alien *alien = row2_head;
+
+	//move bigfoot...
+	//Update position
+	alien->pos[0] += alien->vel[0];
+	//alien.pos[1] += alien.vel[1];
+	//Check for collision with window edges
+	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
+			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 220.0) {
+		//alien->vel[0] = -alien->vel[0];
+		deleteAlien2(alien);
+	}
+	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
+	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
+	//      alien->vel[1] = -alien->vel[1];
+	//      addgrav = 0;
+	//}
+
+}
+
+void moveAlien3(Alien *alien)
+{
+	//Alien *alien = row2_head;
+
+	//move bigfoot...
+	//Update position
+	alien->pos[0] += alien->vel[0];
+	//alien.pos[1] += alien.vel[1];
+	//Check for collision with window edges
+	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
+			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 220.0) {
+		//alien->vel[0] = -alien->vel[0];
+		deleteAlien3(alien);
+	}
+	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
+	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
+	//      alien->vel[1] = -alien->vel[1];
+	//      addgrav = 0;
+	//}
+}
+
+void drawAliens2(void) {
+	Alien *alien = row2_head;
+	float wid = 32.0f;
+	while(alien){
+		glPushMatrix();
+		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
+		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glColor4ub(255,255,255,255);
+
+		glBegin(GL_QUADS);
+		if (alien->vel[0] > 0.0) {
+			glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+		} else {
+			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
+			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
+			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
+			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
+		}
+		glEnd();
+		glPopMatrix();
+		alien = alien->next;
+	}
+	glDisable(GL_ALPHA_TEST);
+}
+
+void drawAliens3(void) {
+	Alien *alien = row3_head;
+	float wid = 32.0f;
+	while(alien){
+		glPushMatrix();
+		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
+		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glColor4ub(255,255,255,255);
+
+		glBegin(GL_QUADS);
+		if (alien->vel[0] > 0.0) {
+			glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+		} else {
+			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
+			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
+			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
+			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
+		}
+		glEnd();
+		glPopMatrix();
+		alien = alien->next;
+	}
+	glDisable(GL_ALPHA_TEST);
+}
+
+void checkAliens() 
+{
+	Alien *node2 = row2_head;
+	Alien *node3 = row3_head;
+
+	while (node2->next != NULL) {
+		moveAlien2(node2);
+		node2 = node2->next;
+	}
+
+	while (node3->next != NULL) {
+		moveAlien3(node3);
+		node3 = node3->next;
+	}
+}
+

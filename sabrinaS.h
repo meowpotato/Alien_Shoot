@@ -41,3 +41,15 @@ extern GLuint glock17Texture;
 extern GLuint curtainsTexture;
 extern GLuint umbrellaTexture;
 
+typedef double Vec[3];
+
+typedef struct t_alien {
+        Vec pos;
+        Vec vel;
+        struct t_alien *prev;
+        struct t_alien *next;
+} Alien;
+
+extern Alien *row1_head;
+extern Alien *row2_head;
+extern Alien *row3_head;

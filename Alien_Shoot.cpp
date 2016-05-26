@@ -84,7 +84,14 @@ void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
 void physics(void);
 void render(void);
-void moveAlien(Alien);
+
+void checkAliens();
+void createAliens2();
+void createAliens3();
+void drawAliens3(void);
+void drawAliens2(void);
+
+//void moveAlien(Alien);
 //-----------------------------------------------------------------------------
 //Setup timers
 const double physicsRate = 1.0 / 30.0;
@@ -108,7 +115,8 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 
 int done=0;
 int xres=1024, yres=1024;
-Alien alien;
+int totaliens = 0;
+//Alien alien;
 
 class Weapon {
 	protected:
@@ -360,8 +368,12 @@ void initSounds(void)
 
 void init() 
 {
-	MakeVector(-150.0,180.0,0.0, alien.pos);
-	MakeVector(6.0,0.0,0.0, alien.vel);
+	while (totaliens < 100) {
+		createAliens2();
+		++totaliens;
+		createAliens3();
+		++totaliens;
+	}
 }
 
 void checkMouse(XEvent *e)
@@ -477,21 +489,16 @@ Flt VecNormalize(Vec vec)
 
 void physics(void)
 {
-	//if (showBigfoot)
-	alien.pos[0] = 200.0;
-	alien.pos[1] = 200.0;
-	moveAlien(alien);
+	checkAliens();
 }
 
 void render(void)
 {
-
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
 	
 	//draw a quad with texture
-	float wid = 120.0f;
 	glColor3f(1.0, 1.0, 1.0);
 
 	if (!space) {
@@ -531,7 +538,6 @@ void render(void)
 		glEnd();
 	}
 	else {
-		
 		//------------------------------------------------
 		//BACKGROUND
 		glBindTexture(GL_TEXTURE_2D, backgroundTexture);
@@ -543,6 +549,12 @@ void render(void)
 		glEnd();
 		//------------------------------------------------
 
+		//------------------------------------------------
+		//ALIENS
+		drawAliens2();
+		drawAliens3();
+		//------------------------------------------------
+		
 		//------------------------------------------------
 		//LEVELS
 		glEnable(GL_ALPHA_TEST);
@@ -583,33 +595,6 @@ void render(void)
 		Bullet bullet;
 		bullet.show_bullet();
 		//glDisable(GL_TEXTURE_2D);
-
-		//------------------------------------------------
-		//ALIENS
-		glPushMatrix();
-		glTranslatef(alien.pos[0], alien.pos[1], alien.pos[2]);
-		glBindTexture(GL_TEXTURE_2D, alienTexture);
-		glEnable(GL_ALPHA_TEST);
-		glAlphaFunc(GL_GREATER, 0.0f);
-		glColor4ub(255,255,255,255);
-		glBegin(GL_QUADS);
-
-		if (alien.vel[0] > 0.0) {
-			glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
-			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
-			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
-			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		} 
-		else {
-			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
-			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
-			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
-			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-		}
-		glEnd();
-		glDisable(GL_ALPHA_TEST);
-		glPopMatrix();
-		//------------------------------------------------
 		
 		/*
 		Rect r;
