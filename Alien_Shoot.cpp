@@ -46,78 +46,6 @@ extern "C" {
 
 using namespace std;
 
-//defined types
-typedef double Flt;
-typedef double Vec[3];
-typedef Flt	Matrix[4][4];
-
-//macros
-#define rnd() (((Flt)rand())/(Flt)RAND_MAX)
-#define random(a) (rand()%a)
-#define MakeVector(x, y, z, v) (v)[0]=(x),(v)[1]=(y),(v)[2]=(z)
-#define VecCopy(a,b) 	(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
-#define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
-#define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-			(c)[1]=(a)[1]-(b)[1]; \
-(c)[2]=(a)[2]-(b)[2]
-//constants
-const float timeslice = 1.0f;
-const float gravity = -0.2f;
-#define ALPHA 1
-
-//X Windows variables
-Display *dpy;
-Window win;
-
-//function prototypes
-void initXWindows(void);
-void initOpengl(void);
-void cleanupXWindows(void);
-void checkResize(XEvent *e);
-void checkMouse(XEvent *e);
-void checkKeys(XEvent *e);
-void init();
-void loadImages();
-void loadTextures();
-void load_weapon_texture();
-void buildTextures();
-unsigned char *buildAlphaData(Ppmimage *);
-void physics(void);
-void render(void);
-
-void checkAliens();
-void createAliens2();
-void createAliens3();
-void drawAliens3(void);
-void drawAliens2(void);
-
-//void moveAlien(Alien);
-//-----------------------------------------------------------------------------
-//Setup timers
-const double physicsRate = 1.0 / 30.0;
-const double oobillion = 1.0 / 1e9;
-struct timespec timeStart, timeCurrent;
-struct timespec timePause;
-double physicsCountdown=0.0;
-double timeSpan=0.0;
-unsigned int upause=0;
-double timeDiff(struct timespec *start, struct timespec *end) 
-{
-	return (double)(end->tv_sec - start->tv_sec ) +
-		(double)(end->tv_nsec - start->tv_nsec) * oobillion;
-}
-void timeCopy(struct timespec *dest, struct timespec *source) 
-{
-	memcpy(dest, source, sizeof(struct timespec));
-}
-//-----------------------------------------------------------------------------
-
-
-int done=0;
-int xres=1024, yres=1024;
-int totaliens = 0;
-//Alien alien;
-
 class Weapon {
 	protected:
 		// Coordinates of center
@@ -188,12 +116,87 @@ class Bullet {
 			y_velocity = 0;
 		}
 		void move();
+		void set_x(int);
+		void set_y(int);
+		void set_z(int);
 		int get_x();
 		int get_y();
 		int get_z();
 		void delete_bullet();
 		void show_bullet();
 };
+
+//defined types
+typedef double Flt;
+typedef double Vec[3];
+typedef Flt	Matrix[4][4];
+
+//macros
+#define rnd() (((Flt)rand())/(Flt)RAND_MAX)
+#define random(a) (rand()%a)
+#define MakeVector(x, y, z, v) (v)[0]=(x),(v)[1]=(y),(v)[2]=(z)
+#define VecCopy(a,b) 	(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
+#define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
+#define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
+			(c)[1]=(a)[1]-(b)[1]; \
+(c)[2]=(a)[2]-(b)[2]
+//constants
+const float timeslice = 1.0f;
+const float gravity = -0.2f;
+#define ALPHA 1
+
+//X Windows variables
+Display *dpy;
+Window win;
+
+//function prototypes
+void initXWindows(void);
+void initOpengl(void);
+void cleanupXWindows(void);
+void checkResize(XEvent *e);
+void checkMouse(XEvent *e);
+void checkKeys(XEvent *e);
+void init();
+void loadImages();
+void loadTextures();
+void load_weapon_texture();
+void buildTextures();
+unsigned char *buildAlphaData(Ppmimage *);
+void physics(Bullet *);
+void render(Glock, Bullet*);
+
+void checkAliens();
+void createAliens2();
+void createAliens3();
+void drawAliens3(void);
+void drawAliens2(void);
+
+//void moveAlien(Alien);
+//-----------------------------------------------------------------------------
+//Setup timers
+const double physicsRate = 1.0 / 30.0;
+const double oobillion = 1.0 / 1e9;
+struct timespec timeStart, timeCurrent;
+struct timespec timePause;
+double physicsCountdown=0.0;
+double timeSpan=0.0;
+unsigned int upause=0;
+double timeDiff(struct timespec *start, struct timespec *end) 
+{
+	return (double)(end->tv_sec - start->tv_sec ) +
+		(double)(end->tv_nsec - start->tv_nsec) * oobillion;
+}
+void timeCopy(struct timespec *dest, struct timespec *source) 
+{
+	memcpy(dest, source, sizeof(struct timespec));
+}
+//-----------------------------------------------------------------------------
+
+
+int done=0;
+int xres=1024, yres=1024;
+int totaliens = 0;
+//Alien alien;
 
 bool space = false;
 int pauseMenu = 0;
@@ -208,6 +211,12 @@ int showRain=0;
 //
 int main(void)
 {
+	Glock glock32;
+	Bullet *bullet = new Bullet;
+	bullet->set_x(280);
+	bullet->set_y(0);
+	bullet->set_z(0);
+	logOpen();
 	logOpen();
 	initXWindows();
 	initOpengl();
@@ -242,17 +251,19 @@ int main(void)
 		//           Apply no physics this frame.
 		while (physicsCountdown >= physicsRate) {
 			//6. Apply physics
-			physics();
+			physics(bullet);
 			//7. Reduce the countdown by our physics-rate
 			physicsCountdown -= physicsRate;
 		}
 		//Always render every frame.
-		render();
+		render(glock32, bullet);
 		glXSwapBuffers(dpy, win);
 	}
 	cleanupXWindows();
 	cleanup_fonts();
 	logClose();
+
+	delete bullet;
 
 	return 0;
 }
@@ -487,12 +498,13 @@ Flt VecNormalize(Vec vec)
 	return(len);
 }
 
-void physics(void)
+void physics(Bullet *bullet)
 {
 	checkAliens();
+	bullet->set_y(bullet->get_y() + 2);
 }
 
-void render(void)
+void render(Glock glock32, Bullet *bullet)
 {
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -584,7 +596,7 @@ void render(void)
 		//------------------------------------------------
 		
 		// Display the user's weapon and display the specs
-		Glock glock32;
+		//Glock glock32;
 		glock32.show_weapon();
 		glock32.show_fact_sights();
 		glock32.show_muzzle_flash();
@@ -592,8 +604,8 @@ void render(void)
 		glock32.set_caliber("45 GAP");
 
 		// Display bullet
-		Bullet bullet;
-		bullet.show_bullet();
+		//Bullet bullet;
+		bullet->show_bullet();
 		//glDisable(GL_TEXTURE_2D);
 		
 		/*

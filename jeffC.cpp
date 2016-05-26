@@ -114,6 +114,9 @@ class Bullet {
 			hit_object = false;
 		}
 		void move();
+		void set_x(int);
+		void set_y(int);
+		void set_z(int);
 		int get_x();
 		int get_y();
 		int get_z();
@@ -125,7 +128,7 @@ class Bullet {
 void Bullet::show_bullet()
 {
 	glPushMatrix();
-	glTranslatef(280,0,0);
+	glTranslatef(x,y,z);
 	glColor3f(1.0f, 0.5f, 0.0f);
 	glBegin(GL_POLYGON);
 	glVertex3f(45.0, 121.0, 0.0);
@@ -358,4 +361,21 @@ int Bullet::get_y()
 int Bullet::get_z()
 {
 	return z;
+}
+
+// Assignn the x-coordinate of bullet's position
+void Bullet::set_x(int val)
+{
+	x = val;
+}
+
+// Assign the y-coordinate of bullet's position
+void Bullet::set_y(int val)
+{
+	y = val;
+}
+// Assign the z-coordinate of bullet's position
+void Bullet::set_z(int val)
+{
+	z = val;
 }
