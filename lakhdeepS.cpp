@@ -14,7 +14,7 @@
 using namespace std;
 
 //Alien alien;
-void moveAlien(Alien alien)
+/*void moveAlien(Alien alien)
 {
 	//Alien alien;
 	//move alien...
@@ -36,7 +36,7 @@ void moveAlien(Alien alien)
 	//Gravity
 	if (addgrav)
 		alien.vel[1] -= 0.75;
-}
+}*/
 
 // test code for more alien's movement
 // to show more than one alien's movement
