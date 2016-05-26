@@ -24,7 +24,7 @@ void moveAlien(Alien alien)
 	alien.pos[1] += alien.vel[1];
 	//Check for collision with window edges
 	if ((alien.pos[0] < -140.0 && alien.vel[0] < 0.0) ||
-		(alien.pos[0] >= (float)xres+140.0 && alien.vel[0] > 0.0)) {
+			(alien.pos[0] >= (float)xres+140.0 && alien.vel[0] > 0.0)) {
 		alien.vel[0] = -alien.vel[0];
 		addgrav = 0;
 	}
@@ -41,43 +41,44 @@ void moveAlien(Alien alien)
 // test code for more alien's movement
 // to show more than one alien's movement
 /*
-   switch(x){
-   case 0:{
-        if(do_up)
-            run_do_up();
-            else if(do_a)
-            run_do_a();
-            else if(do_n)
-            run_do_n();
-            else
-            success = false;
-            break;
-    }
-   case 1:{
-         if(do_n)
-            run_do_n();
-            else if(do_a)
-            run_do_a();
-            else
-            success = false;
-            break;
-   }
-   default: {
-         if(do_a)
-            run_do_a();
-            else if(do_n)
-            run_do_n();
-            else
-            success = false;
-   }
-   }
- */
+switch(x){
+	case 0:{
+		       if(do_up)
+			       run_do_up();
+		       else if(do_a)
+			       run_do_a();
+		       else if(do_n)
+			       run_do_n();
+		       else
+			       success = false;
+		       break;
+	       }
+	case 1:{
+		       if(do_n)
+			       run_do_n();
+		       else if(do_a)
+			       run_do_a();
+		       else
+			       success = false;
+		       break;
+	       }
+	default: {
+			 if(do_a)
+				 run_do_a();
+			 else if(do_n)
+				 run_do_n();
+			 else
+				 success = false;
+		 }
+}
 
-/*	if (display_lakhdeep)
-    	   rectangle r;
-	   r.pos[0] = 250;
-	   r.pos[1] = 250;
-	   r.height = 50;
-	   r.width = 50;
-	   drawRectangle(r);
-	   display(); */
+
+if (display_lakhdeep)
+	rectangle r;
+	r.pos[0] = 250;
+	r.pos[1] = 250;
+	r.height = 50;
+	r.width = 50;
+	drawRectangle(r);
+	display();
+*/

@@ -128,9 +128,9 @@ void Bullet::show_bullet()
 	glTranslatef(280,0,0);
 	glColor3f(1.0f, 0.5f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(45.0, 121.0, 0.0);
-		glVertex3f(47.5, 131.0, 0.0);
-		glVertex3f(50.0, 121.0, 0.0);
+	glVertex3f(45.0, 121.0, 0.0);
+	glVertex3f(47.5, 131.0, 0.0);
+	glVertex3f(50.0, 121.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
@@ -144,9 +144,9 @@ void Weapon::show_muzzle_flash()
 	glTranslatef(280,0,0);
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(0.0, 95.0, 0.0);
-		glVertex3f(-20.0, 130.0, 0.0);
-		glVertex3f(0.0, 75.0, 0.0);
+	glVertex3f(0.0, 95.0, 0.0);
+	glVertex3f(-20.0, 130.0, 0.0);
+	glVertex3f(0.0, 75.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
@@ -155,32 +155,32 @@ void Weapon::show_muzzle_flash()
 	glTranslatef(280,0,0);
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(0.0, 55.0, 0.0);
-		glVertex3f(-20.0, 25.0, 0.0);
-		glVertex3f(0.0, 35.0, 0.0);
+	glVertex3f(0.0, 55.0, 0.0);
+	glVertex3f(-20.0, 25.0, 0.0);
+	glVertex3f(0.0, 35.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
-	
+
 	// Right half of flash    
 	glPushMatrix();
 	glTranslatef(280,0,0);
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(95.0, 95.0, 0.0);
-		glVertex3f(115.0, 130.0, 0.0);
-		glVertex3f(100.0, 75.0, 0.0);
+	glVertex3f(95.0, 95.0, 0.0);
+	glVertex3f(115.0, 130.0, 0.0);
+	glVertex3f(100.0, 75.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
-	
+
 	glPushMatrix();
 	glTranslatef(280,0,0);
 	glColor3f(1.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(100.0, 55.0, 0.0);
-		glVertex3f(115.0, 25.0, 0.0);
-		glVertex3f(100.0, 35.0, 0.0);
+	glVertex3f(100.0, 55.0, 0.0);
+	glVertex3f(115.0, 25.0, 0.0);
+	glVertex3f(100.0, 35.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
@@ -194,10 +194,10 @@ void Weapon::show_fact_sights()
 	glTranslatef(280,0,0);
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(45.0, 100.0, 0.0);
-		glVertex3f(45.0, 110.0, 0.0);
-		glVertex3f(55.0, 110.0, 0.0);
-		glVertex3f(55.0, 100.0, 0.0);
+	glVertex3f(45.0, 100.0, 0.0);
+	glVertex3f(45.0, 110.0, 0.0);
+	glVertex3f(55.0, 110.0, 0.0);
+	glVertex3f(55.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
 
@@ -206,22 +206,22 @@ void Weapon::show_fact_sights()
 	glTranslatef(280,0,0);
 	glColor3f(1.0f, 1.0f, 1.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(47.0, 103.0, 0.0);
-		glVertex3f(47.0, 108.0, 0.0);
-		glVertex3f(53.0, 108.0, 0.0);
-		glVertex3f(53.0, 103.0, 0.0);
+	glVertex3f(47.0, 103.0, 0.0);
+	glVertex3f(47.0, 108.0, 0.0);
+	glVertex3f(53.0, 108.0, 0.0);
+	glVertex3f(53.0, 103.0, 0.0);
 	glEnd();
 	glPopMatrix();
-	
+
 	// Show black left rear factory sight
 	glPushMatrix();
 	glTranslatef(280,0,0);
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);		
-		glVertex3f(5.0, 100.0, 0.0);
-		glVertex3f(10.0, 110.0, 0.0);
-		glVertex3f(30.0, 110.0, 0.0);
-		glVertex3f(30.0, 100.0, 0.0);
+	glVertex3f(5.0, 100.0, 0.0);
+	glVertex3f(10.0, 110.0, 0.0);
+	glVertex3f(30.0, 110.0, 0.0);
+	glVertex3f(30.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
 
@@ -230,10 +230,10 @@ void Weapon::show_fact_sights()
 	glTranslatef(280,0,0);
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(70.0, 100.0, 0.0);
-		glVertex3f(70.0, 110.0, 0.0);
-		glVertex3f(90.0, 110.0, 0.0);
-		glVertex3f(95.0, 100.0, 0.0);
+	glVertex3f(70.0, 100.0, 0.0);
+	glVertex3f(70.0, 110.0, 0.0);
+	glVertex3f(90.0, 110.0, 0.0);
+	glVertex3f(95.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
@@ -246,12 +246,12 @@ void Weapon::show_weapon()
 	glTranslatef(280,0,0);
 	glColor3f(0.0f, 0.0f, 0.0f);
 	glBegin(GL_POLYGON);
-		glVertex3f(0.0, 0.0, 0.0);
-		glVertex3f(0.0, 95.0, 0.0);
-		glVertex3f(5.0, 100.0, 0.0);
-		glVertex3f(95.0, 100.0, 0.0);
-		glVertex3f(100.0, 95.0, 0.0);
-		glVertex3f(100.0, 0.0, 0.0);
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(0.0, 95.0, 0.0);
+	glVertex3f(5.0, 100.0, 0.0);
+	glVertex3f(95.0, 100.0, 0.0);
+	glVertex3f(100.0, 95.0, 0.0);
+	glVertex3f(100.0, 0.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
