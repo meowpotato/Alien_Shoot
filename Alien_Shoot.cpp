@@ -208,6 +208,8 @@ int curtains=1;
 int silhouette=1;
 int trees=1;
 int showRain=0;
+int fire = 0;
+int move_bullet = 0;
 //
 int main(void)
 {
@@ -258,6 +260,7 @@ int main(void)
 		//Always render every frame.
 		render(glock32, bullet);
 		glXSwapBuffers(dpy, win);
+		fire = 0;
 	}
 	cleanupXWindows();
 	cleanup_fonts();
@@ -394,6 +397,17 @@ void checkMouse(XEvent *e)
 	static int savex = 0;
 	static int savey = 0;
 	//
+		cout << "e->xbutton.button: " <<e->xbutton.button
+			<< endl;
+		cout << "savex: " <<e->xbutton.button
+			<< endl;
+		cout << "savey: " <<e->xbutton.button
+			<< endl;
+		if (e->xbutton.button == 41) {
+			fire = 1;
+			move_bullet = 1;
+		}		
+
 	if (e->type == ButtonRelease) {
 		return;
 	}
@@ -501,7 +515,8 @@ Flt VecNormalize(Vec vec)
 void physics(Bullet *bullet)
 {
 	checkAliens();
-	bullet->set_y(bullet->get_y() + 2);
+	if (move_bullet)
+		bullet->set_y(bullet->get_y() + 2);
 }
 
 void render(Glock glock32, Bullet *bullet)
@@ -597,16 +612,19 @@ void render(Glock glock32, Bullet *bullet)
 		
 		// Display the user's weapon and display the specs
 		//Glock glock32;
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glock32.show_weapon();
 		glock32.show_fact_sights();
-		glock32.show_muzzle_flash();
+		cout << "fire: " << fire << endl;
+		if (fire)
+			glock32.show_muzzle_flash();
 		glock32.set_model("32");
 		glock32.set_caliber("45 GAP");
 
 		// Display bullet
 		//Bullet bullet;
-		bullet->show_bullet();
-		//glDisable(GL_TEXTURE_2D);
+		if (move_bullet)
+			bullet->show_bullet();
 		
 		/*
 		Rect r;
