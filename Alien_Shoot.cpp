@@ -2,7 +2,7 @@
 //SO WE MAKE SURE WE DON'T DELETE ANYTHING WE COULD USE
 //cs335
 //Alien Shoot game
-//Modifiers: Sabrina Smith, Jeff Cadena 
+//Modifiers: Sabrina Smith, Jeff Cadena, Lakhdeep, Pedro 
 //
 //
 //program: rainforest
@@ -515,7 +515,7 @@ Flt VecNormalize(Vec vec)
 void physics(Bullet *bullet)
 {
 	checkAliens();
-	cout << "bullet y coord: " << bullet->get_y() << endl;
+	//cout << "bullet y coord: " << bullet->get_y() << endl;
 	if (bullet->get_y() > 400) {
 		move_bullet = 0;
 		bullet->set_x(280);
@@ -622,7 +622,6 @@ void render(Glock glock32, Bullet *bullet)
 		glBindTexture(GL_TEXTURE_2D, 0);
 		glock32.show_weapon();
 		glock32.show_fact_sights();
-		cout << "fire: " << fire << endl;
 		if (fire)
 			glock32.show_muzzle_flash();
 		glock32.set_model("32");
