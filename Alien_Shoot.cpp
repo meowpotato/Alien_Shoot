@@ -126,6 +126,33 @@ class Bullet {
 		void show_bullet();
 };
 
+class Target {
+	private:
+		int x;
+		int y;
+		int z;
+		int width;
+		int height;
+	public:
+		Target() {
+			x = 0;
+			y = 0;
+			z = 0;
+			width = 0;
+			height = 0;
+		}
+		void set_x(int);
+		void set_y(int);
+		void set_z(int);
+		int get_x();
+		int get_y();
+		int get_z();
+		void set_width(int);
+		void set_height(int);
+		int get_width();
+		int get_height();
+};
+
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -396,12 +423,9 @@ void checkMouse(XEvent *e)
 	//Was a mouse button clicked?
 	static int savex = 0;
 	static int savey = 0;
+	static int n = 0;
 	//
 		cout << "e->xbutton.button: " <<e->xbutton.button
-			<< endl;
-		cout << "savex: " <<e->xbutton.button
-			<< endl;
-		cout << "savey: " <<e->xbutton.button
 			<< endl;
 		if (e->xbutton.button == 41) {
 			fire = 1;
@@ -420,9 +444,17 @@ void checkMouse(XEvent *e)
 		}
 	}
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
+		cout << "savex: " <<savex << endl;
+		cout << "savey: " <<savey<< endl;
 		//Mouse moved
+		//int xdiff = savex - e->xbutton.x;
+		//int ydiff = savey - e->xbutton.y;
+		
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
+		if (++n < 10)
+			return;
+		cout << "Mouse moved" << endl;
 	}
 }
 

@@ -124,6 +124,34 @@ class Bullet {
 		void show_bullet();
 };
 
+class Target {
+	private:
+		int x;
+		int y;
+		int z;
+		int width;
+		int height;
+	public:
+		Target() {
+			x = 0;
+			y = 0;
+			z = 0;
+			width = 0;
+			height = 0;
+		}
+		void set_x(int);
+		void set_y(int);
+		void set_z(int);
+		int get_x();
+		int get_y();
+		int get_z();
+		void set_width(int);
+		void set_height(int);
+		int get_width();
+		int get_height();
+		void show_target();
+};
+
 // Display the bullet
 void Bullet::show_bullet()
 {
@@ -378,4 +406,79 @@ void Bullet::set_y(int val)
 void Bullet::set_z(int val)
 {
 	z = val;
+}
+
+// Return the x-coordinate of target's position
+int Target::get_x()
+{
+	return x;
+}
+
+// Return the y-coordinate of target's position
+int Target::get_y()
+{
+	return y;
+}
+// Return the z-coordinate of target's position
+int Target::get_z()
+{
+	return z;
+}
+
+// Assign the x-coordinate of target's position
+void Target::set_x(int val)
+{
+	x = val;
+}
+
+// Assign the y-coordinate of target's position
+void Target::set_y(int val)
+{
+	y = val;
+}
+
+// Assign the z-coordinate of target's position
+void Target::set_z(int val)
+{
+	z = val;
+}
+
+// Assign target's width
+void Target::set_width(int val)
+{
+	width = val;
+}
+
+// Assign target's height
+void Target::set_height(int val)
+{
+	height = val;
+}
+
+// Return target's width
+int Target::get_width()
+{
+	return width;
+}
+
+// Return target's height
+int Target::get_height()
+{
+	return height;
+}
+
+// Display the target
+void Target::show_target()
+{
+	glPushMatrix();
+	glTranslatef(x,y,z);
+	glColor3f(0.8f, 0.2f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex3f(0.0, 0.0, 0.0);
+	glVertex3f(0.0, 30.0, 0.0);
+	glVertex3f(30.0, 30.0, 0.0);
+	glVertex3f(30.0, 0.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
 }
