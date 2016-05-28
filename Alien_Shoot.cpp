@@ -216,7 +216,7 @@ int main(void)
 	Glock glock32;
 	Bullet *bullet = new Bullet;
 	bullet->set_x(280);
-	bullet->set_y(0);
+	bullet->set_y(-25);
 	bullet->set_z(0);
 	logOpen();
 	logOpen();
@@ -515,6 +515,11 @@ Flt VecNormalize(Vec vec)
 void physics(Bullet *bullet)
 {
 	checkAliens();
+	cout << "bullet y coord: " << bullet->get_y() << endl;
+	if (bullet->get_y() == 400) {
+		move_bullet = 0;
+		bullet->set_y(-25);
+	}
 	if (move_bullet)
 		bullet->set_y(bullet->get_y() + 2);
 }
