@@ -377,7 +377,9 @@ int moveAlien1(Alien *alien)
         //alien.pos[1] += alien.vel[1];
         //Check for collision with window edges
         if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-                        (alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] ==  270.0) {
+                        (alien->pos[0] >= (float)xres+140.0 
+				&& alien->vel[0] > 0.0) 
+				&& alien->pos[1] ==  270.0) {
                 //alien->vel[0] = -alien->vel[0];
                 deleteAlien2(alien);
                 return 1;
@@ -399,7 +401,9 @@ int moveAlien2(Alien *alien)
 	//alien.pos[1] += alien.vel[1];
 	//Check for collision with window edges
 	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] ==  270.0) {
+			(alien->pos[0] >= (float)xres+140.0 
+				&& alien->vel[0] > 0.0) 
+				&& alien->pos[1] ==  270.0) {
 		//alien->vel[0] = -alien->vel[0];
 		deleteAlien2(alien);
 		return 1;
@@ -421,7 +425,9 @@ int moveAlien3(Alien *alien)
 	//alien.pos[1] += alien.vel[1];
 	//Check for collision with window edges
 	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 175.0) {
+			(alien->pos[0] >= (float)xres+140.0 
+			&& alien->vel[0] > 0.0) 
+			&& alien->pos[1] == 175.0) {
 		//alien->vel[0] = -alien->vel[0];
 		deleteAlien3(alien);
 		return 1;
@@ -438,7 +444,7 @@ int moveAlien3(Alien *alien)
 void drawAliens1(void) {
         Alien *alien = row1_head;
         float wid = 32.0f;
-        while(alien){
+        while (alien) {
                 glPushMatrix();
                 glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
                 glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
@@ -468,7 +474,7 @@ void drawAliens1(void) {
 void drawAliens2(void) {
 	Alien *alien = row2_head;
 	float wid = 32.0f;
-	while(alien){
+	while (alien) {
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
 		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
@@ -498,7 +504,7 @@ void drawAliens2(void) {
 void drawAliens3(void) {
 	Alien *alien = row3_head;
 	float wid = 32.0f;
-	while(alien){
+	while (alien) {
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
 		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);

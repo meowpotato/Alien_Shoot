@@ -471,7 +471,7 @@ void checkKeys(XEvent *e)
 	else {
 		return;
 	}
-	switch(key) {
+	switch (key) {
 		case XK_b:
 			//showBigfoot ^= 1;
 			//if (showBigfoot) {
