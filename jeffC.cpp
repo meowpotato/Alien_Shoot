@@ -476,8 +476,24 @@ void Target::show_target()
 	glBegin(GL_LINES);
 	glVertex3f(0.0, 0.0, 0.0);
 	glVertex3f(0.0, 30.0, 0.0);
+	glVertex3f(0.0, 30.0, 0.0);
+	glVertex3f(30.0, 30.0, 0.0);
 	glVertex3f(30.0, 30.0, 0.0);
 	glVertex3f(30.0, 0.0, 0.0);
+	glVertex3f(30.0, 0.0, 0.0);
+	glVertex3f(0.0, 0.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+	
+	glPushMatrix();
+	glTranslatef(x,y,z);
+	glColor3f(0.8f, 0.2f, 0.0f);
+	glBegin(GL_LINES);
+	glVertex3f(0.0, 15.0, 0.0);
+	glVertex3f(30.0, 15.0, 0.0);
+	glVertex3f(15.0, 30.0, 0.0);
+	glVertex3f(15.0, 0.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();

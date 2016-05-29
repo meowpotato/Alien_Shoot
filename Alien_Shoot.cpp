@@ -151,6 +151,7 @@ class Target {
 		void set_height(int);
 		int get_width();
 		int get_height();
+		void show_target();
 };
 
 //defined types
@@ -190,7 +191,7 @@ void load_weapon_texture();
 void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
-void render(Glock, Bullet*);
+void render(Glock, Bullet*, Target *);
 
 void checkAliens();
 void createAliens2();
@@ -241,6 +242,10 @@ int move_bullet = 0;
 int main(void)
 {
 	Glock glock32;
+	Target *target = new Target;
+	target->set_x(280);
+	target->set_y(700);
+	target->set_z(0);
 	Bullet *bullet = new Bullet;
 	bullet->set_x(280);
 	bullet->set_y(-25);
@@ -285,7 +290,7 @@ int main(void)
 			physicsCountdown -= physicsRate;
 		}
 		//Always render every frame.
-		render(glock32, bullet);
+		render(glock32, bullet, target);
 		glXSwapBuffers(dpy, win);
 		fire = 0;
 	}
@@ -294,6 +299,7 @@ int main(void)
 	logClose();
 
 	delete bullet;
+	delete target;
 
 	return 0;
 }
@@ -558,7 +564,7 @@ void physics(Bullet *bullet)
 		bullet->set_y(bullet->get_y() + 2);
 }
 
-void render(Glock glock32, Bullet *bullet)
+void render(Glock glock32, Bullet *bullet, Target *target)
 {
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -649,9 +655,11 @@ void render(Glock glock32, Bullet *bullet)
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
 		
-		// Display the user's weapon and display the specs
+		// Display the user's weapon and display the target
 		//Glock glock32;
 		glBindTexture(GL_TEXTURE_2D, 0);
+		glVertex3f(100.0, 0.0, 0.0);
+		target->show_target();
 		glock32.show_weapon();
 		glock32.show_fact_sights();
 		if (fire)
