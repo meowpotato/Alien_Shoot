@@ -255,6 +255,30 @@ void Weapon::show_fact_sights()
 	glVertex3f(30.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	
+	// Show left part of white U on rear sight 
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_POLYGON);
+	glVertex3f(20.0, 90.0, 0.0);
+	glVertex3f(20.0, 105.0, 0.0);
+	glVertex3f(25.0, 105.0, 0.0);
+	glVertex3f(25.0, 90.0, 0.0);
+	glEnd();
+	glPopMatrix();
+
+	// Show bottom part of white U on rear sight 
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_POLYGON);
+	glVertex3f(25.0, 90.0, 0.0);
+	glVertex3f(25.0, 95.0, 0.0);
+	glVertex3f(75.0, 95.0, 0.0);
+	glVertex3f(75.0, 90.0, 0.0);
+	glEnd();
+	glPopMatrix();
 
 	// Show black right rear factory sight
 	glPushMatrix();
@@ -265,6 +289,19 @@ void Weapon::show_fact_sights()
 	glVertex3f(70.0, 110.0, 0.0);
 	glVertex3f(90.0, 110.0, 0.0);
 	glVertex3f(95.0, 100.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	
+	
+	// Show right part of white U on rear sight 
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(1.0f, 1.0f, 1.0f);
+	glBegin(GL_POLYGON);
+	glVertex3f(75.0, 90.0, 0.0);
+	glVertex3f(75.0, 105.0, 0.0);
+	glVertex3f(80.0, 105.0, 0.0);
+	glVertex3f(80.0, 90.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
