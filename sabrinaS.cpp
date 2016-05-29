@@ -8,7 +8,10 @@
 #include "sabrinaS.h"
 #include "common.h"
 
-
+int totaliens = 0;
+int deleted1 = 0;
+int deleted2 = 0;
+int deleted3 = 0;
 Alien *row1_head = NULL;
 Alien *row2_head = NULL;
 Alien *row3_head = NULL;
@@ -222,40 +225,92 @@ void buildTextures()
 	free(ftData);
 }
 
-void createAliens2() 
+int createAliens1() 
+{
+        Alien *node = (Alien *)malloc(sizeof(Alien));
+        printf("alien created\n");
+        node->prev = NULL;
+        node->next = NULL;
+        node->pos[0] = -100.0 + (rand() % 5);
+        node->pos[1] = 365.0;
+        node->vel[0] = rand() % 5 + 1;
+        node->vel[1] = 0.0;
+        node->next = row1_head;
+        if (row1_head != NULL)
+                row1_head->prev = node;
+        row1_head = node;
+        ++totaliens;
+        printf("number of aliens:%d\n", totaliens);
+        return totaliens;
+}
+
+
+int createAliens2() 
 {
 	Alien *node = (Alien *)malloc(sizeof(Alien));
 	printf("alien created\n");
 	node->prev = NULL;
 	node->next = NULL;
-	node->pos[0] = 0.0;
+	node->pos[0] = -100.0 + (rand() % 5);
 	node->pos[1] = 270.0;
-	node->vel[0] = rand() % 5;
+	node->vel[0] = rand() % 5 + 3;
 	node->vel[1] = 0.0;
 	node->next = row2_head;
 	if (row2_head != NULL)
 		row2_head->prev = node;
 	row2_head = node;
-	//++totaliens;
+	++totaliens;
 	printf("number of aliens:%d\n", totaliens);
+	return totaliens;
 }
 
-void createAliens3() 
+int createAliens3() 
 {
 	Alien *node = (Alien *)malloc(sizeof(Alien));
 	printf("alien created\n");
 	node->prev = NULL;
 	node->next = NULL;
-	node->pos[0] = 0.0;
+	node->pos[0] = -100.0 + (rand() % 5);
 	node->pos[1] = 175.0;
-	node->vel[0] = rand() % 5;
+	node->vel[0] = rand() % 5 + 5;
 	node->vel[1] = 0.0;
 	node->next = row3_head;
 	if (row3_head != NULL)
 		row3_head->prev = node;
 	row3_head = node;
-	//++totaliens;
+	++totaliens;
 	printf("number of aliens:%d\n", totaliens);
+	return totaliens;
+}
+
+void deleteAlien1(Alien *currentAlien)
+{
+        if (currentAlien->prev == NULL) {
+                if (currentAlien->next == NULL) {
+                        row1_head = NULL;
+                }
+                else {
+                        currentAlien->next->prev = NULL;
+                        row1_head = currentAlien->next;
+                }
+        }
+
+        else {
+                if (currentAlien->next == NULL) {
+                        currentAlien->prev->next = NULL;
+                }
+                else {
+                        currentAlien->prev->next = currentAlien->next;
+                        currentAlien->next->prev = currentAlien->prev;
+                }
+        }
+
+	        
+
+	free(currentAlien);
+        currentAlien = NULL;
+        --totaliens;
+        printf("Alien deleted\n");
 }
 
 void deleteAlien2(Alien *currentAlien) 
@@ -282,7 +337,7 @@ void deleteAlien2(Alien *currentAlien)
 
 	free(currentAlien);
 	currentAlien = NULL;
-	totaliens--;
+	--totaliens;
 	printf("Alien deleted\n");
 }
 
@@ -310,51 +365,104 @@ void deleteAlien3(Alien *currentAlien)
 
 	free(currentAlien);
 	currentAlien = NULL;
-	totaliens--;
+	--totaliens;
 	printf("Alien deleted\n");
 }
 
-void moveAlien2(Alien *alien)
+int moveAlien1(Alien *alien)
 {
-	//Alien *alien = row2_head;
-
-	//move bigfoot...
-	//Update position
-	alien->pos[0] += alien->vel[0];
-	//alien.pos[1] += alien.vel[1];
-	//Check for collision with window edges
-	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 220.0) {
-		//alien->vel[0] = -alien->vel[0];
-		deleteAlien2(alien);
-	}
-	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
-	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
-	//      alien->vel[1] = -alien->vel[1];
-	//      addgrav = 0;
-	//}
-
+        //move alien...
+        //Update position
+        alien->pos[0] += alien->vel[0];
+        //alien.pos[1] += alien.vel[1];
+        //Check for collision with window edges
+        if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
+                        (alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] ==  270.0) {
+                //alien->vel[0] = -alien->vel[0];
+                deleteAlien2(alien);
+                return 1;
+        }
+        
+	return 0;
+        //if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
+        //              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
+        //      alien->vel[1] = -alien->vel[1];
+        //      addgrav = 0;
+        //}
 }
 
-void moveAlien3(Alien *alien)
+int moveAlien2(Alien *alien)
 {
-	//Alien *alien = row2_head;
-
-	//move bigfoot...
+	//move alien...
 	//Update position
 	alien->pos[0] += alien->vel[0];
 	//alien.pos[1] += alien.vel[1];
 	//Check for collision with window edges
 	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 220.0) {
+			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] ==  270.0) {
 		//alien->vel[0] = -alien->vel[0];
-		deleteAlien3(alien);
+		deleteAlien2(alien);
+		return 1;
 	}
+
+	return 0;
 	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
 	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
 	//      alien->vel[1] = -alien->vel[1];
 	//      addgrav = 0;
 	//}
+}
+
+int moveAlien3(Alien *alien)
+{
+	//move alien...
+	//Update position
+	alien->pos[0] += alien->vel[0];
+	//alien.pos[1] += alien.vel[1];
+	//Check for collision with window edges
+	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
+			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 175.0) {
+		//alien->vel[0] = -alien->vel[0];
+		deleteAlien3(alien);
+		return 1;
+	}
+	
+	return 0;
+	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
+	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
+	//      alien->vel[1] = -alien->vel[1];
+	//      addgrav = 0;
+	//}
+}
+
+void drawAliens1(void) {
+        Alien *alien = row1_head;
+        float wid = 32.0f;
+        while(alien){
+                glPushMatrix();
+                glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
+                glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+                glEnable(GL_ALPHA_TEST);
+                glAlphaFunc(GL_GREATER, 0.0f);
+                glColor4ub(255,255,255,255);
+
+                glBegin(GL_QUADS);
+                if (alien->vel[0] > 0.0) {
+                        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+                        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+                        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+                        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+                } /*else {
+                        glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
+                        glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
+                        glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
+                        glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
+                }*/
+                glEnd();
+                glPopMatrix();
+                alien = alien->next;
+        }
+        glDisable(GL_ALPHA_TEST);
 }
 
 void drawAliens2(void) {
@@ -374,12 +482,12 @@ void drawAliens2(void) {
 			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		} else {
+		} /*else {
 			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-		}
+		}*/
 		glEnd();
 		glPopMatrix();
 		alien = alien->next;
@@ -404,12 +512,12 @@ void drawAliens3(void) {
 			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		} else {
+		} /*else {
 			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-		}
+		}*/
 		glEnd();
 		glPopMatrix();
 		alien = alien->next;
@@ -417,19 +525,38 @@ void drawAliens3(void) {
 	glDisable(GL_ALPHA_TEST);
 }
 
-void checkAliens() 
+int checkAliens() 
 {
+	Alien *node1 = row1_head;
 	Alien *node2 = row2_head;
 	Alien *node3 = row3_head;
 
+	while (node1->next != NULL) {
+                deleted1 = moveAlien1(node1);
+                node1 = node1->next;
+        }
+
 	while (node2->next != NULL) {
-		moveAlien2(node2);
+		deleted2 = moveAlien2(node2);
 		node2 = node2->next;
 	}
 
 	while (node3->next != NULL) {
-		moveAlien3(node3);
+		deleted3 = moveAlien3(node3);
 		node3 = node3->next;
 	}
+
+	if (deleted1 == 1 && deleted2 == 1 && deleted3 == 1)
+		return 3;
+
+	if ((deleted1 == 1 && deleted2 == 1) ||
+		(deleted1 == 1 && deleted3 == 1) ||
+		(deleted2 == 1 && deleted3 == 2))
+		return 2;
+
+	if (deleted1 == 1 || deleted2 == 1 || deleted3 == 1) 
+		return 1;
+
+	return 0;
 }
 

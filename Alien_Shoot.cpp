@@ -11,15 +11,6 @@
 //
 //This program demonstrates the use of OpenGL and XWindows
 //
-//Texture maps are displayed.
-//Press B to see bigfoot roaming his forest.
-//
-//The rain builds up like snow on the ground.
-//Fix it by removing each raindrop for the rain linked list.
-//look for the 
-//
-//
-//
 //
 #include <iostream>
 #include <stdio.h>
@@ -165,11 +156,13 @@ unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
 void render(Glock, Bullet*);
 
-void checkAliens();
-void createAliens2();
-void createAliens3();
+bool checkAliens();
+int  createAliens1();
+int  createAliens2();
+int  createAliens3();
 void drawAliens3(void);
 void drawAliens2(void);
+void drawAliens1(void);
 
 //void moveAlien(Alien);
 //-----------------------------------------------------------------------------
@@ -193,9 +186,10 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 //-----------------------------------------------------------------------------
 
 
+int alienCount = 0;
+bool alienDeleted = false;
 int done=0;
 int xres=1024, yres=1024;
-int totaliens = 0;
 //Alien alien;
 
 bool space = false;
@@ -379,12 +373,6 @@ void initSounds(void)
 
 void init() 
 {
-	while (totaliens < 100) {
-		createAliens2();
-		++totaliens;
-		createAliens3();
-		++totaliens;
-	}
 }
 
 void checkMouse(XEvent *e)
@@ -500,7 +488,17 @@ Flt VecNormalize(Vec vec)
 
 void physics(Bullet *bullet)
 {
-	checkAliens();
+	if (alienCount < 15) {
+		alienCount = createAliens1();
+		alienCount = createAliens2();
+		alienCount = createAliens3();
+	}
+	alienDeleted = checkAliens();
+	//if (alienDeleted) {
+		alienCount = alienCount - alienDeleted;
+	//}
+	printf("Alien count: %d\n", alienCount);
+		
 	bullet->set_y(bullet->get_y() + 2);
 }
 
@@ -563,6 +561,7 @@ void render(Glock glock32, Bullet *bullet)
 
 		//------------------------------------------------
 		//ALIENS
+		drawAliens1();
 		drawAliens2();
 		drawAliens3();
 		//------------------------------------------------
@@ -595,6 +594,7 @@ void render(Glock glock32, Bullet *bullet)
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
 		
+		glBindTexture(GL_TEXTURE_2D, 0);
 		// Display the user's weapon and display the specs
 		//Glock glock32;
 		glock32.show_weapon();
