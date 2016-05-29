@@ -231,6 +231,7 @@ void Weapon::show_fact_sights()
 	glVertex3f(55.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 
 	// Show white dot on front sight 
 	glPushMatrix();
@@ -243,6 +244,7 @@ void Weapon::show_fact_sights()
 	glVertex3f(53.0, 103.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 
 	// Show black left rear factory sight
 	glPushMatrix();
@@ -255,6 +257,7 @@ void Weapon::show_fact_sights()
 	glVertex3f(30.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 	
 	// Show left part of white U on rear sight 
 	glPushMatrix();
@@ -267,6 +270,7 @@ void Weapon::show_fact_sights()
 	glVertex3f(25.0, 90.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 
 	// Show bottom part of white U on rear sight 
 	glPushMatrix();
@@ -279,6 +283,7 @@ void Weapon::show_fact_sights()
 	glVertex3f(75.0, 90.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 
 	// Show black right rear factory sight
 	glPushMatrix();
@@ -291,6 +296,7 @@ void Weapon::show_fact_sights()
 	glVertex3f(95.0, 100.0, 0.0);
 	glEnd();
 	glPopMatrix();
+	glFlush();
 	
 	
 	// Show right part of white U on rear sight 
@@ -320,6 +326,41 @@ void Weapon::show_weapon()
 	glVertex3f(95.0, 100.0, 0.0);
 	glVertex3f(100.0, 95.0, 0.0);
 	glVertex3f(100.0, 0.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+
+	// Show serrations on rear of pistol
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glBegin(GL_LINES);
+	glVertex3f(20.0, 70.0, 0.0);
+	glVertex3f(80.0, 70.0, 0.0);
+	glVertex3f(20.0, 66.0, 0.0);
+	glVertex3f(80.0, 66.0, 0.0);
+	glVertex3f(20.0, 62.0, 0.0);
+	glVertex3f(80.0, 62.0, 0.0);
+	glVertex3f(20.0, 58.0, 0.0);
+	glVertex3f(80.0, 58.0, 0.0);
+	glVertex3f(20.0, 54.0, 0.0);
+	glVertex3f(80.0, 54.0, 0.0);
+	glEnd();
+	glPopMatrix();
+	glFlush();
+
+	glPushMatrix();
+	glTranslatef(280,0,0);
+	glColor3f(0.6f, 0.6f, 0.6f);
+	glBegin(GL_LINES);
+	glVertex3f(10.0, 30.0, 0.0);
+	glVertex3f(10.0, 82.0, 0.0);
+	glVertex3f(10.0, 30.0, 0.0);
+	glVertex3f(90.0, 30.0, 0.0);
+	glVertex3f(90.0, 30.0, 0.0);
+	glVertex3f(90.0, 82.0, 0.0);
+	glVertex3f(10.0, 82.0, 0.0);
+	glVertex3f(90.0, 82.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
