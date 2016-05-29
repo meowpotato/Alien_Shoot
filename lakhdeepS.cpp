@@ -58,6 +58,25 @@ void moveAlien(Alien alien)
 		alien.vel[1] -= 0.75;
 }
 
+void moveAlien2(Alien alien)
+{
+	int addgrav = 1;
+	alien.pos[0] += alien.vel[0];
+	alien.pos[1] += alien.vel[1];
+	if ((alien.pos[0] < -140.0 && alien.vel[0] < 0.0) ||
+			(alien.pos[0] >= (float)xres+140.0 && alien.vel[0] > 0.0)) {
+		alien.vel[0] = -alien.vel[0];
+		addgrav = 0;
+	}
+	if ((alien.pos[1] < 150.0 && alien.vel[1] < 0.0) ||
+			(alien.pos[1] >= (float)yres && alien.vel[1] > 0.0)) {
+		alien.vel[1] = -alien.vel[1];
+		addgrav = 0;
+	}
+	if (addgrav)
+		alien.vel[1] -= 0.75;
+}
+
 // test code for more alien's movement
 // to show more than one alien's movement
 /*

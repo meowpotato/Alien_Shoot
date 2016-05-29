@@ -2,7 +2,7 @@
 //SO WE MAKE SURE WE DON'T DELETE ANYTHING WE COULD USE
 //cs335
 //Alien Shoot game
-//Modifiers: Sabrina Smith, Jeff Cadena 
+//Modifiers: Sabrina Smith, Jeff Cadena, Lakhdeep, Pedro 
 //
 //
 //program: rainforest
@@ -117,6 +117,33 @@ class Bullet {
 		void show_bullet();
 };
 
+class Target {
+	private:
+		int x;
+		int y;
+		int z;
+		int width;
+		int height;
+	public:
+		Target() {
+			x = 0;
+			y = 0;
+			z = 0;
+			width = 0;
+			height = 0;
+		}
+		void set_x(int);
+		void set_y(int);
+		void set_z(int);
+		int get_x();
+		int get_y();
+		int get_z();
+		void set_width(int);
+		void set_height(int);
+		int get_width();
+		int get_height();
+};
+
 //defined types
 typedef double Flt;
 typedef double Vec[3];
@@ -202,13 +229,15 @@ int curtains=1;
 int silhouette=1;
 int trees=1;
 int showRain=0;
+int fire = 0;
+int move_bullet = 0;
 //
 int main(void)
 {
 	Glock glock32;
 	Bullet *bullet = new Bullet;
 	bullet->set_x(280);
-	bullet->set_y(0);
+	bullet->set_y(-25);
 	bullet->set_z(0);
 	logOpen();
 	logOpen();
@@ -252,6 +281,7 @@ int main(void)
 		//Always render every frame.
 		render(glock32, bullet);
 		glXSwapBuffers(dpy, win);
+		fire = 0;
 	}
 	cleanupXWindows();
 	cleanup_fonts();
@@ -381,7 +411,15 @@ void checkMouse(XEvent *e)
 	//Was a mouse button clicked?
 	static int savex = 0;
 	static int savey = 0;
+	static int n = 0;
 	//
+		cout << "e->xbutton.button: " <<e->xbutton.button
+			<< endl;
+		if (e->xbutton.button == 41) {
+			fire = 1;
+			move_bullet = 1;
+		}		
+
 	if (e->type == ButtonRelease) {
 		return;
 	}
@@ -394,9 +432,17 @@ void checkMouse(XEvent *e)
 		}
 	}
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
+		cout << "savex: " <<savex << endl;
+		cout << "savey: " <<savey<< endl;
 		//Mouse moved
+		//int xdiff = savex - e->xbutton.x;
+		//int ydiff = savey - e->xbutton.y;
+		
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
+		if (++n < 10)
+			return;
+		cout << "Mouse moved" << endl;
 	}
 }
 
@@ -495,11 +541,21 @@ void physics(Bullet *bullet)
 	}
 	alienDeleted = checkAliens();
 	//if (alienDeleted) {
-		alienCount = alienCount - alienDeleted;
+	alienCount = alienCount - alienDeleted;
 	//}
 	printf("Alien count: %d\n", alienCount);
 		
 	bullet->set_y(bullet->get_y() + 2);
+	//checkAliens();
+	//cout << "bullet y coord: " << bullet->get_y() << endl;
+	if (bullet->get_y() > 400) {
+		move_bullet = 0;
+		bullet->set_x(280);
+		bullet->set_y(-25);
+		bullet->set_z(0);
+	}
+	if (move_bullet)
+		bullet->set_y(bullet->get_y() + 2);
 }
 
 void render(Glock glock32, Bullet *bullet)
@@ -597,16 +653,18 @@ void render(Glock glock32, Bullet *bullet)
 		glBindTexture(GL_TEXTURE_2D, 0);
 		// Display the user's weapon and display the specs
 		//Glock glock32;
+		glBindTexture(GL_TEXTURE_2D, 0);
 		glock32.show_weapon();
 		glock32.show_fact_sights();
-		glock32.show_muzzle_flash();
+		if (fire)
+			glock32.show_muzzle_flash();
 		glock32.set_model("32");
 		glock32.set_caliber("45 GAP");
 
 		// Display bullet
 		//Bullet bullet;
-		bullet->show_bullet();
-		//glDisable(GL_TEXTURE_2D);
+		if (move_bullet)
+			bullet->show_bullet();
 		
 		/*
 		Rect r;
