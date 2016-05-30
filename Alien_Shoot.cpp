@@ -93,8 +93,10 @@ class Bullet {
 		int z;
 		std::string caliber;
 		// Velocity of the bullet
-		float x_velocity;
-		float y_velocity;
+		int x_velocity;
+		int y_velocity;
+		// Signals if the bullet makes contact w/ an object
+		bool hit_object;
 	public:
 		Bullet() {
 			width = 0;
@@ -110,9 +112,13 @@ class Bullet {
 		void set_x(int);
 		void set_y(int);
 		void set_z(int);
+		void set_xvel(int);
+		void set_yvel(int);
 		int get_x();
 		int get_y();
 		int get_z();
+		int get_xvel();
+		int get_yvel();
 		void delete_bullet();
 		void show_bullet();
 };
@@ -173,7 +179,7 @@ void initXWindows(void);
 void initOpengl(void);
 void cleanupXWindows(void);
 void checkResize(XEvent *e);
-void checkMouse(XEvent *e);
+void checkMouse(XEvent *e, Bullet *, Target *);
 void checkKeys(XEvent *e);
 void init();
 void loadImages();
@@ -182,7 +188,7 @@ void load_weapon_texture();
 void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
-void render(Glock, Bullet*, Target *);
+void render(Glock, Bullet *, Target *);
 
 bool checkAliens();
 int  createAliens1();
@@ -239,7 +245,7 @@ int main(void)
 	Glock glock32;
 	Target *target = new Target;
 	target->set_x(280);
-	target->set_y(700);
+	target->set_y(400);
 	target->set_z(0);
 	Bullet *bullet = new Bullet;
 	bullet->set_x(280);
@@ -257,7 +263,7 @@ int main(void)
 			XEvent e;
 			XNextEvent(dpy, &e);
 			checkResize(&e);
-			checkMouse(&e);
+			checkMouse(&e, bullet, target);
 			checkKeys(&e);
 		}
 		//
@@ -412,7 +418,7 @@ void init()
 {
 }
 
-void checkMouse(XEvent *e)
+void checkMouse(XEvent *e, Bullet *b, Target *target)
 {
 	//Did the mouse move?
 	//Was a mouse button clicked?
@@ -420,13 +426,13 @@ void checkMouse(XEvent *e)
 	static int savey = 0;
 	static int n = 0;
 	//
-		cout << "e->xbutton.button: " <<e->xbutton.button
-			<< endl;
-		if (e->xbutton.button == 41) {
-			fire = 1;
-			move_bullet = 1;
-		}		
-
+	target->set_x(e->xbutton.x);
+	target->set_y(e->xbutton.y);
+	
+	if (e->xbutton.button == 41) {
+		fire = 1;
+		move_bullet = 1;
+	}		
 	if (e->type == ButtonRelease) {
 		return;
 	}
@@ -439,12 +445,25 @@ void checkMouse(XEvent *e)
 		}
 	}
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
+		/*cout << "e->xbutton.x: " <<e->xbutton.x << endl;
+		cout << "e->xbutton.y: " <<e->xbutton.y << endl;
 		cout << "savex: " <<savex << endl;
 		cout << "savey: " <<savey<< endl;
+		cout << "bullet x: " << b->get_x() << endl;
+		cout << "bullet y: " << b->get_y() << endl;*/
 		//Mouse moved
-		//int xdiff = savex - e->xbutton.x;
-		//int ydiff = savey - e->xbutton.y;
-		
+		int xdiff = savex - e->xbutton.x;
+		int ydiff = savey - e->xbutton.y;
+		cout << xdiff << endl;
+		cout << ydiff << endl;
+		if (fire) {
+			// if mouse cursor was R or L of middle x value
+			if (e->xbutton.x > 325)
+				b->set_xvel(2);
+			else
+				b->set_xvel(-2);
+			b->set_yvel(2);
+		}
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
 		if (++n < 10)
@@ -554,15 +573,26 @@ void physics(Bullet *bullet)
 		
 	bullet->set_y(bullet->get_y() + 2);
 	//checkAliens();
-	//cout << "bullet y coord: " << bullet->get_y() << endl;
-	if (bullet->get_y() > 400) {
+	
+	// Check bounds for bullet
+	if (bullet->get_x() > 551 || bullet->get_x() < 28) {
 		move_bullet = 0;
 		bullet->set_x(280);
 		bullet->set_y(-25);
 		bullet->set_z(0);
 	}
-	if (move_bullet)
-		bullet->set_y(bullet->get_y() + 2);
+	if (bullet->get_y() > 100) {
+		move_bullet = 0;
+		bullet->set_x(280);
+		bullet->set_y(-25);
+		bullet->set_z(0);
+	}
+	if (move_bullet) {
+		bullet->set_x(bullet->get_x() + 
+			bullet->get_xvel());
+		bullet->set_y(bullet->get_y() + 
+			bullet->get_yvel());
+	}
 }
 
 void render(Glock glock32, Bullet *bullet, Target *target)

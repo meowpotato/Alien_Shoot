@@ -97,8 +97,8 @@ class Bullet {
 		int z;
 		std::string caliber;
 		// Velocity of the bullet
-		float x_velocity;
-		float y_velocity;
+		int x_velocity;
+		int y_velocity;
 		// Signals if the bullet makes contact w/ an object
 		bool hit_object;
 	public:
@@ -117,9 +117,13 @@ class Bullet {
 		void set_x(int);
 		void set_y(int);
 		void set_z(int);
+		void set_xvel(int);
+		void set_yvel(int);
 		int get_x();
 		int get_y();
 		int get_z();
+		int get_xvel();
+		int get_yvel();
 		void delete_bullet();
 		void show_bullet();
 };
@@ -160,8 +164,9 @@ void Bullet::show_bullet()
 	glColor3f(1.0f, 0.5f, 0.0f);
 	glBegin(GL_POLYGON);
 	glVertex3f(45.0, 121.0, 0.0);
-	glVertex3f(47.5, 131.0, 0.0);
-	glVertex3f(50.0, 121.0, 0.0);
+	glVertex3f(45, 124.0, 0.0);
+	glVertex3f(48.0, 124.0, 0.0);
+	glVertex3f(48.0, 121.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
@@ -463,13 +468,26 @@ int Bullet::get_y()
 {
 	return y;
 }
+
 // Return the z-coordinate of bullet's position
 int Bullet::get_z()
 {
 	return z;
 }
 
-// Assignn the x-coordinate of bullet's position
+// Return the x-velocity
+int Bullet::get_xvel()
+{
+	return x_velocity;
+}
+
+// Return the y-velocity
+int Bullet::get_yvel()
+{
+	return y_velocity;
+}
+
+// Assign the x-coordinate of bullet's position
 void Bullet::set_x(int val)
 {
 	x = val;
@@ -484,6 +502,18 @@ void Bullet::set_y(int val)
 void Bullet::set_z(int val)
 {
 	z = val;
+}
+
+// Assign the x velocity
+void Bullet::set_xvel(int val)
+{
+	x_velocity = val;
+}
+
+// Assign the y velocity
+void Bullet::set_yvel(int val)
+{
+	y_velocity = val;
 }
 
 // Return the x-coordinate of target's position
@@ -550,28 +580,12 @@ void Target::show_target()
 {
 	glPushMatrix();
 	glTranslatef(x,y,z);
-	glColor3f(0.8f, 0.2f, 0.0f);
+	glColor3f(1.0, 0.0f, 0.0f);
 	glBegin(GL_LINES);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 30.0, 0.0);
-	glVertex3f(0.0, 30.0, 0.0);
-	glVertex3f(30.0, 30.0, 0.0);
-	glVertex3f(30.0, 30.0, 0.0);
-	glVertex3f(30.0, 0.0, 0.0);
-	glVertex3f(30.0, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, 0.0);
-	glEnd();
-	glPopMatrix();
-	glFlush();
-	
-	glPushMatrix();
-	glTranslatef(x,y,z);
-	glColor3f(0.8f, 0.2f, 0.0f);
-	glBegin(GL_LINES);
-	glVertex3f(0.0, 15.0, 0.0);
-	glVertex3f(30.0, 15.0, 0.0);
-	glVertex3f(15.0, 30.0, 0.0);
-	glVertex3f(15.0, 0.0, 0.0);
+	glVertex3f(0.0, 8.0, 0.0);
+	glVertex3f(16.0, 8.0, 0.0);
+	glVertex3f(8.0, 16.0, 0.0);
+	glVertex3f(8.0, 0.0, 0.0);
 	glEnd();
 	glPopMatrix();
 	glFlush();
