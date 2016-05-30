@@ -675,14 +675,20 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		if (move_bullet)
 			bullet->show_bullet();
 
+		// Set position for key hints
+		Rect r;
+		r.bot = yres - 550;
+		r.left = 100;
+		r.center = 0;
+
+		ggprint8b(&r, 16, 0, "f - Fire");
+
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner
-		Rect r;
 		r.bot = yres - 550;
 		r.left = 475;
 		r.center = 485;
 
-		ggprint8b(&r, 16, 0, "f - Fire");
 		ggprint8b(&r, 16, 0, "Score: %i", game_score);
 		//glock32.show_weapon_specs(r);
 	}
