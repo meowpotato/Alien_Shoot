@@ -232,6 +232,7 @@ int trees=1;
 int showRain=0;
 int fire = 0;
 int move_bullet = 0;
+int game_score = 0;
 //
 int main(void)
 {
@@ -673,29 +674,16 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		//Bullet bullet;
 		if (move_bullet)
 			bullet->show_bullet();
-		
-		/*
-		Rect r;
-		r.bot = yres - 20;
-		r.left = 10;
-		r.center = 0;
-		ggprint8b(&r, 16, 0, "B - Bigfoot");
-		ggprint8b(&r, 16, 0, "F - Forest");
-		ggprint8b(&r, 16, 0, "S - Silhouette");
-		ggprint8b(&r, 16, 0, "T - Trees");
-		ggprint8b(&r, 16, 0, "U - Umbrella");
-		ggprint8b(&r, 16, 0, "R - Rain");
-		ggprint8b(&r, 16, 0, "D - Deflection");
-		ggprint8b(&r, 16, 0, "N - Sounds");
-		ggprint8b(&r, 16, 0, "W - Weapon");
-		*/
 
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner
-		//r.bot = yres - 400;
-		//r.left = 550;
-		//r.center = 540;
+		Rect r;
+		r.bot = yres - 550;
+		r.left = 475;
+		r.center = 485;
 
+		ggprint8b(&r, 16, 0, "f - Fire");
+		ggprint8b(&r, 16, 0, "Score: %i", game_score);
 		//glock32.show_weapon_specs(r);
 	}
 }
