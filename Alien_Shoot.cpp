@@ -181,6 +181,7 @@ void cleanupXWindows(void);
 void checkResize(XEvent *e);
 void checkMouse(XEvent *e);
 void checkKeys(XEvent *e, Target *, Bullet *);
+void show_mouse_cursor(const int onoff);
 void init();
 void loadImages();
 void loadTextures();
@@ -425,6 +426,31 @@ void initSounds(void)
 
 void init() 
 {
+}
+
+void show_mouse_cursor(const int onoff)
+{
+    if (onoff) {
+        //this removes our own blank cursor.
+        XUndefineCursor(dpy, win);
+        return;
+    }
+    //vars to make blank cursor
+    Pixmap blank;
+    XColor dummy;
+    char data[1] = {0};
+    Cursor cursor;
+    //make a blank cursor
+    blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
+    if (blank == None)
+		std::cout << "error: out of memory." << std::endl;
+    cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
+    XFreePixmap(dpy, blank);
+    //this makes you the cursor. then set it using this function
+    XDefineCursor(dpy, win, cursor);
+    //after you do not need the cursor anymore use this function.
+    //it will undo the last change done by XDefineCursor
+    //(thus do only use ONCE XDefineCursor and then XUndefineCursor):
 }
 
 void checkMouse(XEvent *e)
