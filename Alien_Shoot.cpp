@@ -179,8 +179,8 @@ void initXWindows(void);
 void initOpengl(void);
 void cleanupXWindows(void);
 void checkResize(XEvent *e);
-void checkMouse(XEvent *e, Bullet *, Target *);
-void checkKeys(XEvent *e);
+void checkMouse(XEvent *e);
+void checkKeys(XEvent *e, Target *, Bullet *);
 void init();
 void loadImages();
 void loadTextures();
@@ -272,8 +272,8 @@ int main(void)
 			XEvent e;
 			XNextEvent(dpy, &e);
 			checkResize(&e);
-			checkMouse(&e, bullet, target);
-			checkKeys(&e);
+			checkMouse(&e);
+			checkKeys(&e, target, bullet);
 		}
 		//
 		//Below is a process to apply physics at a consistent rate.
@@ -427,21 +427,14 @@ void init()
 {
 }
 
-void checkMouse(XEvent *e, Bullet *b, Target *target)
+void checkMouse(XEvent *e)
 {
 	//Did the mouse move?
 	//Was a mouse button clicked?
 	static int savex = 0;
 	static int savey = 0;
 	static int n = 0;
-	//
-	target->set_x(e->xbutton.x);
-	target->set_y(yres-(e->xbutton.y));
 	
-	if (e->xbutton.button == 41) {
-		fire = 1;
-		move_bullet = 1;
-	}		
 	if (e->type == ButtonRelease) {
 		return;
 	}
@@ -454,25 +447,9 @@ void checkMouse(XEvent *e, Bullet *b, Target *target)
 		}
 	}
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
-		/*cout << "e->xbutton.x: " <<e->xbutton.x << endl;
-		cout << "e->xbutton.y: " <<e->xbutton.y << endl;
-		cout << "savex: " <<savex << endl;
-		cout << "savey: " <<savey<< endl;
-		cout << "bullet x: " << b->get_x() << endl;
-		cout << "bullet y: " << b->get_y() << endl;*/
 		//Mouse moved
-		int xdiff = savex - e->xbutton.x;
-		int ydiff = savey - e->xbutton.y;
-		cout << xdiff << endl;
-		cout << ydiff << endl;
-		if (fire) {
-			// if mouse cursor was R or L of middle x value
-			if (e->xbutton.x > 325)
-				b->set_xvel(2);
-			else
-				b->set_xvel(-2);
-			b->set_yvel(2);
-		}
+		/*int xdiff = savex - e->xbutton.x;
+		int ydiff = savey - e->xbutton.y;*/
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
 		if (++n < 10)
@@ -481,8 +458,10 @@ void checkMouse(XEvent *e, Bullet *b, Target *target)
 	}
 }
 
-void checkKeys(XEvent *e)
+void checkKeys(XEvent *e, Target *target, Bullet *b)
 {
+	int tmp_xvec = target->get_x()-b->get_x();
+	int tmp_yvec = target->get_y()-b->get_y();
 	//keyboard input?
 	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
@@ -501,6 +480,18 @@ void checkKeys(XEvent *e)
 		return;
 	}
 	switch (key) {
+		case XK_Left:
+			target->set_x(target->get_x() - 25);    
+			break;
+		case XK_Right:
+			target->set_x(target->get_x() + 25);    
+			break;
+		case XK_Up:
+			target->set_y(target->get_y() + 25);    
+			break;
+		case XK_Down:
+			target->set_y(target->get_y() - 25);    
+			break;
 		case XK_b:
 			//showBigfoot ^= 1;
 			//if (showBigfoot) {
@@ -510,6 +501,10 @@ void checkKeys(XEvent *e)
 			//deflection ^= 1;
 			break;
 		case XK_f:
+			b->set_xvel(tmp_xvec);
+			b->set_yvel(tmp_yvec);
+			fire = 1;
+			move_bullet = 1;
 			//forest ^= 1;
 			//curtains ^= 1;
 			//level1 ^= 1;
@@ -580,8 +575,6 @@ void physics(Bullet *bullet)
 		humanCount = createHumans2();
 		humanCount = createHumans3();
 	}
-
-	//bullet->set_y(bullet->get_y() + 5);
 	
 	// Check bounds for bullet
 	if (bullet->get_x() > 551 || bullet->get_x() < 28) {
@@ -600,7 +593,7 @@ void physics(Bullet *bullet)
 		bullet->set_x(bullet->get_x() + 
 			bullet->get_xvel());
 		bullet->set_y(bullet->get_y() + 
-			bullet->get_yvel()+5);
+			bullet->get_yvel());
 	}
 	
 	alienDeleted = checkAliens(bullet, &game_score);
@@ -737,8 +730,12 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 
 		// Display bullet
 		//Bullet bullet;
-		if (move_bullet)
+		if (move_bullet) {
+			//cout << "bullet x: " << bullet->get_x() << endl;
+			//cout << "bullet y: " << bullet->get_y() << endl;
 			bullet->show_bullet();
+			move_bullet = 0;
+		}
 
 		// Set position for key hints
 		Rect r;
@@ -747,6 +744,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		r.center = 0;
 
 		ggprint8b(&r, 16, 0, "f - Fire");
+		ggprint8b(&r, 16, 0, "Arrow keys - aim");
 
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner
