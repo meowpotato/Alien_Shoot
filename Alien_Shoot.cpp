@@ -601,9 +601,9 @@ void physics(Bullet *bullet)
 	alienCount = alienCount - alienDeleted;
 	humanCount = humanCount - humanDeleted;
 	
-	if (humanCount == 0) {
-		gameOver = 1;
-	}
+	//if (lives == -1) {
+	//	gameOver = 1;
+	//}
 	//printf("Alien count: %d\n", alienCount);
 }
 
@@ -634,7 +634,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 		glEnd();
 	}
-	else if (gameOver == 1) {
+	else if (lives <= 0) {
 		glBindTexture(GL_TEXTURE_2D, gameOverTexture);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
@@ -743,8 +743,8 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		r.left = 100;
 		r.center = 0;
 
-		ggprint8b(&r, 16, 0, "f - Fire");
-		ggprint8b(&r, 16, 0, "Arrow keys - aim");
+		ggprint8b(&r, 16, 0, "F - Fire");
+		ggprint8b(&r, 16, 0, "Arrow keys - Aim");
 
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner

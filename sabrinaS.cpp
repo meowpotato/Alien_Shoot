@@ -34,17 +34,20 @@ Ppmimage *levelsImage=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
+Ppmimage *gameOverImage=NULL;
 Ppmimage *glock30Image=NULL;
 Ppmimage *glock17Image=NULL;
 GLuint bigfootTexture;
 GLuint alienTexture;
 GLuint humanTexture;
-GLuint silhouetteTexture;
+GLuint alienSilhouetteTexture;
+GLuint humanSilhouetteTexture;
 GLuint forestTexture;
 GLuint levelsTexture;
 GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
+GLuint gameOverTexture;
 GLuint glock30Texture;
 GLuint glock17Texture;
 GLuint curtainsTexture;
@@ -93,6 +96,7 @@ void loadImages()
 	backgroundImage  = ppm6GetImage("./images/background.ppm");
 	mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
 	pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
+	gameOverImage  	 = ppm6GetImage("./images/gameOver.ppm");
 	glock30Image     = ppm6GetImage("./images/glock_30.ppm");
 	glock17Image     = ppm6GetImage("./images/glock_17.ppm");
 	curtainsImage    = ppm6GetImage("./images/curtains1.ppm");
@@ -103,11 +107,13 @@ void loadTextures()
 	glGenTextures(1, &alienTexture);
 	glGenTextures(1, &humanTexture);
 	glGenTextures(1, &backgroundTexture);
-	glGenTextures(1, &silhouetteTexture);
+	glGenTextures(1, &alienSilhouetteTexture);
+	glGenTextures(1, &humanSilhouetteTexture);
 	glGenTextures(1, &levelsTexture);
 	glGenTextures(1, &curtainsTexture);
 	glGenTextures(1, &mainMenuTexture);
 	glGenTextures(1, &pauseMenuTexture);
+	glGenTextures(1, &gameOverTexture);
 	glGenTextures(1, &glock30Texture);
 }
 
@@ -182,19 +188,34 @@ void buildTextures()
 	free(ftData);
 	//-------------------------------------------------------------------------
 	//
-	//silhouette
+	//alien silhouette
 	//this is similar to a sprite graphic
 	//
-	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//
 	//must build a new set of data...
-	unsigned char *silhouetteData = buildAlphaData(alienImage);
+	unsigned char *alienSilhouetteData = buildAlphaData(alienImage);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-	free(silhouetteData);
+			GL_RGBA, GL_UNSIGNED_BYTE, alienSilhouetteData);
+	free(alienSilhouetteData);
+	//-------------------------------------------------------------------------
+	//
+	//human silhouette
+	//this is similar to a sprite graphic
+	//
+	glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	//
+	//must build a new set of data...
+	unsigned char *humanSilhouetteData = buildAlphaData(humanImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, humanSilhouetteData);
+	free(humanSilhouetteData);
 	//-------------------------------------------------------------------------
 	//
 	//background
@@ -228,6 +249,17 @@ void buildTextures()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3,
 			pauseMenuImage->width, pauseMenuImage->height,
 			0, GL_RGB, GL_UNSIGNED_BYTE, pauseMenuImage->data);
+
+	//-------------------------------------------------------------------------
+	//
+	//game over
+	glBindTexture(GL_TEXTURE_2D, gameOverTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, 3,
+			gameOverImage->width, gameOverImage->height,
+			0, GL_RGB, GL_UNSIGNED_BYTE, gameOverImage->data);
 
 	//-------------------------------------------------------------------------
 	//
@@ -742,7 +774,7 @@ void drawAliens1(void) {
         while(alien){
                 glPushMatrix();
                 glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
-                glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+                glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
                 glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
                 glColor4ub(255,255,255,255);
@@ -767,7 +799,7 @@ void drawAliens2(void) {
 	while(alien){
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
-		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+		glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glColor4ub(255,255,255,255);
@@ -791,7 +823,7 @@ void drawAliens3(void) {
 	while(alien){
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
-		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+		glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glColor4ub(255,255,255,255);
@@ -821,7 +853,7 @@ void drawHumans1(void) {
         while(human){
                 glPushMatrix();
                 glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
-                glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+                glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
                 glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
                 glColor4ub(255,255,255,255);
@@ -846,7 +878,7 @@ void drawHumans2(void) {
         while(human){
                 glPushMatrix();
                 glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
-                glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+                glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
                 glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
                 glColor4ub(255,255,255,255);
@@ -871,7 +903,7 @@ void drawHumans3(void) {
         while(human){
                 glPushMatrix();
                 glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
-                glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+                glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
                 glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
                 glColor4ub(255,255,255,255);
