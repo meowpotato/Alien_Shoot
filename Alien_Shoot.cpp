@@ -687,7 +687,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		drawHumans3();
 		//------------------------------------------------
 		
-		/*//------------------------------------------------
+		//------------------------------------------------
 		//DASH
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
@@ -699,7 +699,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
-		//------------------------------------------------*/
+		//------------------------------------------------
 	
 		//------------------------------------------------
 		//LEVELS
@@ -757,17 +757,19 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		r.left = 100;
 		r.center = 0;
 
-		ggprint8b(&r, 16, 0, "F - Fire");
-		ggprint8b(&r, 16, 0, "Arrow keys - Aim");
+		//ggprint8b(&r, 16, 0, "F - Fire");
+		//ggprint8b(&r, 16, 0, "Arrow keys - Aim");
 
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner
-		r.bot = yres - 550;
+		r.bot = yres - 540;
 		r.left = 475;
 		r.center = 485;
 
-		ggprint8b(&r, 16, 0, "Score: %i", game_score);
-		ggprint8b(&r, 16, 0, "Lives: %i", lives);
+		ggprint13(&r, 20, 0x00ff0000, "             %i", game_score);
+		ggprint13(&r, 26, 0x00ff0000, "             %i", lives);
+		//ggprint8b(&r, 16, 0, "Score: %i", game_score);
+		//ggprint8b(&r, 16, 0, "Lives: %i", lives);
 		//glock32.show_weapon_specs(r);
 	}
 }
