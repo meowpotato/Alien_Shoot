@@ -198,6 +198,13 @@ void drawAliens3(void);
 void drawAliens2(void);
 void drawAliens1(void);
 
+bool checkHumans(Bullet *bullet, int *lives);
+int  createHumans1();
+int  createHumans2();
+int  createHumans3();
+void drawHumans3(void);
+void drawHumans2(void);
+void drawHumans1(void);
 //void moveAlien(Alien);
 //-----------------------------------------------------------------------------
 //Setup timers
@@ -219,15 +226,16 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 }
 //-----------------------------------------------------------------------------
 
-
+int humanCount = 0;
+bool humanDeleted = false;
 int alienCount = 0;
 bool alienDeleted = false;
 int done=0;
 int xres=1024, yres=1024;
-//Alien alien;
 
 bool space = false;
 int pauseMenu = 0;
+int gameOver = 1;
 int glock30 = 0;
 int glock17 = 0;
 int showBigfoot=1;
@@ -239,6 +247,7 @@ int showRain=0;
 int fire = 0;
 int move_bullet = 0;
 int game_score = 0;
+int lives = 3;
 //
 int main(void)
 {
@@ -534,7 +543,7 @@ void checkKeys(XEvent *e)
 			if (shift) {} 
 			break;
 		case XK_Escape:
-			done=1;
+			done = 1;
 			break;
 	}
 }
@@ -566,6 +575,12 @@ void physics(Bullet *bullet)
 		alienCount = createAliens3();
 	}
 		
+	if (humanCount < 5) {
+		humanCount = createHumans1();
+		humanCount = createHumans2();
+		humanCount = createHumans3();
+	}
+
 	//bullet->set_y(bullet->get_y() + 5);
 	
 	// Check bounds for bullet
@@ -589,7 +604,13 @@ void physics(Bullet *bullet)
 	}
 	
 	alienDeleted = checkAliens(bullet, &game_score);
+	humanDeleted = checkHumans(bullet, &lives);
 	alienCount = alienCount - alienDeleted;
+	humanCount = humanCount - humanDeleted;
+	
+	if (humanCount == 0) {
+		gameOver = 1;
+	}
 	//printf("Alien count: %d\n", alienCount);
 }
 
@@ -613,6 +634,15 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 	}
 	else if (pauseMenu == 1) {
 		glBindTexture(GL_TEXTURE_2D, pauseMenuTexture);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+		glEnd();
+	}
+	else if (gameOver == 1) {
+		glBindTexture(GL_TEXTURE_2D, gameOverTexture);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
@@ -653,8 +683,15 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		//------------------------------------------------
 		//ALIENS
 		drawAliens1();
+		drawHumans1();
 		drawAliens2();
+		drawHumans2();
 		drawAliens3();
+		drawHumans3();
+		//------------------------------------------------
+		
+		//------------------------------------------------
+		//HUMANS
 		//------------------------------------------------
 		
 		//------------------------------------------------
@@ -718,6 +755,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		r.center = 485;
 
 		ggprint8b(&r, 16, 0, "Score: %i", game_score);
+		ggprint8b(&r, 16, 0, "Lives: %i", lives);
 		//glock32.show_weapon_specs(r);
 	}
 }

@@ -16,6 +16,7 @@
 
 extern Ppmimage *bigfootImage;
 extern Ppmimage *alienImage;
+extern Ppmimage *humanImage;
 extern Ppmimage *backgroundImage;
 extern Ppmimage *forestImage;
 extern Ppmimage *curtainsImage;
@@ -27,6 +28,7 @@ extern Ppmimage *glock30Image;
 extern Ppmimage *glock17Image;
 extern GLuint bigfootTexture;
 extern GLuint alienTexture;
+extern GLuint humanTexture;
 extern GLuint silhouetteTexture;
 extern GLuint forestTexture;
 extern GLuint backgroundTexture;
@@ -50,6 +52,16 @@ typedef struct t_alien {
         struct t_alien *next;
 } Alien;
 
-extern Alien *row1_head;
-extern Alien *row2_head;
-extern Alien *row3_head;
+typedef struct t_human {
+        Vec pos;
+        Vec vel;
+        struct t_human *prev;
+        struct t_human *next;
+} Human;
+
+extern Alien *row1HeadAlien;
+extern Alien *row2HeadAlien;
+extern Alien *row3HeadAlien;
+extern Human *row1HeadHuman;
+extern Human *row2HeadHuman;
+extern Human *row3HeadHuman;
