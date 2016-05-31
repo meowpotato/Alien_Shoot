@@ -264,7 +264,7 @@ void buildTextures()
 int createAliens1() 
 {
         Alien *node = (Alien *)malloc(sizeof(Alien));
-        printf("alien created\n");
+        //printf("alien created\n");
         node->prev = NULL;
         node->next = NULL;
         node->pos[0] = -100.0 + (rand() % 5);
@@ -276,7 +276,7 @@ int createAliens1()
                 row1_head->prev = node;
         row1_head = node;
         ++totaliens;
-        printf("number of aliens:%d\n", totaliens);
+        //printf("number of aliens:%d\n", totaliens);
         return totaliens;
 }
 
@@ -284,7 +284,7 @@ int createAliens1()
 int createAliens2() 
 {
 	Alien *node = (Alien *)malloc(sizeof(Alien));
-	printf("alien created\n");
+	//printf("alien created\n");
 	node->prev = NULL;
 	node->next = NULL;
 	node->pos[0] = -100.0 + (rand() % 5);
@@ -296,14 +296,14 @@ int createAliens2()
 		row2_head->prev = node;
 	row2_head = node;
 	++totaliens;
-	printf("number of aliens:%d\n", totaliens);
+	//printf("number of aliens:%d\n", totaliens);
 	return totaliens;
 }
 
 int createAliens3() 
 {
 	Alien *node = (Alien *)malloc(sizeof(Alien));
-	printf("alien created\n");
+	//printf("alien created\n");
 	node->prev = NULL;
 	node->next = NULL;
 	node->pos[0] = -100.0 + (rand() % 5);
@@ -315,7 +315,7 @@ int createAliens3()
 		row3_head->prev = node;
 	row3_head = node;
 	++totaliens;
-	printf("number of aliens:%d\n", totaliens);
+	//printf("number of aliens:%d\n", totaliens);
 	return totaliens;
 }
 
@@ -346,7 +346,7 @@ void deleteAlien1(Alien *currentAlien)
 	free(currentAlien);
         currentAlien = NULL;
         --totaliens;
-        printf("Alien deleted\n");
+        //printf("Alien deleted\n");
 }
 
 void deleteAlien2(Alien *currentAlien) 
@@ -374,7 +374,7 @@ void deleteAlien2(Alien *currentAlien)
 	free(currentAlien);
 	currentAlien = NULL;
 	--totaliens;
-	printf("Alien deleted\n");
+	//printf("Alien deleted\n");
 }
 
 void deleteAlien3(Alien *currentAlien) 
@@ -402,103 +402,87 @@ void deleteAlien3(Alien *currentAlien)
 	free(currentAlien);
 	currentAlien = NULL;
 	--totaliens;
-	printf("Alien deleted\n");
+	//printf("Alien deleted\n");
 }
 
-int moveAlien1(Alien *alien, Bullet *bullet)
+int moveAlien1(Alien *alien, Bullet *bullet, int *score)
 {
         //move alien...
         //Update position
         alien->pos[0] += alien->vel[0];
-        //alien.pos[1] += alien.vel[1];
-        //Check for collision with window edges
-        if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-                        (alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] ==  365.0) {
-                //alien->vel[0] = -alien->vel[0];
+        
+	//Check for collision with window edges
+        if ((alien->pos[0] >= (float)xres+140.0 
+		&& alien->vel[0] > 0.0) && alien->pos[1] ==  365.0) {
                 deleteAlien1(alien);
                 return 1;
         }
 
-	if ((bullet->get_x() < alien->pos[0]) 
-			&& (bullet->get_x() > alien->pos[0] - wid)
-			&& (bullet->get_y() > alien->pos[1]) 
-			&& (bullet->get_y() < alien->pos[1] + wid)) {
+	if ((bullet->get_x() <= alien->pos[0]) 
+			&& (bullet->get_x() >= alien->pos[0] - wid)
+			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
+			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
 			deleteAlien1(alien);
-		return 1;
+			return 1;
 	}
         
 	return 0;
-        //if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
-        //              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
-        //      alien->vel[1] = -alien->vel[1];
-        //      addgrav = 0;
-        //}
 }
 
-int moveAlien2(Alien *alien, Bullet *bullet)
+int moveAlien2(Alien *alien, Bullet *bullet, int *score)
 {
 	//move alien...
 	//Update position
 	alien->pos[0] += alien->vel[0];
-	//alien.pos[1] += alien.vel[1];
+	
 	//Check for collision with window edges
-	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] ==  270.0) {
-		//alien->vel[0] = -alien->vel[0];
+	if ((alien->pos[0] >= (float)xres+140.0 
+		&& alien->vel[0] > 0.0) && alien->pos[1] ==  270.0) {
 		deleteAlien2(alien);
 		return 1;
 	}
 	
-	if ((bullet->get_x() < alien->pos[0]) 
-			&& (bullet->get_x() > alien->pos[0] - wid)
-			&& (bullet->get_y() > alien->pos[1]) 
-			&& (bullet->get_y() < alien->pos[1] + wid)) {
+	if ((bullet->get_x() <= alien->pos[0]) 
+			&& (bullet->get_x() >= alien->pos[0] - wid)
+			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
+			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
 			deleteAlien2(alien);
 		return 1;
 	}
 
 	return 0;
-	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
-	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
-	//      alien->vel[1] = -alien->vel[1];
-	//      addgrav = 0;
-	//}
 }
 
-int moveAlien3(Alien *alien, Bullet *bullet)
+int moveAlien3(Alien *alien, Bullet *bullet, int *score)
 {
 	//move alien...
 	//Update position
 	alien->pos[0] += alien->vel[0];
-	//alien.pos[1] += alien.vel[1];
+	
 	//Check for collision with window edges
-	if (//(alien->pos[0] < -140.0 && alien->vel[0] < 0.0) ||
-			(alien->pos[0] >= (float)xres+140.0 && alien->vel[0] > 0.0) && alien->pos[1] == 175.0) {
-		//alien->vel[0] = -alien->vel[0];
+	if ((alien->pos[0] >= (float)xres+140.0 
+		&& alien->vel[0] > 0.0) && alien->pos[1] == 175.0) {
 		deleteAlien3(alien);
 		return 1;
 	}
 	
-	if ((bullet->get_x() < alien->pos[0]) 
-			&& (bullet->get_x() > alien->pos[0] - wid)
-			&& (bullet->get_y() > alien->pos[1]) 
-			&& (bullet->get_y() < alien->pos[1] + wid)) {
+	if ((bullet->get_x() <= alien->pos[0]) 
+			&& (bullet->get_x() >= alien->pos[0] - wid)
+			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
+			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
 			deleteAlien3(alien);
 		return 1;
 	}
-
 	return 0;
-	//if ((alien->pos[1] < 150.0 && alien->vel[1] < 0.0) ||
-	//              (alien->pos[1] >= (float)yres && alien->vel[1] > 0.0)) {
-	//      alien->vel[1] = -alien->vel[1];
-	//      addgrav = 0;
-	//}
 }
 
 void drawAliens1(void) {
@@ -590,24 +574,24 @@ void drawAliens3(void) {
 	glDisable(GL_ALPHA_TEST);
 }
 
-int checkAliens(Bullet *bullet) 
+int checkAliens(Bullet *bullet, int *score) 
 {
 	Alien *node1 = row1_head;
 	Alien *node2 = row2_head;
 	Alien *node3 = row3_head;
 
 	while (node1->next != NULL) {
-                deleted1 = moveAlien1(node1, bullet);
+                deleted1 = moveAlien1(node1, bullet, score);
                 node1 = node1->next;
         }
 
 	while (node2->next != NULL) {
-		deleted2 = moveAlien2(node2, bullet);
+		deleted2 = moveAlien2(node2, bullet, score);
 		node2 = node2->next;
 	}
 
 	while (node3->next != NULL) {
-		deleted3 = moveAlien3(node3, bullet);
+		deleted3 = moveAlien3(node3, bullet, score);
 		node3 = node3->next;
 	}
 

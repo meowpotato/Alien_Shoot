@@ -190,7 +190,7 @@ unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
 void render(Glock, Bullet *, Target *);
 
-bool checkAliens();
+bool checkAliens(Bullet *bullet, int *score);
 int  createAliens1();
 int  createAliens2();
 int  createAliens3();
@@ -427,7 +427,7 @@ void checkMouse(XEvent *e, Bullet *b, Target *target)
 	static int n = 0;
 	//
 	target->set_x(e->xbutton.x);
-	target->set_y(e->xbutton.y);
+	target->set_y(yres-(e->xbutton.y));
 	
 	if (e->xbutton.button == 41) {
 		fire = 1;
@@ -565,14 +565,8 @@ void physics(Bullet *bullet)
 		alienCount = createAliens2();
 		alienCount = createAliens3();
 	}
-	alienDeleted = checkAliens();
-	//if (alienDeleted) {
-	alienCount = alienCount - alienDeleted;
-	//}
-	printf("Alien count: %d\n", alienCount);
 		
-	bullet->set_y(bullet->get_y() + 2);
-	//checkAliens();
+	//bullet->set_y(bullet->get_y() + 5);
 	
 	// Check bounds for bullet
 	if (bullet->get_x() > 551 || bullet->get_x() < 28) {
@@ -581,7 +575,7 @@ void physics(Bullet *bullet)
 		bullet->set_y(-25);
 		bullet->set_z(0);
 	}
-	if (bullet->get_y() > 100) {
+	if (bullet->get_y() > 560) {
 		move_bullet = 0;
 		bullet->set_x(280);
 		bullet->set_y(-25);
@@ -591,8 +585,12 @@ void physics(Bullet *bullet)
 		bullet->set_x(bullet->get_x() + 
 			bullet->get_xvel());
 		bullet->set_y(bullet->get_y() + 
-			bullet->get_yvel());
+			bullet->get_yvel()+5);
 	}
+	
+	alienDeleted = checkAliens(bullet, &game_score);
+	alienCount = alienCount - alienDeleted;
+	//printf("Alien count: %d\n", alienCount);
 }
 
 void render(Glock glock32, Bullet *bullet, Target *target)
