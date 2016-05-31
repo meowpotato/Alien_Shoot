@@ -34,6 +34,7 @@ Ppmimage *levelsImage=NULL;
 Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
+Ppmimage *dashImage=NULL;
 Ppmimage *gameOverImage=NULL;
 Ppmimage *glock30Image=NULL;
 Ppmimage *glock17Image=NULL;
@@ -47,6 +48,7 @@ GLuint levelsTexture;
 GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
+GLuint dashTexture;
 GLuint gameOverTexture;
 GLuint glock30Texture;
 GLuint glock17Texture;
@@ -96,6 +98,7 @@ void loadImages()
 	backgroundImage  = ppm6GetImage("./images/background.ppm");
 	mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
 	pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
+	dashImage 	 = ppm6GetImage("./images/dash.ppm");
 	gameOverImage  	 = ppm6GetImage("./images/gameOver.ppm");
 	glock30Image     = ppm6GetImage("./images/glock_30.ppm");
 	glock17Image     = ppm6GetImage("./images/glock_17.ppm");
@@ -113,6 +116,7 @@ void loadTextures()
 	glGenTextures(1, &curtainsTexture);
 	glGenTextures(1, &mainMenuTexture);
 	glGenTextures(1, &pauseMenuTexture);
+	glGenTextures(1, &dashTexture);
 	glGenTextures(1, &gameOverTexture);
 	glGenTextures(1, &glock30Texture);
 }
@@ -285,6 +289,22 @@ void buildTextures()
 			glock17Image->width, glock17Image->height,
 			0, GL_RGB, GL_UNSIGNED_BYTE, glock17Image->data);
 
+	//-------------------------------------------------------------------------
+	//
+	//dash
+	//
+	glBindTexture(GL_TEXTURE_2D, dashTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	//
+	//must build a new set of data...
+	w = dashImage->width;
+	h = dashImage->height;
+	ftData = buildAlphaData(dashImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+	free(ftData);
 
 	//-------------------------------------------------------------------------
 	//

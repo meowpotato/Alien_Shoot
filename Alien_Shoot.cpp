@@ -676,17 +676,31 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		//------------------------------------------------
 		//ALIENS
 		drawAliens1();
-		drawHumans1();
 		drawAliens2();
-		drawHumans2();
 		drawAliens3();
-		drawHumans3();
 		//------------------------------------------------
 		
 		//------------------------------------------------
 		//HUMANS
+		drawHumans1();
+		drawHumans2();
+		drawHumans3();
 		//------------------------------------------------
 		
+		/*//------------------------------------------------
+		//DASH
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, dashTexture);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		//------------------------------------------------*/
+	
 		//------------------------------------------------
 		//LEVELS
 		glEnable(GL_ALPHA_TEST);
@@ -700,7 +714,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
-
+		
 		//------------------------------------------------
 		//CURTAINS
 		glEnable(GL_ALPHA_TEST);
