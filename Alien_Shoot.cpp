@@ -361,6 +361,7 @@ void initXWindows(void)
 			CWColormap | CWEventMask, &swa);
 	GLXContext glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
 	glXMakeCurrent(dpy, win, glc);
+	show_mouse_cursor(0);
 	setTitle();
 }
 
