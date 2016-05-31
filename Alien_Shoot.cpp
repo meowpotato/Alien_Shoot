@@ -520,9 +520,6 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 			target->set_y(target->get_y() - 25);    
 			break;
 		case XK_b:
-			//showBigfoot ^= 1;
-			//if (showBigfoot) {
-			//}
 			break;
 		case XK_d:
 			//deflection ^= 1;
@@ -532,9 +529,6 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 			b->set_yvel(tmp_yvec);
 			fire = 1;
 			move_bullet = 1;
-			//forest ^= 1;
-			//curtains ^= 1;
-			//level1 ^= 1;
 			break;
 		case XK_s:
 			silhouette ^= 1;
@@ -560,9 +554,6 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 		case XK_n:
 			break;
 		case XK_w:
-			glock30 ^= 1;
-			//glock17 ^= 1;
-			if (shift) {} 
 			break;
 		case XK_Escape:
 			done = 1;
@@ -663,24 +654,6 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 	}
 	else if (lives <= 0) {
 		glBindTexture(GL_TEXTURE_2D, gameOverTexture);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-		glEnd();
-	}
-	else if (glock30 == 1) {
-		glBindTexture(GL_TEXTURE_2D, glock30Texture);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-		glEnd();
-	}
-	else if (glock17 == 1) {
-		glBindTexture(GL_TEXTURE_2D, glock17Texture);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);

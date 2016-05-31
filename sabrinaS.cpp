@@ -24,36 +24,26 @@ Human *row2HeadHuman = NULL;
 Human *row3HeadHuman = NULL;
 
 float wid = 32.0f;
-Ppmimage *bigfootImage=NULL;
 Ppmimage *alienImage=NULL;
 Ppmimage *humanImage=NULL;
-Ppmimage *forestImage=NULL;
 Ppmimage *backgroundImage=NULL;
 Ppmimage *curtainsImage=NULL;
 Ppmimage *levelsImage=NULL;
-Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
 Ppmimage *dashImage=NULL;
 Ppmimage *gameOverImage=NULL;
-Ppmimage *glock30Image=NULL;
-Ppmimage *glock17Image=NULL;
-GLuint bigfootTexture;
 GLuint alienTexture;
 GLuint humanTexture;
 GLuint alienSilhouetteTexture;
 GLuint humanSilhouetteTexture;
-GLuint forestTexture;
 GLuint levelsTexture;
 GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
 GLuint dashTexture;
 GLuint gameOverTexture;
-GLuint glock30Texture;
-GLuint glock17Texture;
 GLuint curtainsTexture;
-GLuint umbrellaTexture;
 
 class Bullet {
         protected:
@@ -100,8 +90,6 @@ void loadImages()
 	pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
 	dashImage 	 = ppm6GetImage("./images/dash.ppm");
 	gameOverImage  	 = ppm6GetImage("./images/gameOver.ppm");
-	glock30Image     = ppm6GetImage("./images/glock_30.ppm");
-	glock17Image     = ppm6GetImage("./images/glock_17.ppm");
 	curtainsImage    = ppm6GetImage("./images/curtains1.ppm");
 }
 
@@ -118,7 +106,6 @@ void loadTextures()
 	glGenTextures(1, &pauseMenuTexture);
 	glGenTextures(1, &dashTexture);
 	glGenTextures(1, &gameOverTexture);
-	glGenTextures(1, &glock30Texture);
 }
 
 unsigned char *buildAlphaData(Ppmimage *img) 
@@ -264,30 +251,6 @@ void buildTextures()
 	glTexImage2D(GL_TEXTURE_2D, 0, 3,
 			gameOverImage->width, gameOverImage->height,
 			0, GL_RGB, GL_UNSIGNED_BYTE, gameOverImage->data);
-
-	//-------------------------------------------------------------------------
-	//
-	//Glock 30 Weapon
-	//
-	glBindTexture(GL_TEXTURE_2D, glock30Texture);
-	//
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3,
-			glock30Image->width, glock30Image->height,
-			0, GL_RGB, GL_UNSIGNED_BYTE, glock30Image->data);
-
-	//-------------------------------------------------------------------------
-	//
-	//Glock 17 Weapon
-	//
-	glBindTexture(GL_TEXTURE_2D, glock17Texture);
-	//
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3,
-			glock17Image->width, glock17Image->height,
-			0, GL_RGB, GL_UNSIGNED_BYTE, glock17Image->data);
 
 	//-------------------------------------------------------------------------
 	//
@@ -640,6 +603,26 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
                 return 1;
         }
 
+	/*double d0 = bullet->get_x() - alien->pos[0];
+	double d1 = bullet->get_y() - alien->pos[1];
+	double dist = (d0*d0 + d1*d1);
+	if (dist < 32){
+			*score = *score + 50;
+			deleteAlien1(alien);
+			return 1;
+	}*/
+
+	if (((alien->pos[0]) + wid) >= (bullet->get_x())
+		&& ((bullet->get_x()) >= (alien->pos[0]))
+		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
+		&& ((bullet->get_y()) <= (alien->pos[1]))) {
+			printf("ALIEN HIT!\n");
+			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
+			deleteAlien1(alien);
+			return 1;
+	}
+/*
 	if ((bullet->get_x() < alien->pos[0]) 
 			&& (bullet->get_x() > alien->pos[0] - wid)
 			&& (yres-(bullet->get_y()) > alien->pos[1]) 
@@ -650,7 +633,7 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
 			deleteAlien1(alien);
 			return 1;
 	}
-        
+  */      
 	return 0;
 }
 
@@ -667,15 +650,15 @@ int moveAlien2(Alien *alien, Bullet *bullet, int *score)
 		return 1;
 	}
 	
-	if ((bullet->get_x() <= alien->pos[0]) 
-			&& (bullet->get_x() >= alien->pos[0] - wid)
-			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
-			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
+	if (((alien->pos[0]) + wid) >= (bullet->get_x())
+		&& ((bullet->get_x()) >= (alien->pos[0]))
+		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
+		&& ((bullet->get_y()) <= (alien->pos[1]))) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
-			deleteAlien2(alien);
-		return 1;
+			deleteAlien1(alien);
+			return 1;
 	}
 
 	return 0;
@@ -694,15 +677,15 @@ int moveAlien3(Alien *alien, Bullet *bullet, int *score)
 		return 1;
 	}
 	
-	if ((bullet->get_x() <= alien->pos[0]) 
-			&& (bullet->get_x() >= alien->pos[0] - wid)
-			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
-			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
+	if (((alien->pos[0]) + wid) >= (bullet->get_x())
+		&& ((bullet->get_x()) >= (alien->pos[0]))
+		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
+		&& ((bullet->get_y()) <= (alien->pos[1]))) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
-			deleteAlien3(alien);
-		return 1;
+			deleteAlien1(alien);
+			return 1;
 	}
 	return 0;
 }
@@ -854,17 +837,25 @@ void drawAliens3(void) {
 			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		} /*else {
-			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
-			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
-			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
-			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-		}*/
+		} 
 		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		
+		glColor3f(0.0, 0.0, 0.0);	
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBegin(GL_POLYGON);
+		//	glTexCoord2f(0.0f, 1.0f); glVertex2i((-wid/2)+5,(-wid/2)-5);
+		//	glTexCoord2f(0.0f, 0.0f); glVertex2i((-wid/2)+5, (wid/2)-10);
+		//	glTexCoord2f(1.0f, 0.0f); glVertex2i( (wid/2)-5, (wid/2)-10);
+		//	glTexCoord2f(1.0f, 1.0f); glVertex2i( (wid/2)-5,(-wid/2)-5);
+		
+		//glEnd();
+		//glDisable(GL_BLEND);
 		glPopMatrix();
 		alien = alien->next;
 	}
-	glDisable(GL_ALPHA_TEST);
+	//glDisable(GL_ALPHA_TEST);
 }
 
 void drawHumans1(void) {
@@ -1011,4 +1002,3 @@ int checkHumans(Bullet *bullet, int *lives)
 
         return 0;
 }
-

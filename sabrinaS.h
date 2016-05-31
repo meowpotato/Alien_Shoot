@@ -14,39 +14,26 @@
 
 #include "ppm.h"
 
-extern Ppmimage *bigfootImage;
 extern Ppmimage *alienImage;
 extern Ppmimage *humanImage;
 extern Ppmimage *backgroundImage;
-extern Ppmimage *forestImage;
 extern Ppmimage *curtainsImage;
 extern Ppmimage *levelsImage;
-extern Ppmimage *umbrellaImage;
 extern Ppmimage *mainMenuImage;
 extern Ppmimage *pauseMenuImage;
 extern Ppmimage *dashImage;
 extern Ppmimage *gameOverImage;
-extern Ppmimage *glock30Image;
-extern Ppmimage *glock17Image;
-extern GLuint bigfootTexture;
 extern GLuint alienTexture;
 extern GLuint humanTexture;
 extern GLuint alienSilhouetteTexture;
 extern GLuint humanSilhouetteTexture;
-extern GLuint forestTexture;
 extern GLuint backgroundTexture;
 extern GLuint levelsTexture;
-extern GLuint level1Texture;
-extern GLuint level2Texture;
-extern GLuint level3Texture;
 extern GLuint mainMenuTexture;
 extern GLuint pauseMenuTexture;
 extern GLuint dashTexture;
 extern GLuint gameOverTexture;
-extern GLuint glock30Texture;
-extern GLuint glock17Texture;
 extern GLuint curtainsTexture;
-extern GLuint umbrellaTexture;
 
 typedef double Vec[3];
 
