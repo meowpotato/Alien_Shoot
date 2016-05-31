@@ -9,12 +9,22 @@
  * This code will compile with the main Alien_Shoot.cpp file
  * A lot of the coding has been done in the main file of our game
  * */
-#include <iostream>
+//Put in .h file
+/*#include <iostream>
 #include <functional>
 #include "common.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <cstring>
+#include <X11/Xlib.h>
+#include <X11/keysym.h>
+#include <GL/glx.h>
+#include <cstdlib> */
+#include "common.h"
+#include "lakhdeepS.h"
+
 
 //defined types
 typedef double Flt;
@@ -28,12 +38,6 @@ typedef Flt 	Matrix [4][4];
 
 using namespace std;
 
-typedef struct Alien {
-	Vec pos;
-	Vec vel;
-} Alien;
-
-Alien alien;
 void moveAlien(Alien alien)
 {
 	//Alien alien;
@@ -76,6 +80,21 @@ void moveAlien2(Alien alien)
 	if (addgrav)
 		alien.vel[1] -= 0.75;
 }
+
+/*
+//Attempt to have scoreboard showing
+void showScoreboard()
+{
+	Rect r;
+	glClear(GL_COLOR_BUFFER_BIT);
+	//
+	r.bot = yres - 20;
+	r.left = 10;
+	r.center = 0;
+	ggprint8b(&r, 16, 0x00ff0000, "SCORE");
+	ggprint8b(&r, 16, 0x00ff0000, "n score: %i", g->score);
+}
+*/
 
 // test code for more alien's movement
 // to show more than one alien's movement
