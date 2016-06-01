@@ -1,8 +1,9 @@
 //Author: Sabrina Smith
 //Class: CMPS 335
-//Purpose: Lab 5 - Work on project material
-//	   Loading images and textures outside of main.cpp file	   
-//Modified: 5/2/16
+//Purpose: Loading images and textures outside of main.cpp file	   
+//	   All alien and human functionality
+//	   Creating, deleting, moving, drawing alien and humans
+//	   Draw, create, and check functions are used in Alien_Shoot.cpp
 
 
 #include "sabrinaS.h"

@@ -1,15 +1,11 @@
-//MANY THINGS NEED TO BE DELETED BUT LETS LEAVE THEM FOR NOW 
-//SO WE MAKE SURE WE DON'T DELETE ANYTHING WE COULD USE
 //cs335
 //Alien Shoot game
-//Modifiers: Sabrina Smith, Jeff Cadena, Lakhdeep, Pedro 
+//Modifiers: Sabrina Smith, Jeff Cadena, Lakhdeep Singh, Pedro Hernandez
 //
 //
 //program: rainforest
 //author:  Gordon Griesel
 //date:    2013 to present
-//
-//This program demonstrates the use of OpenGL and XWindows
 //
 //
 #include <iostream>
