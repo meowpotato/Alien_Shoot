@@ -183,6 +183,10 @@ void checkResize(XEvent *e);
 void checkMouse(XEvent *e);
 void checkKeys(XEvent *e, Target *, Bullet *);
 void show_mouse_cursor(const int onoff);
+void initSound();
+void emptyDriver();
+void loadSounds();
+void playSound(int sndSet);
 void init();
 void loadImages();
 void loadTextures();
@@ -228,6 +232,7 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 }
 //-----------------------------------------------------------------------------
 
+int sndSet;
 int humanCount = 0;
 bool humanDeleted = false;
 int alienCount = 0;
@@ -267,6 +272,9 @@ int main(void)
 	initXWindows();
 	initOpengl();
 	init();
+	initSound();
+	emptyDriver();
+	loadSounds();
 	clock_gettime(CLOCK_REALTIME, &timePause);
 	clock_gettime(CLOCK_REALTIME, &timeStart);
 	while (!done) {
@@ -301,6 +309,7 @@ int main(void)
 			//7. Reduce the countdown by our physics-rate
 			physicsCountdown -= physicsRate;
 		}
+		playSound(sndSet);
 		//Always render every frame.
 		render(glock32, bullet, target);
 		glXSwapBuffers(dpy, win);
