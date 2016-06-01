@@ -1,11 +1,13 @@
 /* Author: Lakhdeep Singh
  * HW3 - CS 335 Individual Contribution to project
- * Date Written: 4/15/16-5/31/16, modified 4/27/16, modified 5/2/16, 5/4/16, 5/10/16
- * 5/14/16, 5/22/16, 5/26/16, 5/28/16
+ * Date Written: 4/15/16-5/31/16, modified 4/27/16, modified 5/2/16, 5/4/16,
+ * 5/10/16, 5/14/16, 5/22/16, 5/26/16, 5/28/16, 5/29/16, 5/30/16, 5/31/16
  *
  * So far,  the code down below is for the movement of the aliens
- * this all works and does compile,
- * and more code for more movement will be added soon.
+ * this all works and does compile.
+ * Alongside with deleting humans and aliens were attempted
+ * Adding scoreboard was started but ended in main file
+ * A lot of code was contributed in main file, please check.
  * This code will compile with the main Alien_Shoot.cpp file
  * A lot of the coding has been done in the main file of our game
  * */
@@ -22,6 +24,7 @@
 #include <X11/keysym.h>
 #include <GL/glx.h>
 #include <cstdlib> */
+
 #include "common.h"
 #include "lakhdeepS.h"
 
@@ -62,9 +65,10 @@ void moveAlien(Alien alien)
 		alien.vel[1] -= 0.75;
 }
 
+//same thing for second one
 void moveAlien2(Alien alien)
 {
-	int addgrav = 1;
+	int addgrav = 2;
 	alien.pos[0] += alien.vel[0];
 	alien.pos[1] += alien.vel[1];
 	if ((alien.pos[0] < -140.0 && alien.vel[0] < 0.0) ||
@@ -140,3 +144,130 @@ if (display_lakhdeep)
 	drawRectangle(r);
 	display();
 */
+
+//third alien
+void moveAlien3(Alien alien)
+{
+	int addgrav = 3;
+	alien.pos[0] += alien.vel[0];
+	alien.pos[1] += alien.vel[1];
+	if ((alien.pos[0] < -140.0 && alien.vel[0] < 0.0) ||
+			(alien.pos[0] >= (float)xres+140.0 && alien.vel[0] > 0.0)) {
+		alien.vel[0] = -alien.vel[0];
+		addgrav = 0;
+	}
+	if ((alien.pos[1] < 150.0 && alien.vel[1] < 0.0) ||
+			(alien.pos[1] >= (float)yres && alien.vel[1] > 0.0)) {
+		alien.vel[1] = -alien.vel[1];
+		addgrav = 0;
+	}
+	if (addgrav)
+		alien.vel[1] -= 0.75;
+}
+
+/*
+//delete alien to respawn
+void deleteAlien1(Alien alien)
+{
+        if (alien->prev == NULL) {
+                if (alien->next == NULL) {
+                        row1_head = NULL;
+                }
+                else {
+                        alien->next->prev = NULL;
+                        row1_head = alien->next;
+                }
+        }
+
+        else {
+                if (alien->next == NULL) {
+                        alien->prev->next = NULL;
+                }
+                else {
+                        alien->prev->next = currentAlien->next;
+                        alien->next->prev = currentAlien->prev;
+                }
+        }
+	} */
+//movement of Humans
+void moveHuman1(Human human)
+{
+	int addgrav = 1;
+	human.pos[0] += human.vel[0];
+	human.pos[1] += human.vel[1];
+	if ((human.pos[0] < -140.0 && human.vel[0] < 0.0) ||
+			(human.pos[0] >= (float)xres+140.0 && human.vel[0] > 0.0)) {
+		human.vel[0] = -human.vel[0];
+		addgrav = 0;
+	}
+	if ((human.pos[1] < 150.0 && human.vel[1] < 0.0) ||
+			(human.pos[1] >= (float)yres && human.vel[1] > 0.0)) {
+		human.vel[1] = -human.vel[1];
+		addgrav = 0;
+	}
+	if (addgrav)
+		human.vel[1] -= 0.75;
+}
+
+void moveHuman2(Human human)
+{
+        int addgrav = 2;
+        human.pos[0] += human.vel[0];
+        human.pos[1] += human.vel[1];
+        if ((human.pos[0] < -160.0 && human.vel[0] < 0.0) ||
+                        (human.pos[0] >= (float)xres+140.0 && human.vel[0] > 0.0)) {
+                human.vel[0] = -human.vel[0];
+                addgrav = 0;
+        }
+        if ((human.pos[1] < 150.0 && human.vel[1] < 0.0) ||
+                        (human.pos[1] >= (float)yres && human.vel[1] > 0.0)) {
+                human.vel[1] = -human.vel[1];
+                addgrav = 0;
+        }
+        if (addgrav)
+                human.vel[1] -= 0.80;
+}
+
+void moveHuman3(Human human)
+{
+int addgrav = 3;
+        human.pos[0] += human.vel[0];
+        human.pos[1] += human.vel[1];
+        if ((human.pos[0] < -145.0 && human.vel[0] < 0.0) ||
+                        (human.pos[0] >= (float)xres+140.0 && human.vel[0] > 0.0)) {
+                human.vel[0] = -human.vel[0];
+                addgrav = 0;
+        }
+        if ((human.pos[1] < 150.0 && human.vel[1] < 0.0) ||
+                        (human.pos[1] >= (float)yres && human.vel[1] > 0.0)) {
+                human.vel[1] = -human.vel[1];
+                addgrav = 0;
+        }
+        if (addgrav)
+                human.vel[1] -= 0.75;
+}
+
+/*
+void deleteHuman1(Human human)
+{
+        if (human->prev == NULL) {
+                if (human->next == NULL) {
+                        row1_human = NULL;
+                }
+                else {
+                        human->next->prev = NULL;
+                        row1_human = human->next;
+                }
+        }
+
+        else {
+                if (human->next == NULL) {
+                        human->prev->next = NULL;
+                }
+                else {
+                        human->prev->next = currentHuman->next;
+                        human->next->prev = currentHuman->prev;
+                }
+        }
+        } */
+

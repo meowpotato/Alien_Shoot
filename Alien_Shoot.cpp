@@ -197,12 +197,13 @@ typedef Flt	Matrix[4][4];
 #define VecCopy(a,b) 	(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
 #define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-			(c)[1]=(a)[1]-(b)[1]; \
+			     (c)[1]=(a)[1]-(b)[1]; \
 (c)[2]=(a)[2]-(b)[2]
 //constants
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
 #define ALPHA 1
+static int shift = 0;
 
 //X Windows variables
 Display *dpy;
@@ -213,8 +214,9 @@ void initXWindows(void);
 void initOpengl(void);
 void cleanupXWindows(void);
 void checkResize(XEvent *e);
-void checkMouse(XEvent *e, Game *game);
-void checkKeys(XEvent *e, Target *, int *);
+void checkMouse(XEvent *e);
+void checkKeys(XEvent *e, Target *, Bullet *);
+void show_mouse_cursor(const int onoff);
 void init();
 void loadImages();
 void loadTextures();
@@ -232,6 +234,13 @@ void drawAliens3(void);
 void drawAliens2(void);
 void drawAliens1(void);
 
+bool checkHumans(Bullet *bullet, int *lives);
+int  createHumans1();
+int  createHumans2();
+int  createHumans3();
+void drawHumans3(void);
+void drawHumans2(void);
+void drawHumans1(void);
 //void moveAlien(Alien);
 //-----------------------------------------------------------------------------
 //Setup timers
@@ -253,15 +262,16 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 }
 //------------------------------------------------------------------------
 
-
+int humanCount = 0;
+bool humanDeleted = false;
 int alienCount = 0;
 bool alienDeleted = false;
 int done=0;
 int xres=1024, yres=1024;
-//Alien alien;
 
-bool space = false;
+int space = 0;
 int pauseMenu = 0;
+int gameOver = 1;
 int glock30 = 0;
 int glock17 = 0;
 int showBigfoot=1;
@@ -273,6 +283,7 @@ int showRain=0;
 int fire = 0;
 int move_bullet = 0;
 int game_score = 0;
+int lives = 3;
 //
 int main(void)
 {
@@ -395,6 +406,7 @@ void initXWindows(void)
 			CWColormap | CWEventMask, &swa);
 	GLXContext glc = glXCreateContext(dpy, vi, NULL, GL_TRUE);
 	glXMakeCurrent(dpy, win, glc);
+	show_mouse_cursor(0);
 	setTitle();
 }
 
@@ -462,14 +474,39 @@ void init()
 {
 }
 
-void checkMouse(XEvent *e, Game *g)
+void show_mouse_cursor(const int onoff)
+{
+	if (onoff) {
+		//this removes our own blank cursor.
+		XUndefineCursor(dpy, win);
+		return;
+	}
+	//vars to make blank cursor
+	Pixmap blank;
+	XColor dummy;
+	char data[1] = {0};
+	Cursor cursor;
+	//make a blank cursor
+	blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
+	if (blank == None)
+		std::cout << "error: out of memory." << std::endl;
+	cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
+	XFreePixmap(dpy, blank);
+	//this makes you the cursor. then set it using this function
+	XDefineCursor(dpy, win, cursor);
+	//after you do not need the cursor anymore use this function.
+	//it will undo the last change done by XDefineCursor
+	//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
+}
+
+void checkMouse(XEvent *e)
 {
 	//Did the mouse move?
 	//Was a mouse button clicked?
 	static int savex = 0;
 	static int savey = 0;
 	static int n = 0;
-	
+
 	if (e->type == ButtonRelease) {
 		return;
 	}
@@ -498,7 +535,7 @@ void checkMouse(XEvent *e, Game *g)
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
 		//Mouse moved
 		/*int xdiff = savex - e->xbutton.x;
-		int ydiff = savey - e->xbutton.y;*/
+		  int ydiff = savey - e->xbutton.y;*/
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
 		if (++n < 10)
@@ -513,7 +550,6 @@ void checkKeys(XEvent *e, Target *target, int *b_index)
 	int tmp_yvec = target->get_y()-b->get_y();*/
 
 	//keyboard input?
-	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
 	if (e->type == KeyRelease) {
 		if (key == XK_Shift_L || key == XK_Shift_R)
@@ -543,9 +579,6 @@ void checkKeys(XEvent *e, Target *target, int *b_index)
 			target->set_y(target->get_y() - 25);    
 			break;
 		case XK_b:
-			//showBigfoot ^= 1;
-			//if (showBigfoot) {
-			//}
 			break;
 		case XK_d:
 			//deflection ^= 1;
@@ -556,9 +589,6 @@ void checkKeys(XEvent *e, Target *target, int *b_index)
 			//b->set_yvel(tmp_yvec);
 			fire = 1;
 			move_bullet = 1;
-			//forest ^= 1;
-			//curtains ^= 1;
-			//level1 ^= 1;
 			break;
 		case XK_s:
 			silhouette ^= 1;
@@ -575,7 +605,7 @@ void checkKeys(XEvent *e, Target *target, int *b_index)
 		case XK_r:
 			break;
 		case XK_space:
-			space = true;
+			space = 1;
 			break;
 		case XK_equal:
 			break;
@@ -584,12 +614,9 @@ void checkKeys(XEvent *e, Target *target, int *b_index)
 		case XK_n:
 			break;
 		case XK_w:
-			glock30 ^= 1;
-			//glock17 ^= 1;
-			if (shift) {} 
 			break;
 		case XK_Escape:
-			done=1;
+			done = 1;
 			break;
 	}
 }
@@ -686,6 +713,54 @@ void physics(Game *g, Bullet *b, int *b_index)
 	alienDeleted = checkAliens(b, &game_score);
 	alienCount = alienCount - alienDeleted;
 	//printf("Alien count: %d\n", alienCount);
+	//Objects on screen only move after the player has
+	//started the game and if the game is not paused
+	//--Sabrina
+	if (space == 1) {
+		if (pauseMenu != 1) {
+			if (alienCount < 15) {
+				alienCount = createAliens1();
+				alienCount = createAliens2();
+				alienCount = createAliens3();
+			}
+
+			if (humanCount < 5) {
+				humanCount = createHumans1();
+				humanCount = createHumans2();
+				humanCount = createHumans3();
+			}
+
+			// Check bounds for bullet
+			if (bullet->get_x() > 551 || bullet->get_x() < 28) {
+				move_bullet = 0;
+				bullet->set_x(280);
+				bullet->set_y(-25);
+				bullet->set_z(0);
+			}
+			if (bullet->get_y() > 560) {
+				move_bullet = 0;
+				bullet->set_x(280);
+				bullet->set_y(-25);
+				bullet->set_z(0);
+			}
+			if (move_bullet) {
+				bullet->set_x(bullet->get_x() + 
+						bullet->get_xvel());
+				bullet->set_y(bullet->get_y() + 
+						bullet->get_yvel());
+			}
+
+			alienDeleted = checkAliens(bullet, &game_score);
+			humanDeleted = checkHumans(bullet, &lives);
+			alienCount = alienCount - alienDeleted;
+			humanCount = humanCount - humanDeleted;
+
+			//if (lives == -1) {
+			//	gameOver = 1;
+			//}
+			//printf("Alien count: %d\n", alienCount);
+		}
+	}
 }
 
 void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
@@ -693,7 +768,7 @@ void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	//draw a quad with texture
 	glColor3f(1.0, 1.0, 1.0);
 
@@ -715,17 +790,8 @@ void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
 		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
 		glEnd();
 	}
-	else if (glock30 == 1) {
-		glBindTexture(GL_TEXTURE_2D, glock30Texture);
-		glBegin(GL_QUADS);
-		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
-		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
-		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
-		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
-		glEnd();
-	}
-	else if (glock17 == 1) {
-		glBindTexture(GL_TEXTURE_2D, glock17Texture);
+	else if (lives <= 0) {
+		glBindTexture(GL_TEXTURE_2D, gameOverTexture);
 		glBegin(GL_QUADS);
 		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
 		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
@@ -751,7 +817,28 @@ void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
 		drawAliens2();
 		drawAliens3();
 		//------------------------------------------------
-		
+
+		//------------------------------------------------
+		//HUMANS
+		drawHumans1();
+		drawHumans2();
+		drawHumans3();
+		//------------------------------------------------
+
+		//------------------------------------------------
+		//DASH
+		glEnable(GL_ALPHA_TEST);
+		glAlphaFunc(GL_GREATER, 0.0f);
+		glBindTexture(GL_TEXTURE_2D, dashTexture);
+		glBegin(GL_QUADS);
+		glTexCoord2f(0.0f, 1.0f); glVertex2i(0, 0);
+		glTexCoord2f(0.0f, 0.0f); glVertex2i(0, yres);
+		glTexCoord2f(1.0f, 0.0f); glVertex2i(xres, yres);
+		glTexCoord2f(1.0f, 1.0f); glVertex2i(xres, 0);
+		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		//------------------------------------------------
+
 		//------------------------------------------------
 		//LEVELS
 		glEnable(GL_ALPHA_TEST);
@@ -779,7 +866,7 @@ void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
-		
+
 		// Display the user's weapon and display the target
 		// Display the user's weapon and display the specs
 		//Glock glock32;
@@ -811,16 +898,19 @@ void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
 		r.left = 100;
 		r.center = 0;
 
-		ggprint8b(&r, 16, 0, "f - Fire");
-		ggprint8b(&r, 16, 0, "Arrow keys - aim");
+		//ggprint8b(&r, 16, 0, "F - Fire");
+		//ggprint8b(&r, 16, 0, "Arrow keys - Aim");
 
 		// Reposition the Rect instance r so weapon menu will be 
 		// displayed in bottom right corner
-		r.bot = yres - 550;
+		r.bot = yres - 540;
 		r.left = 475;
 		r.center = 485;
 
-		ggprint8b(&r, 16, 0, "Score: %i", game_score);
+		ggprint13(&r, 20, 0x00ff0000, "             %i", game_score);
+		ggprint13(&r, 26, 0x00ff0000, "             %i", lives);
+		//ggprint8b(&r, 16, 0, "Score: %i", game_score);
+		//ggprint8b(&r, 16, 0, "Lives: %i", lives);
 		//glock32.show_weapon_specs(r);
 	}
 }

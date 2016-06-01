@@ -8,38 +8,42 @@
 #include "sabrinaS.h"
 #include "common.h"
 
+int tothumans = 0;
 int totaliens = 0;
 int deleted1 = 0;
 int deleted2 = 0;
 int deleted3 = 0;
-Alien *row1_head = NULL;
-Alien *row2_head = NULL;
-Alien *row3_head = NULL;
+int deleted4 = 0;
+int deleted5 = 0;
+int deleted6 = 0;
+Alien *row1HeadAlien = NULL;
+Alien *row2HeadAlien = NULL;
+Alien *row3HeadAlien = NULL;
+Human *row1HeadHuman = NULL;
+Human *row2HeadHuman = NULL;
+Human *row3HeadHuman = NULL;
 
 float wid = 32.0f;
-Ppmimage *bigfootImage=NULL;
 Ppmimage *alienImage=NULL;
-Ppmimage *forestImage=NULL;
+Ppmimage *humanImage=NULL;
 Ppmimage *backgroundImage=NULL;
 Ppmimage *curtainsImage=NULL;
 Ppmimage *levelsImage=NULL;
-Ppmimage *umbrellaImage=NULL;
 Ppmimage *mainMenuImage=NULL;
 Ppmimage *pauseMenuImage=NULL;
-Ppmimage *glock30Image=NULL;
-Ppmimage *glock17Image=NULL;
-GLuint bigfootTexture;
+Ppmimage *dashImage=NULL;
+Ppmimage *gameOverImage=NULL;
 GLuint alienTexture;
-GLuint silhouetteTexture;
-GLuint forestTexture;
+GLuint humanTexture;
+GLuint alienSilhouetteTexture;
+GLuint humanSilhouetteTexture;
 GLuint levelsTexture;
 GLuint backgroundTexture;
 GLuint mainMenuTexture;
 GLuint pauseMenuTexture;
-GLuint glock30Texture;
-GLuint glock17Texture;
+GLuint dashTexture;
+GLuint gameOverTexture;
 GLuint curtainsTexture;
-GLuint umbrellaTexture;
 
 class Bullet {
         protected:
@@ -79,25 +83,29 @@ class Bullet {
 void loadImages() 
 {
 	alienImage       = ppm6GetImage("./images/alien.ppm");
+	humanImage       = ppm6GetImage("./images/human.ppm");
 	levelsImage	 = ppm6GetImage("./images/levels.ppm");
 	backgroundImage  = ppm6GetImage("./images/background.ppm");
 	mainMenuImage    = ppm6GetImage("./images/mainMenu.ppm");
 	pauseMenuImage   = ppm6GetImage("./images/pauseMenu.ppm");
-	glock30Image     = ppm6GetImage("./images/glock_30.ppm");
-	glock17Image     = ppm6GetImage("./images/glock_17.ppm");
+	dashImage 	 = ppm6GetImage("./images/dash.ppm");
+	gameOverImage  	 = ppm6GetImage("./images/gameOver.ppm");
 	curtainsImage    = ppm6GetImage("./images/curtains1.ppm");
 }
 
 void loadTextures() 
 {
 	glGenTextures(1, &alienTexture);
+	glGenTextures(1, &humanTexture);
 	glGenTextures(1, &backgroundTexture);
-	glGenTextures(1, &silhouetteTexture);
+	glGenTextures(1, &alienSilhouetteTexture);
+	glGenTextures(1, &humanSilhouetteTexture);
 	glGenTextures(1, &levelsTexture);
 	glGenTextures(1, &curtainsTexture);
 	glGenTextures(1, &mainMenuTexture);
 	glGenTextures(1, &pauseMenuTexture);
-	glGenTextures(1, &glock30Texture);
+	glGenTextures(1, &dashTexture);
+	glGenTextures(1, &gameOverTexture);
 }
 
 unsigned char *buildAlphaData(Ppmimage *img) 
@@ -154,19 +162,51 @@ void buildTextures()
 	free(ftData);
 	//-------------------------------------------------------------------------
 	//
-	//silhouette
-	//this is similar to a sprite graphic
+	//human
 	//
-	glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+	//
+	glBindTexture(GL_TEXTURE_2D, humanTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	//
 	//must build a new set of data...
-	unsigned char *silhouetteData = buildAlphaData(alienImage);
+	w = humanImage->width;
+	h = humanImage->height;
+	ftData = buildAlphaData(humanImage);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
-			GL_RGBA, GL_UNSIGNED_BYTE, silhouetteData);
-	free(silhouetteData);
+			GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+	free(ftData);
+	//-------------------------------------------------------------------------
+	//
+	//alien silhouette
+	//this is similar to a sprite graphic
+	//
+	glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	//
+	//must build a new set of data...
+	unsigned char *alienSilhouetteData = buildAlphaData(alienImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, alienSilhouetteData);
+	free(alienSilhouetteData);
+	//-------------------------------------------------------------------------
+	//
+	//human silhouette
+	//this is similar to a sprite graphic
+	//
+	glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
+	//
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+	//
+	//must build a new set of data...
+	unsigned char *humanSilhouetteData = buildAlphaData(humanImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, humanSilhouetteData);
+	free(humanSilhouetteData);
 	//-------------------------------------------------------------------------
 	//
 	//background
@@ -203,28 +243,31 @@ void buildTextures()
 
 	//-------------------------------------------------------------------------
 	//
-	//Glock 30 Weapon
-	//
-	glBindTexture(GL_TEXTURE_2D, glock30Texture);
+	//game over
+	glBindTexture(GL_TEXTURE_2D, gameOverTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 	glTexImage2D(GL_TEXTURE_2D, 0, 3,
-			glock30Image->width, glock30Image->height,
-			0, GL_RGB, GL_UNSIGNED_BYTE, glock30Image->data);
+			gameOverImage->width, gameOverImage->height,
+			0, GL_RGB, GL_UNSIGNED_BYTE, gameOverImage->data);
 
 	//-------------------------------------------------------------------------
 	//
-	//Glock 17 Weapon
+	//dash
 	//
-	glBindTexture(GL_TEXTURE_2D, glock17Texture);
+	glBindTexture(GL_TEXTURE_2D, dashTexture);
 	//
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, 3,
-			glock17Image->width, glock17Image->height,
-			0, GL_RGB, GL_UNSIGNED_BYTE, glock17Image->data);
-
+	//
+	//must build a new set of data...
+	w = dashImage->width;
+	h = dashImage->height;
+	ftData = buildAlphaData(dashImage);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0,
+			GL_RGBA, GL_UNSIGNED_BYTE, ftData);
+	free(ftData);
 
 	//-------------------------------------------------------------------------
 	//
@@ -271,10 +314,10 @@ int createAliens1()
         node->pos[1] = 365.0;
         node->vel[0] = rand() % 5 + 1;
         node->vel[1] = 0.0;
-        node->next = row1_head;
-        if (row1_head != NULL)
-                row1_head->prev = node;
-        row1_head = node;
+        node->next = row1HeadAlien;
+        if (row1HeadAlien != NULL)
+                row1HeadAlien->prev = node;
+        row1HeadAlien = node;
         ++totaliens;
         //printf("number of aliens:%d\n", totaliens);
         return totaliens;
@@ -291,10 +334,10 @@ int createAliens2()
 	node->pos[1] = 270.0;
 	node->vel[0] = rand() % 5 + 3;
 	node->vel[1] = 0.0;
-	node->next = row2_head;
-	if (row2_head != NULL)
-		row2_head->prev = node;
-	row2_head = node;
+	node->next = row2HeadAlien;
+	if (row2HeadAlien != NULL)
+		row2HeadAlien->prev = node;
+	row2HeadAlien = node;
 	++totaliens;
 	//printf("number of aliens:%d\n", totaliens);
 	return totaliens;
@@ -310,24 +353,82 @@ int createAliens3()
 	node->pos[1] = 175.0;
 	node->vel[0] = rand() % 5 + 5;
 	node->vel[1] = 0.0;
-	node->next = row3_head;
-	if (row3_head != NULL)
-		row3_head->prev = node;
-	row3_head = node;
+	node->next = row3HeadAlien;
+	if (row3HeadAlien != NULL)
+		row3HeadAlien->prev = node;
+	row3HeadAlien = node;
 	++totaliens;
 	//printf("number of aliens:%d\n", totaliens);
 	return totaliens;
+}
+
+int createHumans1()
+{
+        Human *node = (Human *)malloc(sizeof(Human));
+        //printf("alien created\n");
+        node->prev = NULL;
+        node->next = NULL;
+        node->pos[0] = -100.0 + (rand() % 5);
+        node->pos[1] = 365.0;
+        node->vel[0] = rand() % 5 ;
+        node->vel[1] = 0.0;
+        node->next = row1HeadHuman;
+        if (row1HeadHuman != NULL)
+                row1HeadHuman->prev = node;
+        row1HeadHuman = node;
+        ++tothumans;
+        //printf("number of aliens:%d\n", totaliens);
+        return tothumans;
+}
+
+
+int createHumans2()
+{
+        Human *node = (Human *)malloc(sizeof(Human));
+        //printf("alien created\n");
+        node->prev = NULL;
+        node->next = NULL;
+        node->pos[0] = -100.0 + (rand() % 5);
+        node->pos[1] = 270.0;
+        node->vel[0] = rand() % 5 + 2;
+        node->vel[1] = 0.0;
+        node->next = row2HeadHuman;
+        if (row2HeadHuman != NULL)
+                row2HeadHuman->prev = node;
+        row2HeadHuman = node;
+        ++tothumans;
+        //printf("number of aliens:%d\n", totaliens);
+        return tothumans;
+}
+
+int createHumans3()
+{
+        Human *node = (Human *)malloc(sizeof(Human));
+        //printf("alien created\n");
+        node->prev = NULL;
+        node->next = NULL;
+        node->pos[0] = -100.0 + (rand() % 5);
+        node->pos[1] = 175.0;
+        node->vel[0] = rand() % 5 + 3;
+        node->vel[1] = 0.0;
+        node->next = row3HeadHuman;
+        if (row3HeadHuman != NULL)
+                row3HeadHuman->prev = node;
+        row3HeadHuman = node;
+        ++tothumans;
+        //printf("number of aliens:%d\n", totaliens);
+        return tothumans;
 }
 
 void deleteAlien1(Alien *currentAlien)
 {
         if (currentAlien->prev == NULL) {
                 if (currentAlien->next == NULL) {
-                        row1_head = NULL;
+                        row1HeadAlien = NULL;
                 }
                 else {
                         currentAlien->next->prev = NULL;
-                        row1_head = currentAlien->next;
+                        row1HeadAlien = currentAlien->next;
                 }
         }
 
@@ -353,11 +454,11 @@ void deleteAlien2(Alien *currentAlien)
 {
 	if (currentAlien->prev == NULL) {
 		if (currentAlien->next == NULL) {
-			row2_head = NULL;
+			row2HeadAlien = NULL;
 		}
 		else {
 			currentAlien->next->prev = NULL;
-			row2_head = currentAlien->next;
+			row2HeadAlien = currentAlien->next;
 		}
 	}
 
@@ -381,11 +482,11 @@ void deleteAlien3(Alien *currentAlien)
 {
 	if (currentAlien->prev == NULL) {
 		if (currentAlien->next == NULL) {
-			row3_head = NULL;
+			row3HeadAlien = NULL;
 		}
 		else {
 			currentAlien->next->prev = NULL;
-			row3_head = currentAlien->next;
+			row3HeadAlien = currentAlien->next;
 		}
 	}
 
@@ -405,6 +506,90 @@ void deleteAlien3(Alien *currentAlien)
 	//printf("Alien deleted\n");
 }
 
+void deleteHuman1(Human *currentHuman)
+{
+        if (currentHuman->prev == NULL) {
+                if (currentHuman->next == NULL) {
+                        row1HeadHuman = NULL;
+                }
+                else {
+                        currentHuman->next->prev = NULL;
+                        row1HeadHuman = currentHuman->next;
+                }
+        }
+
+        else {
+                if (currentHuman->next == NULL) {
+                        currentHuman->prev->next = NULL;
+                }
+                else {
+                        currentHuman->prev->next = currentHuman->next;
+                        currentHuman->next->prev = currentHuman->prev;
+                }
+        }
+
+        free(currentHuman);
+        currentHuman = NULL;
+        --tothumans;
+        //printf("Alien deleted\n");
+}
+
+void deleteHuman2(Human *currentHuman)
+{
+        if (currentHuman->prev == NULL) {
+                if (currentHuman->next == NULL) {
+                        row2HeadHuman = NULL;
+                }
+                else {
+                        currentHuman->next->prev = NULL;
+                        row2HeadHuman = currentHuman->next;
+                }
+        }       
+                
+        else {  
+                if (currentHuman->next == NULL) {
+                        currentHuman->prev->next = NULL;
+                }
+                else {  
+                        currentHuman->prev->next = currentHuman->next;
+                        currentHuman->next->prev = currentHuman->prev;
+                }       
+        }
+
+        free(currentHuman);
+        currentHuman = NULL;
+        --tothumans;
+        //printf("Alien deleted\n");
+}
+
+void deleteHuman3(Human *currentHuman)
+{
+        if (currentHuman->prev == NULL) {
+                if (currentHuman->next == NULL) {
+                        row3HeadHuman = NULL;
+                }
+                else {
+                        currentHuman->next->prev = NULL;
+                        row3HeadHuman = currentHuman->next;
+                }
+        }       
+                
+        else {  
+                if (currentHuman->next == NULL) {
+                        currentHuman->prev->next = NULL;
+                }
+                else {  
+                        currentHuman->prev->next = currentHuman->next;
+                        currentHuman->next->prev = currentHuman->prev;
+                }       
+        }
+
+        free(currentHuman);
+        currentHuman = NULL;
+        --tothumans;
+        //printf("Alien deleted\n");
+}
+
 int moveAlien1(Alien *alien, Bullet *bullet, int *score)
 {
         //move alien...
@@ -418,17 +603,37 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
                 return 1;
         }
 
-	if ((bullet->get_x() <= alien->pos[0]) 
-			&& (bullet->get_x() >= alien->pos[0] - wid)
-			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
-			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
+	/*double d0 = bullet->get_x() - alien->pos[0];
+	double d1 = bullet->get_y() - alien->pos[1];
+	double dist = (d0*d0 + d1*d1);
+	if (dist < 32){
+			*score = *score + 50;
+			deleteAlien1(alien);
+			return 1;
+	}*/
+
+	if (((alien->pos[0]) + wid) >= (bullet->get_x())
+		&& ((bullet->get_x()) >= (alien->pos[0]))
+		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
+		&& ((bullet->get_y()) <= (alien->pos[1]))) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
 			deleteAlien1(alien);
 			return 1;
 	}
-        
+/*
+	if ((bullet->get_x() < alien->pos[0]) 
+			&& (bullet->get_x() > alien->pos[0] - wid)
+			&& (yres-(bullet->get_y()) > alien->pos[1]) 
+			&& (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
+			printf("ALIEN HIT!\n");
+			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
+			deleteAlien1(alien);
+			return 1;
+	}
+  */      
 	return 0;
 }
 
@@ -445,15 +650,15 @@ int moveAlien2(Alien *alien, Bullet *bullet, int *score)
 		return 1;
 	}
 	
-	if ((bullet->get_x() <= alien->pos[0]) 
-			&& (bullet->get_x() >= alien->pos[0] - wid)
-			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
-			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
+	if (((alien->pos[0]) + wid) >= (bullet->get_x())
+		&& ((bullet->get_x()) >= (alien->pos[0]))
+		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
+		&& ((bullet->get_y()) <= (alien->pos[1]))) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
-			deleteAlien2(alien);
-		return 1;
+			deleteAlien1(alien);
+			return 1;
 	}
 
 	return 0;
@@ -472,26 +677,108 @@ int moveAlien3(Alien *alien, Bullet *bullet, int *score)
 		return 1;
 	}
 	
-	if ((bullet->get_x() <= alien->pos[0]) 
-			&& (bullet->get_x() >= alien->pos[0] - wid)
-			&& (yres-(bullet->get_y()) >= alien->pos[1]) 
-			&& (yres-(bullet->get_y()) <= alien->pos[1] + wid)) {
+	if (((alien->pos[0]) + wid) >= (bullet->get_x())
+		&& ((bullet->get_x()) >= (alien->pos[0]))
+		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
+		&& ((bullet->get_y()) <= (alien->pos[1]))) {
 			printf("ALIEN HIT!\n");
 			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
-			deleteAlien3(alien);
-		return 1;
+			deleteAlien1(alien);
+			return 1;
 	}
 	return 0;
 }
 
-void drawAliens1(void) {
-        Alien *alien = row1_head;
+int moveHuman1(Human *human, Bullet *bullet, int *lives)
+{
+        //move human...
+        //Update position
+        human->pos[0] += human->vel[0];
+
+        //Check for collision with window edges
+        if ((human->pos[0] >= (float)xres+140.0
+                && human->vel[0] > 0.0) && human->pos[1] ==  365.0) {
+                deleteHuman1(human);
+                return 1;
+        }
+
+        if ((bullet->get_x() < human->pos[0])
+                        && (bullet->get_x() > human->pos[0] - wid)
+                        && (yres-(bullet->get_y()) > human->pos[1])
+                        && (yres-(bullet->get_y()) < human->pos[1] + wid)) {
+                        printf("HUMAN HIT!\n");
+                        printf("HUMAN POS[0] = %f\n", human->pos[0]);
+                        *lives = *lives - 1;
+                        deleteHuman1(human);
+                        return 1;
+        }
+
+        return 0;
+}
+
+int moveHuman2(Human *human, Bullet *bullet, int *lives)
+{
+        //move human...
+        //Update position
+        human->pos[0] += human->vel[0];
+
+        //Check for collision with window edges
+        if ((human->pos[0] >= (float)xres+140.0
+                && human->vel[0] > 0.0) && human->pos[1] ==  270.0) {
+                deleteHuman2(human);
+                return 1;
+        }
+
+        if ((bullet->get_x() < human->pos[0])
+                        && (bullet->get_x() > human->pos[0] - wid)
+                        && (yres-(bullet->get_y()) > human->pos[1])
+                        && (yres-(bullet->get_y()) < human->pos[1] + wid)) {
+                        printf("HUMAN HIT!\n");
+                        printf("HUMAN POS[0] = %f\n", human->pos[0]);
+                        *lives = *lives - 1;
+                        deleteHuman2(human);
+                        return 1;
+        }
+
+        return 0;
+}
+
+int moveHuman3(Human *human, Bullet *bullet, int *lives)
+{
+        //move human...
+        //Update position
+        human->pos[0] += human->vel[0];
+
+        //Check for collision with window edges
+        if ((human->pos[0] >= (float)xres+140.0
+                && human->vel[0] > 0.0) && human->pos[1] ==  175.0) {
+                deleteHuman3(human);
+                return 1;
+        }
+
+        if ((bullet->get_x() < human->pos[0])
+                        && (bullet->get_x() > human->pos[0] - wid)
+                        && (yres-(bullet->get_y()) > human->pos[1])
+                        && (yres-(bullet->get_y()) < human->pos[1] + wid)) {
+                        printf("HUMAN HIT!\n");
+                        printf("HUMAN POS[0] = %f\n", human->pos[0]);
+                        *lives = *lives - 1;
+                        deleteHuman3(human);
+                        return 1;
+        }
+
+        return 0;
+}
+
+void drawAliens1(void) 
+{
+        Alien *alien = row1HeadAlien;
         float wid = 32.0f;
-        while(alien){
+        while (alien) { 
                 glPushMatrix();
                 glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
-                glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+                glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
                 glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
                 glColor4ub(255,255,255,255);
@@ -502,12 +789,7 @@ void drawAliens1(void) {
                         glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
                         glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
                         glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-                } /*else {
-                        glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
-                        glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
-                        glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
-                        glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-                }*/
+                } 
                 glEnd();
                 glPopMatrix();
                 alien = alien->next;
@@ -515,13 +797,14 @@ void drawAliens1(void) {
         glDisable(GL_ALPHA_TEST);
 }
 
-void drawAliens2(void) {
-	Alien *alien = row2_head;
+void drawAliens2(void) 
+{
+	Alien *alien = row2HeadAlien;
 	float wid = 32.0f;
-	while(alien){
+	while (alien) {
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
-		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+		glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glColor4ub(255,255,255,255);
@@ -532,12 +815,7 @@ void drawAliens2(void) {
 			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		} /*else {
-			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
-			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
-			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
-			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-		}*/
+		} 
 		glEnd();
 		glPopMatrix();
 		alien = alien->next;
@@ -545,12 +823,13 @@ void drawAliens2(void) {
 	glDisable(GL_ALPHA_TEST);
 }
 
-void drawAliens3(void) {
-	Alien *alien = row3_head;
-	while(alien){
+void drawAliens3(void) 
+{
+	Alien *alien = row3HeadAlien;
+	while (alien) {
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
-		glBindTexture(GL_TEXTURE_2D, silhouetteTexture);
+		glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
 		glEnable(GL_ALPHA_TEST);
 		glAlphaFunc(GL_GREATER, 0.0f);
 		glColor4ub(255,255,255,255);
@@ -561,24 +840,110 @@ void drawAliens3(void) {
 			glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
 			glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
 			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
-		} /*else {
-			glTexCoord2f(1.0f, 1.0f); glVertex2i(-wid,-wid);
-			glTexCoord2f(1.0f, 0.0f); glVertex2i(-wid, wid);
-			glTexCoord2f(0.0f, 0.0f); glVertex2i( wid, wid);
-			glTexCoord2f(0.0f, 1.0f); glVertex2i( wid,-wid);
-		}*/
+		} 
 		glEnd();
+		glDisable(GL_ALPHA_TEST);
+		
+		glColor3f(0.0, 0.0, 0.0);	
+		//glEnable(GL_BLEND);
+		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glBegin(GL_POLYGON);
+		//	glTexCoord2f(0.0f, 1.0f); glVertex2i((-wid/2)+5,(-wid/2)-5);
+		//	glTexCoord2f(0.0f, 0.0f); glVertex2i((-wid/2)+5, (wid/2)-10);
+		//	glTexCoord2f(1.0f, 0.0f); glVertex2i( (wid/2)-5, (wid/2)-10);
+		//	glTexCoord2f(1.0f, 1.0f); glVertex2i( (wid/2)-5,(-wid/2)-5);
+		
+		//glEnd();
+		//glDisable(GL_BLEND);
 		glPopMatrix();
 		alien = alien->next;
 	}
-	glDisable(GL_ALPHA_TEST);
+	//glDisable(GL_ALPHA_TEST);
+}
+
+void drawHumans1(void) 
+{
+        Human *human = row1HeadHuman;
+        float wid = 32.0f;
+        while (human) {
+                glPushMatrix();
+                glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
+                glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
+                glEnable(GL_ALPHA_TEST);
+                glAlphaFunc(GL_GREATER, 0.0f);
+                glColor4ub(255,255,255,255);
+
+                glBegin(GL_QUADS);
+                if (human->vel[0] > 0.0) {
+                        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+                        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+                        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+                        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+                } 
+                glEnd();
+                glPopMatrix();
+                human = human->next;
+        }
+        glDisable(GL_ALPHA_TEST);
+}
+
+void drawHumans2(void) 
+{
+        Human *human = row2HeadHuman;
+        float wid = 32.0f;
+        while (human) {
+                glPushMatrix();
+                glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
+                glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
+                glEnable(GL_ALPHA_TEST);
+                glAlphaFunc(GL_GREATER, 0.0f);
+                glColor4ub(255,255,255,255);
+
+                glBegin(GL_QUADS);
+                if (human->vel[0] > 0.0) {
+                        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+                        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+                        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+                        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+                }
+                glEnd();
+                glPopMatrix();
+                human = human->next;
+        }
+        glDisable(GL_ALPHA_TEST);
+}
+
+void drawHumans3(void) 
+{
+        Human *human = row3HeadHuman;
+        float wid = 32.0f;
+        while (human) {
+                glPushMatrix();
+                glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
+                glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
+                glEnable(GL_ALPHA_TEST);
+                glAlphaFunc(GL_GREATER, 0.0f);
+                glColor4ub(255,255,255,255);
+
+                glBegin(GL_QUADS);
+                if (human->vel[0] > 0.0) {
+                        glTexCoord2f(0.0f, 1.0f); glVertex2i(-wid,-wid);
+                        glTexCoord2f(0.0f, 0.0f); glVertex2i(-wid, wid);
+                        glTexCoord2f(1.0f, 0.0f); glVertex2i( wid, wid);
+                        glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
+                }
+                glEnd();
+                glPopMatrix();
+                human = human->next;
+        }
+        glDisable(GL_ALPHA_TEST);
 }
 
 int checkAliens(Bullet *bullet, int *score) 
 {
-	Alien *node1 = row1_head;
-	Alien *node2 = row2_head;
-	Alien *node3 = row3_head;
+	Alien *node1 = row1HeadAlien;
+	Alien *node2 = row2HeadAlien;
+	Alien *node3 = row3HeadAlien;
 
 	while (node1->next != NULL) {
                 deleted1 = moveAlien1(node1, bullet, score);
@@ -609,3 +974,37 @@ int checkAliens(Bullet *bullet, int *score)
 	return 0;
 }
 
+int checkHumans(Bullet *bullet, int *lives)
+{
+        Human *node1 = row1HeadHuman;
+        Human *node2 = row2HeadHuman;
+        Human *node3 = row3HeadHuman;
+
+        while (node1->next != NULL) {
+                deleted4 = moveHuman1(node1, bullet, lives);
+                node1 = node1->next;
+        }
+
+        while (node2->next != NULL) {
+                deleted5 = moveHuman2(node2, bullet, lives);
+                node2 = node2->next;
+        }
+
+        while (node3->next != NULL) {
+                deleted6 = moveHuman3(node3, bullet, lives);
+                node3 = node3->next;
+        }
+
+        if (deleted4 == 1 && deleted5 == 1 && deleted6 == 1)
+                return 3;
+
+        if ((deleted4 == 1 && deleted5 == 1) ||
+                (deleted4 == 1 && deleted6 == 1) ||
+                (deleted5 == 1 && deleted6 == 2))
+                return 2;
+
+        if (deleted4 == 1 || deleted5 == 1 || deleted6 == 1)
+                return 1;
+
+        return 0;
+}

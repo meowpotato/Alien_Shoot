@@ -33,4 +33,12 @@ typedef struct t_alien {
         struct t_alien *next;
 } Alien;
 
+typedef struct t_human {
+	Vec pos;
+	Vec vel;
+	struct t_human *prev;
+	struct t_human *next;
+} Human;
+
 void moveAlien(Alien);
+void moveHuman(Human);
