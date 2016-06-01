@@ -169,6 +169,7 @@ typedef Flt	Matrix[4][4];
 const float timeslice = 1.0f;
 const float gravity = -0.2f;
 #define ALPHA 1
+static int shift = 0;
 
 //X Windows variables
 Display *dpy;
@@ -490,7 +491,6 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 	int tmp_xvec = target->get_x()-b->get_x();
 	int tmp_yvec = target->get_y()-b->get_y();
 	//keyboard input?
-	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
 	if (e->type == KeyRelease) {
 		if (key == XK_Shift_L || key == XK_Shift_R)
