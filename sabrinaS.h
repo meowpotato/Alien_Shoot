@@ -1,3 +1,9 @@
+//Author: Sabrina Smith
+//Purpose: Header file for sabrinaS.cpp
+//	   Defines functions needed for Alien_Shoot.cpp,
+//	   structures and image files
+//
+
 #include <iostream>
 #include <stdio.h>
 #include <stdlib.h>
