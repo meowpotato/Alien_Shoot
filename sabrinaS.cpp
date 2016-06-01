@@ -612,6 +612,7 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
 			return 1;
 	}*/
 
+/*
 	if (((alien->pos[0]) + wid) >= (bullet->get_x())
 		&& ((bullet->get_x()) >= (alien->pos[0]))
 		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
@@ -622,7 +623,7 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
 			deleteAlien1(alien);
 			return 1;
 	}
-/*
+  */      
 	if ((bullet->get_x() < alien->pos[0]) 
 			&& (bullet->get_x() > alien->pos[0] - wid)
 			&& (yres-(bullet->get_y()) > alien->pos[1]) 
@@ -633,7 +634,6 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
 			deleteAlien1(alien);
 			return 1;
 	}
-  */      
 	return 0;
 }
 
@@ -650,6 +650,17 @@ int moveAlien2(Alien *alien, Bullet *bullet, int *score)
 		return 1;
 	}
 	
+	if ((bullet->get_x() < alien->pos[0]) 
+			&& (bullet->get_x() > alien->pos[0] - wid)
+			&& (yres-(bullet->get_y()) > alien->pos[1]) 
+			&& (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
+			printf("ALIEN HIT!\n");
+			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
+			deleteAlien1(alien);
+			return 1;
+	}
+	/*
 	if (((alien->pos[0]) + wid) >= (bullet->get_x())
 		&& ((bullet->get_x()) >= (alien->pos[0]))
 		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
@@ -660,7 +671,7 @@ int moveAlien2(Alien *alien, Bullet *bullet, int *score)
 			deleteAlien1(alien);
 			return 1;
 	}
-
+	*/
 	return 0;
 }
 
@@ -677,6 +688,17 @@ int moveAlien3(Alien *alien, Bullet *bullet, int *score)
 		return 1;
 	}
 	
+	if ((bullet->get_x() < alien->pos[0]) 
+			&& (bullet->get_x() > alien->pos[0] - wid)
+			&& (yres-(bullet->get_y()) > alien->pos[1]) 
+			&& (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
+			printf("ALIEN HIT!\n");
+			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			*score = *score + 50;
+			deleteAlien1(alien);
+			return 1;
+	}
+	/*
 	if (((alien->pos[0]) + wid) >= (bullet->get_x())
 		&& ((bullet->get_x()) >= (alien->pos[0]))
 		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
@@ -687,6 +709,7 @@ int moveAlien3(Alien *alien, Bullet *bullet, int *score)
 			deleteAlien1(alien);
 			return 1;
 	}
+	*/
 	return 0;
 }
 
