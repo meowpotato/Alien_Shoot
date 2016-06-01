@@ -771,10 +771,11 @@ int moveHuman3(Human *human, Bullet *bullet, int *lives)
         return 0;
 }
 
-void drawAliens1(void) {
+void drawAliens1(void) 
+{
         Alien *alien = row1HeadAlien;
         float wid = 32.0f;
-        while(alien){
+        while (alien) { 
                 glPushMatrix();
                 glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
                 glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
@@ -796,10 +797,11 @@ void drawAliens1(void) {
         glDisable(GL_ALPHA_TEST);
 }
 
-void drawAliens2(void) {
+void drawAliens2(void) 
+{
 	Alien *alien = row2HeadAlien;
 	float wid = 32.0f;
-	while(alien){
+	while (alien) {
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
 		glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
@@ -821,9 +823,10 @@ void drawAliens2(void) {
 	glDisable(GL_ALPHA_TEST);
 }
 
-void drawAliens3(void) {
+void drawAliens3(void) 
+{
 	Alien *alien = row3HeadAlien;
-	while(alien){
+	while (alien) {
 		glPushMatrix();
 		glTranslatef(alien->pos[0], alien->pos[1], alien->pos[2]);
 		glBindTexture(GL_TEXTURE_2D, alienSilhouetteTexture);
@@ -858,10 +861,11 @@ void drawAliens3(void) {
 	//glDisable(GL_ALPHA_TEST);
 }
 
-void drawHumans1(void) {
+void drawHumans1(void) 
+{
         Human *human = row1HeadHuman;
         float wid = 32.0f;
-        while(human){
+        while (human) {
                 glPushMatrix();
                 glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
                 glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
@@ -883,10 +887,11 @@ void drawHumans1(void) {
         glDisable(GL_ALPHA_TEST);
 }
 
-void drawHumans2(void) {
+void drawHumans2(void) 
+{
         Human *human = row2HeadHuman;
         float wid = 32.0f;
-        while(human){
+        while (human) {
                 glPushMatrix();
                 glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
                 glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
@@ -908,10 +913,11 @@ void drawHumans2(void) {
         glDisable(GL_ALPHA_TEST);
 }
 
-void drawHumans3(void) {
+void drawHumans3(void) 
+{
         Human *human = row3HeadHuman;
         float wid = 32.0f;
-        while(human){
+        while (human) {
                 glPushMatrix();
                 glTranslatef(human->pos[0], human->pos[1], human->pos[2]);
                 glBindTexture(GL_TEXTURE_2D, humanSilhouetteTexture);
