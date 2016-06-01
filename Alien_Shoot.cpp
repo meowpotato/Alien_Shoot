@@ -195,6 +195,7 @@ void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
 void render(Glock, Bullet *, Target *);
+void check_bounds(Bullet *, int);
 
 bool checkAliens(Bullet *bullet, int *score);
 int  createAliens1();
@@ -607,20 +608,7 @@ void physics(Bullet *bullet)
 				humanCount = createHumans2();
 				humanCount = createHumans3();
 			}
-
-			// Check bounds for bullet
-			if (bullet->get_x() > 551 || bullet->get_x() < 28) {
-				move_bullet = 0;
-				bullet->set_x(280);
-				bullet->set_y(-25);
-				bullet->set_z(0);
-			}
-			if (bullet->get_y() > 560) {
-				move_bullet = 0;
-				bullet->set_x(280);
-				bullet->set_y(-25);
-				bullet->set_z(0);
-			}
+			check_bounds(bullet, move_bullet);
 			if (move_bullet) {
 				bullet->set_x(bullet->get_x() + 
 						bullet->get_xvel());

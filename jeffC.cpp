@@ -158,6 +158,28 @@ class Target {
 		void show_target();
 };
 
+void check_bounds(Bullet *, int);
+
+void check_bounds(Bullet * bullet, int move_bullet)
+{
+// Check bounds for bullet
+	if (bullet->get_x() > 551 || bullet->get_x() < 28) {
+		move_bullet = 0;
+		if (move_bullet == 0) {
+			bullet->set_x(280);
+			bullet->set_y(-25);
+			bullet->set_z(0);
+		}
+	}
+	if (bullet->get_y() > 560) {
+		move_bullet = 0;
+		bullet->set_x(280);
+		bullet->set_y(-25);
+		bullet->set_z(0);
+	}
+
+}
+
 // Display the bullet
 void Bullet::show_bullet()
 {
