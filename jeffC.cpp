@@ -159,6 +159,7 @@ class Target {
 };
 
 void check_bounds(Bullet *, int);
+void move_round(Bullet *, int);
 
 void check_bounds(Bullet * bullet, int move_bullet)
 {
@@ -178,6 +179,16 @@ void check_bounds(Bullet * bullet, int move_bullet)
 		bullet->set_z(0);
 	}
 
+}
+
+void move_round(Bullet *bullet, int move_bullet)
+{
+	if (move_bullet) {
+		bullet->set_x(bullet->get_x() + 
+			bullet->get_xvel());
+		bullet->set_y(bullet->get_y() + 
+			bullet->get_yvel());
+	}
 }
 
 // Display the bullet

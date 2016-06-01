@@ -192,6 +192,7 @@ unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
 void render(Glock, Bullet *, Target *);
 void check_bounds(Bullet *, int);
+void move_round(Bullet *, int);
 
 bool checkAliens(Bullet *bullet, int *score);
 int  createAliens1();
@@ -605,12 +606,7 @@ void physics(Bullet *bullet)
 				humanCount = createHumans3();
 			}
 			check_bounds(bullet, move_bullet);
-			if (move_bullet) {
-				bullet->set_x(bullet->get_x() + 
-						bullet->get_xvel());
-				bullet->set_y(bullet->get_y() + 
-						bullet->get_yvel());
-			}
+			move_round(bullet, move_bullet);
 
 			alienDeleted = checkAliens(bullet, &game_score);
 			humanDeleted = checkHumans(bullet, &lives);
