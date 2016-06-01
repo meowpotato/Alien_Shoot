@@ -163,7 +163,7 @@ typedef Flt	Matrix[4][4];
 #define VecCopy(a,b) 	(b)[0]=(a)[0];(b)[1]=(a)[1];(b)[2]=(a)[2]
 #define VecDot(a,b)	((a)[0]*(b)[0]+(a)[1]*(b)[1]+(a)[2]*(b)[2])
 #define VecSub(a,b,c) (c)[0]=(a)[0]-(b)[0]; \
-			(c)[1]=(a)[1]-(b)[1]; \
+			     (c)[1]=(a)[1]-(b)[1]; \
 (c)[2]=(a)[2]-(b)[2]
 //constants
 const float timeslice = 1.0f;
@@ -235,7 +235,7 @@ bool alienDeleted = false;
 int done=0;
 int xres=1024, yres=1024;
 
-bool space = false;
+int space = 0;
 int pauseMenu = 0;
 int gameOver = 1;
 int glock30 = 0;
@@ -432,27 +432,27 @@ void init()
 
 void show_mouse_cursor(const int onoff)
 {
-    if (onoff) {
-        //this removes our own blank cursor.
-        XUndefineCursor(dpy, win);
-        return;
-    }
-    //vars to make blank cursor
-    Pixmap blank;
-    XColor dummy;
-    char data[1] = {0};
-    Cursor cursor;
-    //make a blank cursor
-    blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
-    if (blank == None)
+	if (onoff) {
+		//this removes our own blank cursor.
+		XUndefineCursor(dpy, win);
+		return;
+	}
+	//vars to make blank cursor
+	Pixmap blank;
+	XColor dummy;
+	char data[1] = {0};
+	Cursor cursor;
+	//make a blank cursor
+	blank = XCreateBitmapFromData (dpy, win, data, 1, 1);
+	if (blank == None)
 		std::cout << "error: out of memory." << std::endl;
-    cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
-    XFreePixmap(dpy, blank);
-    //this makes you the cursor. then set it using this function
-    XDefineCursor(dpy, win, cursor);
-    //after you do not need the cursor anymore use this function.
-    //it will undo the last change done by XDefineCursor
-    //(thus do only use ONCE XDefineCursor and then XUndefineCursor):
+	cursor = XCreatePixmapCursor(dpy, blank, blank, &dummy, &dummy, 0, 0);
+	XFreePixmap(dpy, blank);
+	//this makes you the cursor. then set it using this function
+	XDefineCursor(dpy, win, cursor);
+	//after you do not need the cursor anymore use this function.
+	//it will undo the last change done by XDefineCursor
+	//(thus do only use ONCE XDefineCursor and then XUndefineCursor):
 }
 
 void checkMouse(XEvent *e)
@@ -462,7 +462,7 @@ void checkMouse(XEvent *e)
 	static int savex = 0;
 	static int savey = 0;
 	static int n = 0;
-	
+
 	if (e->type == ButtonRelease) {
 		return;
 	}
@@ -477,7 +477,7 @@ void checkMouse(XEvent *e)
 	if (savex != e->xbutton.x || savey != e->xbutton.y) {
 		//Mouse moved
 		/*int xdiff = savex - e->xbutton.x;
-		int ydiff = savey - e->xbutton.y;*/
+		  int ydiff = savey - e->xbutton.y;*/
 		savex = e->xbutton.x;
 		savey = e->xbutton.y;
 		if (++n < 10)
@@ -545,7 +545,7 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 		case XK_r:
 			break;
 		case XK_space:
-			space = true;
+			space = 1;
 			break;
 		case XK_equal:
 			break;
@@ -582,47 +582,54 @@ Flt VecNormalize(Vec vec)
 
 void physics(Bullet *bullet)
 {
-	if (alienCount < 15) {
-		alienCount = createAliens1();
-		alienCount = createAliens2();
-		alienCount = createAliens3();
+	//Objects on screen only move after the player has
+	//started the game and if the game is not paused
+	//--Sabrina
+	if (space == 1) {
+		if (pauseMenu != 1) {
+			if (alienCount < 15) {
+				alienCount = createAliens1();
+				alienCount = createAliens2();
+				alienCount = createAliens3();
+			}
+
+			if (humanCount < 5) {
+				humanCount = createHumans1();
+				humanCount = createHumans2();
+				humanCount = createHumans3();
+			}
+
+			// Check bounds for bullet
+			if (bullet->get_x() > 551 || bullet->get_x() < 28) {
+				move_bullet = 0;
+				bullet->set_x(280);
+				bullet->set_y(-25);
+				bullet->set_z(0);
+			}
+			if (bullet->get_y() > 560) {
+				move_bullet = 0;
+				bullet->set_x(280);
+				bullet->set_y(-25);
+				bullet->set_z(0);
+			}
+			if (move_bullet) {
+				bullet->set_x(bullet->get_x() + 
+						bullet->get_xvel());
+				bullet->set_y(bullet->get_y() + 
+						bullet->get_yvel());
+			}
+
+			alienDeleted = checkAliens(bullet, &game_score);
+			humanDeleted = checkHumans(bullet, &lives);
+			alienCount = alienCount - alienDeleted;
+			humanCount = humanCount - humanDeleted;
+
+			//if (lives == -1) {
+			//	gameOver = 1;
+			//}
+			//printf("Alien count: %d\n", alienCount);
+		}
 	}
-		
-	if (humanCount < 5) {
-		humanCount = createHumans1();
-		humanCount = createHumans2();
-		humanCount = createHumans3();
-	}
-	
-	// Check bounds for bullet
-	if (bullet->get_x() > 551 || bullet->get_x() < 28) {
-		move_bullet = 0;
-		bullet->set_x(280);
-		bullet->set_y(-25);
-		bullet->set_z(0);
-	}
-	if (bullet->get_y() > 560) {
-		move_bullet = 0;
-		bullet->set_x(280);
-		bullet->set_y(-25);
-		bullet->set_z(0);
-	}
-	if (move_bullet) {
-		bullet->set_x(bullet->get_x() + 
-			bullet->get_xvel());
-		bullet->set_y(bullet->get_y() + 
-			bullet->get_yvel());
-	}
-	
-	alienDeleted = checkAliens(bullet, &game_score);
-	humanDeleted = checkHumans(bullet, &lives);
-	alienCount = alienCount - alienDeleted;
-	humanCount = humanCount - humanDeleted;
-	
-	//if (lives == -1) {
-	//	gameOver = 1;
-	//}
-	//printf("Alien count: %d\n", alienCount);
 }
 
 void render(Glock glock32, Bullet *bullet, Target *target)
@@ -630,7 +637,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 	glClear(GL_COLOR_BUFFER_BIT);
-	
+
 	//draw a quad with texture
 	glColor3f(1.0, 1.0, 1.0);
 
@@ -679,14 +686,14 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		drawAliens2();
 		drawAliens3();
 		//------------------------------------------------
-		
+
 		//------------------------------------------------
 		//HUMANS
 		drawHumans1();
 		drawHumans2();
 		drawHumans3();
 		//------------------------------------------------
-		
+
 		//------------------------------------------------
 		//DASH
 		glEnable(GL_ALPHA_TEST);
@@ -700,7 +707,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
-	
+
 		//------------------------------------------------
 		//LEVELS
 		glEnable(GL_ALPHA_TEST);
@@ -714,7 +721,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
-		
+
 		//------------------------------------------------
 		//CURTAINS
 		glEnable(GL_ALPHA_TEST);
@@ -728,7 +735,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glEnd();
 		glDisable(GL_ALPHA_TEST);
 		//------------------------------------------------
-		
+
 		// Display the user's weapon and display the target
 		// Display the user's weapon and display the specs
 		//Glock glock32;
