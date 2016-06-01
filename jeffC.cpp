@@ -101,6 +101,7 @@ class Bullet {
 		int y_velocity;
 		// Signals if the bullet makes contact w/ an object
 		bool hit_object;
+		int nbullets;
 	public:
 		Bullet() {
 			width = 0;
@@ -112,6 +113,7 @@ class Bullet {
 			x_velocity = 0;
 			y_velocity = 0;
 			hit_object = false;
+			nbullets = 0;
 		}
 		void move();
 		void set_x(int);

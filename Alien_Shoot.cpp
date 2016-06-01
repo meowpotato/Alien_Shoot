@@ -82,6 +82,20 @@ class Glock : public Weapon {
 		}
 };
 
+//typedef float Vec[3];
+/*struct Bullet {
+	Vec pos;
+	Vec vel;
+	float color[3];
+	struct timespec time;
+	Bullet() {};
+};
+*/
+
+const int MAX_BULLETS = 10;
+int nbullets = 0;
+
+
 class Bullet {
 	protected:
 		// Width and height of the bullet
@@ -97,6 +111,7 @@ class Bullet {
 		int y_velocity;
 		// Signals if the bullet makes contact w/ an object
 		bool hit_object;
+		int nbullets;
 	public:
 		Bullet() {
 			width = 0;
@@ -107,7 +122,11 @@ class Bullet {
 			caliber = "9mm";
 			x_velocity = 0;
 			y_velocity = 0;
+			nbullets = 0;
 		}
+		Vec pos;
+		Vec vel;
+		struct timespec time;
 		void move();
 		void set_x(int);
 		void set_y(int);
@@ -122,6 +141,8 @@ class Bullet {
 		void delete_bullet();
 		void show_bullet();
 };
+
+//Bullet *barr;
 
 class Target {
 	private:
@@ -149,6 +170,19 @@ class Target {
 		int get_width();
 		int get_height();
 		void show_target();
+};
+
+struct Game {
+	Bullet *barr;
+	int nbullets;
+	struct timespec bulletTimer;
+	Game() {
+		barr = new Bullet[MAX_BULLETS];
+		nbullets = 0;
+	}
+	~Game() {
+		delete [] barr;
+	}
 };
 
 //defined types
@@ -179,16 +213,16 @@ void initXWindows(void);
 void initOpengl(void);
 void cleanupXWindows(void);
 void checkResize(XEvent *e);
-void checkMouse(XEvent *e);
-void checkKeys(XEvent *e, Target *, Bullet *);
+void checkMouse(XEvent *e, Game *game);
+void checkKeys(XEvent *e, Target *, int *);
 void init();
 void loadImages();
 void loadTextures();
 void load_weapon_texture();
 void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
-void physics(Bullet *);
-void render(Glock, Bullet *, Target *);
+void physics(Game *game, Bullet *, int *);
+void render(Glock, Game *game, Bullet *, Target *, int *);
 
 bool checkAliens(Bullet *bullet, int *score);
 int  createAliens1();
@@ -217,7 +251,7 @@ void timeCopy(struct timespec *dest, struct timespec *source)
 {
 	memcpy(dest, source, sizeof(struct timespec));
 }
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------
 
 
 int alienCount = 0;
@@ -243,14 +277,23 @@ int game_score = 0;
 int main(void)
 {
 	Glock glock32;
+	Game game;
 	Target *target = new Target;
 	target->set_x(280);
 	target->set_y(400);
 	target->set_z(0);
 	Bullet *bullet = new Bullet;
+	Bullet *barr = new Bullet[MAX_BULLETS];
+	int b_index = -1;
 	bullet->set_x(280);
 	bullet->set_y(-25);
 	bullet->set_z(0);
+	for (int i=0; i<MAX_BULLETS; i++) {
+		barr[i].set_x(280);
+		barr[i].set_y(-25);
+		barr[i].set_z(0);
+	}
+
 	logOpen();
 	logOpen();
 	initXWindows();
@@ -263,8 +306,8 @@ int main(void)
 			XEvent e;
 			XNextEvent(dpy, &e);
 			checkResize(&e);
-			checkMouse(&e);
-			checkKeys(&e, target, bullet);
+			checkMouse(&e, &game);
+			checkKeys(&e, target, &b_index);
 		}
 		//
 		//Below is a process to apply physics at a consistent rate.
@@ -286,14 +329,15 @@ int main(void)
 		//           Apply no physics this frame.
 		while (physicsCountdown >= physicsRate) {
 			//6. Apply physics
-			physics(bullet);
+			physics(&game, barr, &b_index);
 			//7. Reduce the countdown by our physics-rate
 			physicsCountdown -= physicsRate;
 		}
 		//Always render every frame.
-		render(glock32, bullet, target);
+		render(glock32, &game, barr, target, &b_index);
 		glXSwapBuffers(dpy, win);
 		fire = 0;
+		b_index = -1;
 	}
 	cleanupXWindows();
 	cleanup_fonts();
@@ -418,7 +462,7 @@ void init()
 {
 }
 
-void checkMouse(XEvent *e)
+void checkMouse(XEvent *e, Game *g)
 {
 	//Did the mouse move?
 	//Was a mouse button clicked?
@@ -432,6 +476,20 @@ void checkMouse(XEvent *e)
 	if (e->type == ButtonPress) {
 		if (e->xbutton.button==1) {
 			//Left button is down
+			struct timespec bt;
+			clock_gettime(CLOCK_REALTIME, &bt);
+			double ts = timeDiff(&g->bulletTimer, &bt);
+			if (ts > 0.1) {
+				if (g->nbullets < MAX_BULLETS) {
+					Bullet *b = &g->barr[g->nbullets];
+					timeCopy(&b->time, &bt);
+					b->pos[0] = 280;
+					b->pos[1] = -25;
+					b->vel[0] = 2;
+					b->vel[1] = 2;
+					g->nbullets++;	
+				}
+			}
 		}
 		if (e->xbutton.button==3) {
 			//Right button is down
@@ -445,14 +503,15 @@ void checkMouse(XEvent *e)
 		savey = e->xbutton.y;
 		if (++n < 10)
 			return;
-		cout << "Mouse moved" << endl;
+		//cout << "Mouse moved" << endl;
 	}
 }
 
-void checkKeys(XEvent *e, Target *target, Bullet *b)
+void checkKeys(XEvent *e, Target *target, int *b_index)
 {
-	int tmp_xvec = target->get_x()-b->get_x();
-	int tmp_yvec = target->get_y()-b->get_y();
+	/*int tmp_xvec = target->get_x()-b->get_x();
+	int tmp_yvec = target->get_y()-b->get_y();*/
+
 	//keyboard input?
 	static int shift=0;
 	int key = XLookupKeysym(&e->xkey, 0);
@@ -492,8 +551,9 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 			//deflection ^= 1;
 			break;
 		case XK_f:
-			b->set_xvel(tmp_xvec);
-			b->set_yvel(tmp_yvec);
+			*b_index = *b_index + 1;
+			//b->set_xvel(tmp_xvec);
+			//b->set_yvel(tmp_yvec);
 			fire = 1;
 			move_bullet = 1;
 			//forest ^= 1;
@@ -553,15 +613,57 @@ Flt VecNormalize(Vec vec)
 	return(len);
 }
 
-void physics(Bullet *bullet)
+void physics(Game *g, Bullet *b, int *b_index)
 {
 	if (alienCount < 15) {
 		alienCount = createAliens1();
 		alienCount = createAliens2();
 		alienCount = createAliens3();
 	}
-		
+	if (move_bullet) {	
+		for (int i = 0; i < MAX_BULLETS; i++) {
+			b[i].set_y(b[i].get_y()+10);
+		}
+	}
+	for (int i=0; i<MAX_BULLETS; i++) {
+	if (b[i].get_y() > 560) {
+		move_bullet = 0;
+		b[i].set_x(280);
+		b[i].set_y(-25);
+		b[i].set_z(0);
+	}
+	}
+	
 	// Check bounds for bullet
+	/*if (bullet[*b_index].get_x() > 551 || 
+		bullet[*b_index].get_x() < 28) {
+		move_bullet = 0;
+		bullet[*b_index].set_x(280);
+		bullet[*b_index].set_y(-25);
+		bullet[*b_index].set_z(0);
+	}
+	if (bullet[*b_index].get_y() > 560) {
+		move_bullet = 0;
+		bullet[*b_index].set_x(280);
+		bullet[*b_index].set_y(-25);
+		bullet[*b_index].set_z(0);
+	}
+	if (*b_index < MAX_BULLETS) {
+		if (move_bullet) {
+		cout << "get_xvel(): " << bullet[*b_index].get_xvel() << endl;
+		cout << "get_yvel(): " << bullet[*b_index].get_yvel() << endl;
+			bullet[*b_index].set_x(bullet[*b_index].get_x() + 
+				bullet[*b_index].get_xvel());
+			bullet[*b_index].set_y(bullet[*b_index].get_y() + 
+				bullet[*b_index].get_yvel());
+			move_bullet = 0;
+			bullet[*b_index].set_x(280);
+			bullet[*b_index].set_y(-25);
+			bullet[*b_index].set_z(0);
+		}
+	}*/
+
+	/*// Check bounds for bullet
 	if (bullet->get_x() > 551 || bullet->get_x() < 28) {
 		move_bullet = 0;
 		bullet->set_x(280);
@@ -579,14 +681,14 @@ void physics(Bullet *bullet)
 			bullet->get_xvel());
 		bullet->set_y(bullet->get_y() + 
 			bullet->get_yvel());
-	}
+	}*/
 	
-	alienDeleted = checkAliens(bullet, &game_score);
+	alienDeleted = checkAliens(b, &game_score);
 	alienCount = alienCount - alienDeleted;
 	//printf("Alien count: %d\n", alienCount);
 }
 
-void render(Glock glock32, Bullet *bullet, Target *target)
+void render(Glock glock32, Game *g, Bullet *b, Target *target, int *b_index)
 {
 	//Clear the screen
 	glClearColor(1.0, 1.0, 1.0, 1.0);
@@ -692,11 +794,14 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		glock32.set_caliber("45 GAP");
 
 		// Display bullet
-		//Bullet bullet;
 		if (move_bullet) {
 			//cout << "bullet x: " << bullet->get_x() << endl;
 			//cout << "bullet y: " << bullet->get_y() << endl;
-			bullet->show_bullet();
+			for (int i = 0; i < MAX_BULLETS; i++) {
+		cout << "bullet[" << i << "]"<< "x coord"  << b[i].get_x()<< endl;
+		cout << "bullet[" << i << "]"<< "y coord"  << b[i].get_y()<< endl;
+				b[i].show_bullet();
+			}
 			move_bullet = 0;
 		}
 
