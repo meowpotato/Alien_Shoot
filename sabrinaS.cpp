@@ -596,45 +596,25 @@ int moveAlien1(Alien *alien, Bullet *bullet, int *score)
         //move alien...
         //Update position
         alien->pos[0] += alien->vel[0];
-        
+ 
 	//Check for collision with window edges
         if ((alien->pos[0] >= (float)xres+140.0 
 		&& alien->vel[0] > 0.0) && alien->pos[1] ==  365.0) {
                 deleteAlien1(alien);
                 return 1;
+       	}
+
+	if ((bullet->get_x() < alien->pos[0]) 
+                        && (bullet->get_x() > alien->pos[0] - wid)
+                        && (yres-(bullet->get_y()) > alien->pos[1]) 
+                        && (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
+                        printf("ALIEN HIT!\n");
+                        //printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+                        *score = *score + 50;
+                        deleteAlien1(alien);
+                        return 1;
         }
 
-	/*double d0 = bullet->get_x() - alien->pos[0];
-	double d1 = bullet->get_y() - alien->pos[1];
-	double dist = (d0*d0 + d1*d1);
-	if (dist < 32){
-			*score = *score + 50;
-			deleteAlien1(alien);
-			return 1;
-	}*/
-
-/*
-	if (((alien->pos[0]) + wid) >= (bullet->get_x())
-		&& ((bullet->get_x()) >= (alien->pos[0]))
-		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
-		&& ((bullet->get_y()) <= (alien->pos[1]))) {
-			printf("ALIEN HIT!\n");
-			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
-			*score = *score + 50;
-			deleteAlien1(alien);
-			return 1;
-	}
-  */      
-	if ((bullet->get_x() < alien->pos[0]) 
-			&& (bullet->get_x() > alien->pos[0] - wid)
-			&& (yres-(bullet->get_y()) > alien->pos[1]) 
-			&& (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
-			printf("ALIEN HIT!\n");
-			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
-			*score = *score + 50;
-			deleteAlien1(alien);
-			return 1;
-	}
 	return 0;
 }
 
@@ -656,23 +636,12 @@ int moveAlien2(Alien *alien, Bullet *bullet, int *score)
 			&& (yres-(bullet->get_y()) > alien->pos[1]) 
 			&& (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
 			printf("ALIEN HIT!\n");
-			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			//printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
 			deleteAlien1(alien);
 			return 1;
 	}
-	/*
-	if (((alien->pos[0]) + wid) >= (bullet->get_x())
-		&& ((bullet->get_x()) >= (alien->pos[0]))
-		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
-		&& ((bullet->get_y()) <= (alien->pos[1]))) {
-			printf("ALIEN HIT!\n");
-			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
-			*score = *score + 50;
-			deleteAlien1(alien);
-			return 1;
-	}
-	*/
+	
 	return 0;
 }
 
@@ -694,23 +663,12 @@ int moveAlien3(Alien *alien, Bullet *bullet, int *score)
 			&& (yres-(bullet->get_y()) > alien->pos[1]) 
 			&& (yres-(bullet->get_y()) < alien->pos[1] + wid)) {
 			printf("ALIEN HIT!\n");
-			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
+			//printf("ALIEN POS[0] = %f\n", alien->pos[0]);
 			*score = *score + 50;
 			deleteAlien1(alien);
 			return 1;
 	}
-	/*
-	if (((alien->pos[0]) + wid) >= (bullet->get_x())
-		&& ((bullet->get_x()) >= (alien->pos[0]))
-		&& (((alien->pos[1]) - wid) <= (bullet->get_y()))
-		&& ((bullet->get_y()) <= (alien->pos[1]))) {
-			printf("ALIEN HIT!\n");
-			printf("ALIEN POS[0] = %f\n", alien->pos[0]);
-			*score = *score + 50;
-			deleteAlien1(alien);
-			return 1;
-	}
-	*/
+	
 	return 0;
 }
 
@@ -732,7 +690,7 @@ int moveHuman1(Human *human, Bullet *bullet, int *lives)
                         && (yres-(bullet->get_y()) > human->pos[1])
                         && (yres-(bullet->get_y()) < human->pos[1] + wid)) {
                         printf("HUMAN HIT!\n");
-                        printf("HUMAN POS[0] = %f\n", human->pos[0]);
+                        //printf("HUMAN POS[0] = %f\n", human->pos[0]);
                         *lives = *lives - 1;
                         deleteHuman1(human);
                         return 1;
@@ -759,7 +717,7 @@ int moveHuman2(Human *human, Bullet *bullet, int *lives)
                         && (yres-(bullet->get_y()) > human->pos[1])
                         && (yres-(bullet->get_y()) < human->pos[1] + wid)) {
                         printf("HUMAN HIT!\n");
-                        printf("HUMAN POS[0] = %f\n", human->pos[0]);
+                        //printf("HUMAN POS[0] = %f\n", human->pos[0]);
                         *lives = *lives - 1;
                         deleteHuman2(human);
                         return 1;
@@ -786,7 +744,7 @@ int moveHuman3(Human *human, Bullet *bullet, int *lives)
                         && (yres-(bullet->get_y()) > human->pos[1])
                         && (yres-(bullet->get_y()) < human->pos[1] + wid)) {
                         printf("HUMAN HIT!\n");
-                        printf("HUMAN POS[0] = %f\n", human->pos[0]);
+                        //printf("HUMAN POS[0] = %f\n", human->pos[0]);
                         *lives = *lives - 1;
                         deleteHuman3(human);
                         return 1;
@@ -866,23 +824,9 @@ void drawAliens3(void)
 			glTexCoord2f(1.0f, 1.0f); glVertex2i( wid,-wid);
 		} 
 		glEnd();
-		glDisable(GL_ALPHA_TEST);
-		
-		glColor3f(0.0, 0.0, 0.0);	
-		//glEnable(GL_BLEND);
-		//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glBegin(GL_POLYGON);
-		//	glTexCoord2f(0.0f, 1.0f); glVertex2i((-wid/2)+5,(-wid/2)-5);
-		//	glTexCoord2f(0.0f, 0.0f); glVertex2i((-wid/2)+5, (wid/2)-10);
-		//	glTexCoord2f(1.0f, 0.0f); glVertex2i( (wid/2)-5, (wid/2)-10);
-		//	glTexCoord2f(1.0f, 1.0f); glVertex2i( (wid/2)-5,(-wid/2)-5);
-		
-		//glEnd();
-		//glDisable(GL_BLEND);
 		glPopMatrix();
 		alien = alien->next;
 	}
-	//glDisable(GL_ALPHA_TEST);
 }
 
 void drawHumans1(void) 
