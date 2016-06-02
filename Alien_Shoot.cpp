@@ -189,7 +189,7 @@ void loadTextures();
 void load_weapon_texture();
 void buildTextures();
 unsigned char *buildAlphaData(Ppmimage *);
-void physics(Bullet *);
+void physics(Bullet *, Target *);
 void render(Glock, Bullet *, Target *);
 void check_bounds(Bullet *, int);
 void move_round(Bullet *, Target *, int);
@@ -303,7 +303,7 @@ int main(void)
 		//           Apply no physics this frame.
 		while (physicsCountdown >= physicsRate) {
 			//6. Apply physics
-			physics(bullet);
+			physics(bullet, target);
 			//7. Reduce the countdown by our physics-rate
 			physicsCountdown -= physicsRate;
 		}
@@ -312,6 +312,9 @@ int main(void)
 		render(glock32, bullet, target);
 		glXSwapBuffers(dpy, win);
 		fire = 0;
+		bullet->set_x(280);
+		bullet->set_y(0);
+		bullet->set_z(0);
 	}
 	cleanupXWindows();
 	cleanup_fonts();
@@ -583,7 +586,7 @@ Flt VecNormalize(Vec vec)
 	return(len);
 }
 
-void physics(Bullet *bullet)
+void physics(Bullet *bullet, Target *target)
 {
 	//Objects on screen only move after the player has
 	//started the game and if the game is not paused
@@ -602,6 +605,7 @@ void physics(Bullet *bullet)
 				humanCount = createHumans3();
 			}
 			check_bounds(bullet, move_bullet);
+			move_round(bullet, target, move_bullet);
 
 			alienDeleted = checkAliens(bullet, &game_score);
 			humanDeleted = checkHumans(bullet, &lives);
@@ -732,7 +736,6 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 
 		// Display bullet
 		if (move_bullet) {
-			move_round(bullet, target, move_bullet);
 			bullet->show_bullet();
 			move_bullet = 0;
 		}
