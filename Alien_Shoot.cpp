@@ -177,7 +177,7 @@ void initOpengl(void);
 void cleanupXWindows(void);
 void checkResize(XEvent *e);
 void checkMouse(XEvent *e);
-void checkKeys(XEvent *e, Target *, Bullet *);
+void checkKeys(XEvent *e, Target *);
 void show_mouse_cursor(const int onoff);
 void initSound();
 void emptyDriver();
@@ -192,7 +192,7 @@ unsigned char *buildAlphaData(Ppmimage *);
 void physics(Bullet *);
 void render(Glock, Bullet *, Target *);
 void check_bounds(Bullet *, int);
-void move_round(Bullet *, int);
+void move_round(Bullet *, Target *, int);
 
 bool checkAliens(Bullet *bullet, int *score);
 int  createAliens1();
@@ -258,12 +258,12 @@ int main(void)
 {
 	Glock glock32;
 	Target *target = new Target;
-	target->set_x(280);
-	target->set_y(400);
+	target->set_x(320);
+	target->set_y(125);
 	target->set_z(0);
 	Bullet *bullet = new Bullet;
 	bullet->set_x(280);
-	bullet->set_y(-25);
+	bullet->set_y(0);
 	bullet->set_z(0);
 	logOpen();
 	logOpen();
@@ -281,7 +281,7 @@ int main(void)
 			XNextEvent(dpy, &e);
 			checkResize(&e);
 			checkMouse(&e);
-			checkKeys(&e, target, bullet);
+			checkKeys(&e, target);
 		}
 		//
 		//Below is a process to apply physics at a consistent rate.
@@ -493,10 +493,8 @@ void checkMouse(XEvent *e)
 	}
 }
 
-void checkKeys(XEvent *e, Target *target, Bullet *b)
+void checkKeys(XEvent *e, Target *target)
 {
-	int tmp_xvec = target->get_x()-b->get_x();
-	int tmp_yvec = target->get_y()-b->get_y();
 	//keyboard input?
 	int key = XLookupKeysym(&e->xkey, 0);
 	if (e->type == KeyRelease) {
@@ -532,8 +530,6 @@ void checkKeys(XEvent *e, Target *target, Bullet *b)
 			//deflection ^= 1;
 			break;
 		case XK_f:
-			b->set_xvel(tmp_xvec);
-			b->set_yvel(tmp_yvec);
 			fire = 1;
 			move_bullet = 1;
 			break;
@@ -606,7 +602,6 @@ void physics(Bullet *bullet)
 				humanCount = createHumans3();
 			}
 			check_bounds(bullet, move_bullet);
-			move_round(bullet, move_bullet);
 
 			alienDeleted = checkAliens(bullet, &game_score);
 			humanDeleted = checkHumans(bullet, &lives);
@@ -729,16 +724,15 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		target->show_target();
 		glock32.show_weapon();
 		glock32.show_fact_sights();
-		if (fire)
+		if (fire) {
 			glock32.show_muzzle_flash();
+		}
 		glock32.set_model("32");
 		glock32.set_caliber("45 GAP");
 
 		// Display bullet
-		//Bullet bullet;
 		if (move_bullet) {
-			//cout << "bullet x: " << bullet->get_x() << endl;
-			//cout << "bullet y: " << bullet->get_y() << endl;
+			move_round(bullet, target, move_bullet);
 			bullet->show_bullet();
 			move_bullet = 0;
 		}
@@ -758,7 +752,7 @@ void render(Glock glock32, Bullet *bullet, Target *target)
 		r.left = 475;
 		r.center = 485;
 
-		ggprint13(&r, 20, 0x00ff0000, "             %i", game_score);
+		ggprint13(&r, 20, 0x00ff0000, "             %i",game_score);
 		ggprint13(&r, 26, 0x00ff0000, "             %i", lives);
 		//ggprint8b(&r, 16, 0, "Score: %i", game_score);
 		//ggprint8b(&r, 16, 0, "Lives: %i", lives);

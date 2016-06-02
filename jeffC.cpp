@@ -5,14 +5,17 @@
  * Author: Jeff Cadena
  * CMPS 335 Individual contribution to project
  * Date: Written 4/11/16-Present 
- * Modified 4/27, 5/2, 5/6, 5/22, 5/24, 5/26
+ * Modified 4/27, 5/2, 5/6, 5/22, 5/24, 5/26, 5/28-5/31, 6/1
  * Purpose: Make weapon classes, appropriate child classes
  * using inheritance, and functions that will be called
- * in the main project program Alien_Shoot.cpp.
+ * in the main project program Alien_Shoot.cpp. These are used 
+ * to draw the weapon and create special effects. 
  * */
 
 #include <iostream>
 #include <GL/glu.h>
+#include <ctime>
+#include <cstdlib>
 
 extern "C" {
 #include "fonts.h"
@@ -159,7 +162,7 @@ class Target {
 };
 
 void check_bounds(Bullet *, int);
-void move_round(Bullet *, int);
+void move_round(Bullet *, Target *, int);
 
 void check_bounds(Bullet * bullet, int move_bullet)
 {
@@ -181,13 +184,17 @@ void check_bounds(Bullet * bullet, int move_bullet)
 
 }
 
-void move_round(Bullet *bullet, int move_bullet)
+void move_round(Bullet *bullet, Target *target, int move_bullet)
 {
+	// Randomly generate the skew of round's flight
+	// path due to trembling hands via HR and breathing
+	srand(time(NULL));  
+	int delta_x = rand() % 20;	
+	int delta_y = rand() % 20;	
 	if (move_bullet) {
-		bullet->set_x(bullet->get_x() + 
-			bullet->get_xvel());
-		bullet->set_y(bullet->get_y() + 
-			bullet->get_yvel());
+			bullet->set_x(target->get_x()+delta_x-40);
+			bullet->set_y(target->get_y()+delta_y-115);
+			bullet->set_z(target->get_z());
 	}
 }
 
