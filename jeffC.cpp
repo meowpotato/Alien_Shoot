@@ -5,11 +5,14 @@
  * Author: Jeff Cadena
  * CMPS 335 Individual contribution to project
  * Date: Written 4/11/16-Present 
- * Modified 4/27, 5/2, 5/6, 5/22, 5/24, 5/26, 5/28-5/31, 6/1
+ * Modified 4/27, 5/2, 5/6, 5/22, 5/24, 5/26, 5/28-5/31, 6/1, 6/3
  * Purpose: Make weapon classes, appropriate child classes
  * using inheritance, and functions that will be called
  * in the main project program Alien_Shoot.cpp. These are used 
- * to draw the weapon and create special effects. 
+ * to draw the weapon and create special effects. My special
+ * effect is accomplished with the 'f' key, in which the
+ * muzzle flash appears and the bullet is fired and sent
+ * to the target crosshairs with an intentional deviation. 
  * */
 
 #include <iostream>
