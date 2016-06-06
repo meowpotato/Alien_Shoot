@@ -89,7 +89,7 @@ void playSound(int sndSet)
 	alSourcei(alSource[sndSet], AL_LOOPING, AL_TRUE);
 
 	if (alGetError() != AL_NO_ERROR) {
-		printf("Error: Setting Source\n");
+	//	printf("Error: Setting Source\n");
 	}
 
 	alSourcePlay(alSource[sndSet]);
